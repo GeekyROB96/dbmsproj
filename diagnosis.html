@@ -1,0 +1,151 @@
+    <!DOCTYPE html>
+    <html lang="en">
+
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>Diagnosis Report</title>
+        <style>
+            body {
+                font-family: Arial, sans-serif;
+                margin: 0;
+                padding: 0;
+                background-image: url('images/diag-back.jpg');
+                background-size: cover; 
+                background-repeat: no-repeat; 
+                background-color: #f4f4f4; 
+            }
+
+            .container {
+                max-width: 800px;
+                margin: 20px auto;
+                padding: 20px;
+                background-color: #fff;
+                border-radius: 8px;
+                box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            }
+
+            h2 {
+                text-align: center;
+                margin-bottom: 20px;
+            }
+
+            .diagnosis-report {
+                margin-top: 20px;
+            }
+
+            .field {
+                margin-bottom: 10px;
+            }
+
+            .field label {
+                font-weight: bold;
+            }
+
+            .field input[type="text"],
+            .field textarea {
+                width: 100%;
+                padding: 8px;
+                border: 1px solid #ccc;
+                border-radius: 4px;
+                box-sizing: border-box;
+            }
+
+            .field textarea {
+                height: 100px;
+            }
+
+            .field:last-child {
+                margin-bottom: 0;
+            }
+
+            .btn-submit {
+                display: block;
+                width: 100%;
+                padding: 10px;
+                background-color: #007bff;
+                color: #fff;
+                border: none;
+                border-radius: 4px;
+                cursor: pointer;
+                font-size: 16px;
+                text-align: center;
+                text-decoration: none;
+            }
+
+            .btn-submit:hover {
+                background-color: #0056b3;
+            }
+        </style>
+    </head>
+
+    <body>
+        <div class="container">
+            <h2>Diagnosis Report</h2>
+            <form id="diagnosisForm" >
+                <div class="field">
+                    <label for="doctorName">Doctor Name:</label>
+                    <!-- <input type="text" id="doctor_name" name="doctor_name" required> -->
+                    <textarea id="doctorName" name="doctorName" required></textarea>
+
+                </div>
+                <div class="field">
+                    <label for="diagnosedFor">Diagnosed For:</label>
+                    <!-- <input type="text" id="diagnosed" name="diagnosed" required> -->
+                    <textarea id="diagnosedFor" name="diagnosedFor" required></textarea>
+
+                </div>
+                <div class="field">
+                    <label for="diagnosisDate">Diagnosis Date:</label>
+                    <input type="date" id="diagnosisDate" name="diagnosisDate" required>
+                </div>
+                <div class="field">
+                    <label for="reason">Reason:</label>
+                    <textarea id="reason" name="reason" required></textarea>
+                </div>
+                <div class="field">
+                    <label for="measures">Measures:</label>
+                    <textarea id="measures" name="measures" required></textarea>
+                    <button type="submit" class="btn-submit" onclick="submitForm()">Submit</button>
+                </div>
+            </form>
+        </div>
+    </body>
+    <script>
+        function submitForm() {
+            // Get form data
+            var formData = new FormData(document.getElementById('diagnosisForm'));
+
+            // Convert FormData to a plain JavaScript object
+            var formDataObject = {};
+            formData.forEach((value, key) => {
+                formDataObject[key] = value;
+            });
+
+            // Add hardcoded appointmentId to formDataObject
+            formDataObject.appointmentId = 5;
+
+            console.log('FormDataObject:', formDataObject);
+
+
+            // Make a POST request to the server with JSON data
+            fetch('http://localhost:3000/diagnosisreport/', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify(formDataObject),
+                withCredentials: true// or 'include' if you need to send cookies
+            })
+                .then(response => response.json())
+                .then(data => {
+                    // Log the response in the console
+                    console.log('Server Response:', data);
+                })
+                .catch(error => {
+                    console.error('Error:', error);
+                });
+               // window.location.href('report.html')
+        }
+    </script>
+    </html>

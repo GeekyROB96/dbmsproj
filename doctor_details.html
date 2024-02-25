@@ -1,0 +1,156 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Doctor Details</title>
+    <style>
+        body {
+            font-family: 'Arial', sans-serif;
+            background-color: #f4f4f4;
+            margin: 0;
+            padding: 0;
+        }
+
+        .container {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            max-width: 800px;
+            margin: 20px auto;
+            padding: 20px;
+            background-color: #fff;
+            border-radius: 10px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        }
+
+        .doctor-details {
+            width: 45%;
+        }
+
+        .doctor-details img {
+            width: 200px;
+            border-radius: 50%;
+            margin-bottom: 20px;
+        }
+
+        .doctor-details h2 {
+            font-size: 24px;
+            font-weight: bold;
+            margin-bottom: 10px;
+        }
+
+        .doctor-details p {
+            font-size: 16px;
+            margin-bottom: 10px;
+        }
+
+        .appointment-details {
+            width: 45%;
+        }
+
+        .appointment-details h3 {
+            font-size: 20px;
+            margin-bottom: 10px;
+        }
+
+        .appointment-details label {
+            display: block;
+            margin-bottom: 8px;
+        }
+
+        .appointment-details input[type="text"] {
+            width: 100%;
+            padding: 8px;
+            margin-bottom: 12px;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+            box-sizing: border-box;
+        }
+
+        .book-now-button {
+            background-color: #673ab7;
+            color: #fff;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+    </style>
+</head>
+
+<body>
+
+    <div class="container">
+        <div class="doctor-details">
+            <img id="doctor-img" src="" alt="Doctor Image">
+            <h2 id="doctor-name"></h2>
+            <p id="doctor-specialization"></p>
+            <div class="rating" id="doctor-rating">
+                <i class="fa fa-star"></i>
+                <span></span>
+            </div>
+            <p id="doctor-bio"></p>
+            <p id="doctor-consultation-fee"></p>
+            <p id="doctor-experience"></p>
+            <p id="doctor-availability"></p>
+            <p id="doctor-center"></p>
+        </div>
+        <div class="appointment-details">
+            <h3>Choose your slot</h3>
+            <label for="appointment-date">Appointment Date:</label>
+            <input type="date" id="appointment-date" name="appointment-date" placeholder="Enter appointment date">
+            <label for="appointment-time">Appointment Time:</label>
+            <input type="time" id="appointment-time" name="appointment-time" placeholder="Enter appointment time">
+            <label for="remarks">Remarks:</label>
+            <input type="text" id="remarks" name="remarks" placeholder="Enter any remarks">
+            <label for="symptoms">Symptoms:</label>
+            <input type="text" id="symptoms" name="symptoms" placeholder="Enter symptoms">
+            <button class="book-now-button" onclick="bookAppointment()">Book Now</button>
+        </div>
+    </div>
+
+    <script>
+        window.onload = function () {
+            const queryString = window.location.search;
+            const urlParams = new URLSearchParams(queryString);
+            const image = urlParams.get('image');
+            const name = urlParams.get('name');
+            const specialization = urlParams.get('specialization');
+            const rating = urlParams.get('rating');
+            const bio = urlParams.get('bio');
+            const consultationFee = urlParams.get('consultationFee');
+            const experience = urlParams.get('experience');
+            const availability = urlParams.get('availability');
+            const center = urlParams.get('center');
+
+            document.getElementById("doctor-img").src = image;
+            document.getElementById("doctor-name").innerText = name;
+            document.getElementById("doctor-specialization").innerText = specialization;
+            document.getElementById("doctor-rating").getElementsByTagName("span")[0].innerText = rating;
+            document.getElementById("doctor-bio").innerText = "Bio: " + bio;
+            document.getElementById("doctor-consultation-fee").innerText = "Consultation Fee: " + consultationFee;
+            document.getElementById("doctor-experience").innerText = "Experience: " + experience;
+            document.getElementById("doctor-availability").innerText = "Availability: " + availability;
+            document.getElementById("doctor-center").innerText = "Center: " + center;
+        };
+
+        function bookAppointment() {
+            const appointmentDate = document.getElementById("appointment-date").value;
+            const appointmentTime = document.getElementById("appointment-time").value;
+            const remarks = document.getElementById("remarks").value;
+            const symptoms = document.getElementById("symptoms").value;
+
+            // You can construct the URL with appointment details and navigate to the next page here
+            // For now, let's log the details
+            console.log("Appointment Date:", appointmentDate);
+            console.log("Appointment Time:", appointmentTime);
+            console.log("Remarks:", remarks);
+            console.log("Symptoms:", symptoms);
+        }
+    </script>
+
+</body>
+
+</html>

@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Diagnosis Report</title>
+  <style>
+    /* Add some basic styles for the diagnosis card */
+    .diagnosis-card {
+      border: 1px solid #ccc;
+      padding: 10px;
+      margin: 10px;
+      border-radius: 5px;
+      box-shadow: 0 0 5px rgba(0, 0, 0, 0.1);
+    }
+  </style>
+</head>
+
+<body>
+    <center><h2>Diagnosis Report</h2></center>
+  <div id="diagnosisDetails">
+    <!-- This section will be filled with diagnosis report details dynamically -->
+  </div>
+
+  <script>
+    // Retrieve the selected appointment ID from session storage
+    var selectedID = sessionStorage.getItem('selectedID');
+
+    // Fetch the diagnosis report details based on the appointment ID
+    fetch(`http://localhost:3000/diagnosisreport/${selectedID}`)
+      .then(response => response.json())
+      .then(diagnosisReports => {
+        renderDiagnosisReports(diagnosisReports);
+      })
+      .catch(error => console.error('Error fetching diagnosis report:', error));
+
+    function renderDiagnosisReports(diagnosisReports) {
+      var diagnosisDetailsContainer = document.getElementById('diagnosisDetails');
+
+      if (diagnosisReports && diagnosisReports.length > 0) {
+        diagnosisReports.forEach(report => {
+          // Create diagnosis report card
+          var diagnosisCard = document.createElement('div');
+          diagnosisCard.className = 'diagnosis-card';
+
+          // Display diagnosis report details
+          diagnosisCard.innerHTML = `
+            <p>ID: ${report.id}</p>
+            <p>Appointment ID: ${report.appointmentId}</p>
+            <p>Doctor Name: ${report.doctorName}</p>
+            <p>Diagnosed For: ${report.diagnosedFor}</p>
+            <p>Diagnosis Date: ${new Date(report.diagnosisDate).toLocaleString()}</p>
+            <p>Reason: ${report.reason}</p>
+            <p>Measures: ${report.measures}</p>
+            <p>Created At: ${new Date(report.createdAt).toLocaleString()}</p>
+            <p>Updated At: ${new Date(report.updatedAt).toLocaleString()}</p>
+          `;
+
+          // Append card to the container
+          diagnosisDetailsContainer.appendChild(diagnosisCard);
+        });
+      } else {
+        console.log('No diagnosis report found.');
+        diagnosisDetailsContainer.innerHTML = '<p>No diagnosis report found.</p>';
+      }
+    }
+  </script>
+
+</body>
+
+</html>

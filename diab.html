@@ -1,0 +1,184 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Pharmacy Cart Page</title>
+    <style>
+        body {
+            margin: 0;
+            padding: 0;
+            font-family: Arial, sans-serif;
+        }
+
+        h1 {
+            text-align: center;
+        }
+
+        .product-page {
+            padding: 20px;
+            position: relative;
+            /* Added position relative */
+        }
+
+        .container {
+            width: 200px;
+            /* Increased width */
+            border: 1px solid #ccc;
+            padding: 20px;
+            text-align: center;
+            margin: 18px;
+            /* Increased margin */
+            float: left;
+            /* Added to align containers in a row */
+        }
+
+        .product-image {
+            width: 100%;
+            max-height: 150px;
+            /* Decreased image height */
+            object-fit: contain;
+            margin-bottom: 8px;
+        }
+
+        .quantity {
+            margin-bottom: 8px;
+        }
+
+        .quantity input {
+            width: 60px;
+            text-align: center;
+        }
+
+        .btn-add-to-cart {
+            background-color: #ac86f8;
+            color: white;
+            padding: 10px 20px;
+            border: none;
+            cursor: pointer;
+            margin-top: 10px;
+        }
+
+        .clearfix::after {
+            content: "";
+            clear: both;
+            display: table;
+        }
+
+        .price {
+            font-size: 15px;
+            font-weight: bold;
+            margin-bottom: 10px;
+        }
+
+        .cart-button {
+            position: absolute;
+            top: 0;
+            right: 0;
+            margin-top: 20px;
+            margin-right: 20px;
+            cursor: pointer;
+        }
+
+        .cart-info {
+            position: fixed;
+            top: 50%;
+            right: 0;
+            transform: translateY(-50%);
+            background-color: #f9f9f9;
+            padding: 20px;
+            border: 1px solid #ccc;
+        }
+
+        .cart-product {
+            margin-bottom: 10px;
+        }
+
+        .cart-total {
+            font-weight: bold;
+        }
+    </style>
+</head>
+
+<body>
+    <h1>Product Page</h1>
+    <div class="product-page">
+        <!-- Add the cart button above the containers -->
+        <button class="cart-button" onclick="redirectToCart()">Cart</button>
+
+        <div class="container">
+            <img src="images/d1.jpg" alt="Product Image" class="product-image">
+            <div class="price">₹799</div> <!-- Added price in INR -->
+            <div class="quantity">
+                <button onclick="decrement('quantity1')">-</button>
+                <input type="text" id="quantity1" value="1">
+                <button onclick="increment('quantity1')">+</button>
+            </div>
+            <button class="btn-add-to-cart" onclick="addToCart('product1', '799')">Add to Cart</button>
+        </div>
+
+        <!-- Repeat other product containers here -->
+    </div>
+
+    <div class="cart-info" id="cartInfo" style="display: none;">
+        <h2>Cart</h2>
+        <div id="cartContent"></div>
+        <div class="cart-total" id="cartTotal"></div>
+    </div>
+
+    <script>
+        let cart = [];
+
+        function increment(quantityId) {
+            var quantityInput = document.getElementById(quantityId);
+            var currentValue = parseInt(quantityInput.value);
+            quantityInput.value = currentValue + 1;
+        }
+
+        function decrement(quantityId) {
+            var quantityInput = document.getElementById(quantityId);
+            var currentValue = parseInt(quantityInput.value);
+            if (currentValue > 1) {
+                quantityInput.value = currentValue - 1;
+            }
+        }
+        function addToCart(productName, productPrice) {
+            var quantityId = "quantity" + productName.substr(7); // Extracting the number part from the productName
+            var quantity = parseInt(document.getElementById(quantityId).value);
+            var totalPrice = quantity * parseInt(productPrice);
+            var product = {
+                name: productName,
+                quantity: quantity,
+                price: totalPrice
+            };
+            cart.push(product);
+            updateCartInfo();
+        }
+
+        function redirectToCart() {
+            window.location.href = "cart.html";
+        }
+
+        function updateCartInfo() {
+            var cartContent = document.getElementById("cartContent");
+            cartContent.innerHTML = "";
+            var totalItems = 0;
+            var totalPrice = 0;
+            for (var i = 0; i < cart.length; i++) {
+                var product = cart[i];
+                totalItems += product.quantity;
+                totalPrice += product.price;
+                cartContent.innerHTML += "<div class='cart-product'>" +
+                    "<img src='images/" + product.name + ".jpg' alt='" + product.name + "'>" +
+                    "<div>Quantity: " + product.quantity + "</div>" +
+                    "<div>Price: ₹" + product.price + "</div>" +
+                    "</div>";
+            }
+            document.getElementById("cartTotal").innerHTML = "Total Items: " + totalItems + " Total Price: ₹" + totalPrice;
+        }
+    </script>
+
+</body>
+
+</html>

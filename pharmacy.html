@@ -1,0 +1,291 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>HealthHub Pharmacy</title>
+    <style>
+        body {
+            font-family: 'Arial', sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #fff;
+            color: #000;
+        }
+
+        header {
+            background: #512DA8;
+            text-align: center;
+            padding: 6px;
+            color: #fff;
+            position: relative;
+        }
+
+        header h1 {
+            z-index: 1;
+            position: relative;
+            display: inline-block;
+        }
+
+        header img {
+            width: 50px;
+            height: auto;
+            margin-right: 10px;
+        }
+
+        main {
+            padding: 18px;
+        }
+
+        .content-container {
+            display: flex;
+            align-items: center;
+            background: linear-gradient(to right, #512DA8, #FF4081);
+            color: #fff;
+            border-radius: 15px;
+            padding: 20px;
+            margin-top: 20px;
+            max-width: 100%;
+            margin: 0 auto;
+        }
+
+        .content-text {
+            flex: 1;
+            margin-right: 20px;
+            text-align: left;
+        }
+
+        .content-image {
+            max-width: 150%;
+            max-height: 260px;
+            border-radius: 10px;
+
+            animation: floatAnimation 3s infinite ease-in-out;
+        }
+
+        @keyframes floatAnimation {
+
+            0%,
+            100% {
+                transform: translateY(0);
+            }
+
+            50% {
+                transform: translateY(-10px);
+            }
+        }
+
+        .new-section {
+            text-align: center;
+            margin-top: 30px;
+        }
+
+        .image-row {
+            display: flex;
+            justify-content: center;
+            gap: 20px;
+            margin-top: 20px;
+        }
+
+        .image-item {
+            text-align: center;
+            position: relative;
+        }
+
+        .image-item img {
+            width: 150px;
+            height: 150px;
+            border-radius: 10px;
+            cursor: pointer;
+        }
+
+        .image-item p {
+            color: black;
+            margin-top: 10px;
+        }
+
+        .additional-content-container {
+            display: flex;
+            align-items: start;
+            background-color: white;
+            padding: 10px;
+            border-radius: 10px;
+            margin-top: 20px;
+            margin-bottom: 20px;
+        }
+
+        .additional-content-image {
+            width: 550px;
+            height: 300px;
+            border-radius: 10px;
+            margin-right: 10px;
+        }
+
+        .additional-content-text {
+            flex: 1;
+            text-align: left;
+            gap: 1px;
+        }
+
+        .tick-mark {
+            font-size: 24px;
+            color: #4CAF50;
+            display: inline-block;
+            animation: tickAnimation 3s infinite alternate;
+        }
+
+        @keyframes tickAnimation {
+            0% {
+                transform: scale(1);
+            }
+
+            100% {
+                transform: scale(1.2);
+            }
+        }
+
+        .testimonial-container {
+            padding: 8px;
+            background-color: #04289d;
+            display: flex;
+            justify-content: space-between;
+        }
+
+        .testimonial-content {
+            display: flex;
+        }
+
+        .testimonial-image {
+            width: 400px;
+            height: 500px;
+            object-fit: contain;
+            margin-right: 10px;
+        }
+
+        .testimonial-text {
+            flex-grow: 1;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            color: white;
+            overflow: hidden;
+        }
+
+        .testimonial-avatar {
+            margin-bottom: 15px;
+        }
+
+        .testimonial-avatar img {
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            margin-right: 12px;
+        }
+
+        .avatar-name {
+            color: white;
+        }
+    </style>
+</head>
+
+<body>
+
+    <header>
+        <h1><img src="images/tablet.png" alt="Tablet Icon"> HealthHub Pharmacy</h1>
+    </header>
+
+    <main>
+        <div class="content-container">
+            <div class="content-text">
+                <h2>From the leading online pharmacy</h2>
+                <p>& HealthCare Platform</p>
+                <p>Provides the essential nutrition and supplements from all over the world</p>
+            </div>
+            <img class="content-image" src="images/pharmacy-img.png" alt="Animated Image">
+        </div>
+
+        <div class="new-section">
+            <h3>Top Picks For You</h3>
+            <div class="image-row">
+                <div class="image-item" onclick="window.location.href='diab.html'">
+                    <img src="images/diab.jpg" alt="Image 1">
+                    <p>Diabetes</p>
+                </div>
+                <div class="image-item" onclick="window.location.href='skin.html'">
+                    <img src="images/skin.webp" alt="Image 2">
+                    <p>Skin Care</p>
+                </div>
+                <div class="image-item" onclick="window.location.href='child.html'">
+                    <img src="images/child.jpg" alt="Image 3">
+                    <p>Child Care</p>
+                </div>
+                <div class="image-item" onclick="window.location.href='drinks.html'">
+                    <img src="images/supp.jpg" alt="Image 3">
+                    <p>Drinks & Supplements</p>
+                </div>
+                <div class="image-item" onclick="window.location.href='general.html'">
+                    <img src="images/gen.jpg" alt="Image 3">
+                    <p>General Aid-Box</p>
+                </div>
+                <div class="image-item" onclick="window.location.href='essential.html'">
+                    <img src="images/essen.jpg" alt="Image 3">
+                    <p>Essentials</p>
+                </div>
+                <!-- Add more image items as needed -->
+            </div>
+        </div>
+
+        <div class="additional-content-container">
+            <img class="additional-content-image" src="images/tab.png" alt="Additional Image">
+            <div class="additional-content-text">
+                <h3>100% Trusted Medical Store</h3>
+                <p><span class="tick-mark">&#10004;</span>Healthy Life</p>
+                <p><span class="tick-mark">&#10004;</span>Quality Products For You</p>
+                <p><span class="tick-mark">&#10004;</span>Hustle Free Order</p>
+                <p><span class="tick-mark">&#10004;</span>Best Offers & Coupons</p>
+                <p><span class="tick-mark">&#10004;</span>Easy at your doorstep</p>
+            </div>
+        </div>
+        <!-- Add this HTML code within your main tag in the existing HTML structure -->
+
+        <div class="testimonial-container">
+            <div class="testimonial-content">
+                <img src="images/float.png" alt="Floating Image" class="testimonial-image">
+                <div class="testimonial-text">
+                    <div class="testimonial-avatar">
+                        <img src="images/c1.jpg" alt="Avatar 1" class="avatar-image">
+                        <div class="avatar-content">
+                            <p>The HealthSync Hub has been a game-changer for me. Ordering my medications is a breeze,
+                                and the detailed
+                                information provided helps me make informed decisions about my health.</p>
+                            <p class="avatar-name">Vaish</p>
+                        </div>
+                    </div>
+
+                    <div class="testimonial-avatar">
+                        <img src="images/c1.jpg" alt="Avatar 2">
+                        <p>The convenience of having my medications delivered to my doorstep is unparalleled. The
+                            security
+                            measures instill
+                            confidence in every transaction.</p>
+                        <p class="avatar-name">Ap</p>
+                    </div>
+                    <div class="testimonial-avatar">
+                        <img src="images/c2.jpg" alt="Avatar 3">
+                        <p>As a busy professional, the efficient service has saved me countless hours. The ability to
+                            chat with
+                            a pharmacist
+                            online for quick advice is fantastic, making it so much easier to manage my health.</p>
+                        <p class="avatar-name">Rohit</p>
+                    </div>
+
+                </div>
+            </div>
+        </div>
+
+    </main>
+
+</body>
+
+</html>

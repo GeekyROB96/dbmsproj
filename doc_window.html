@@ -1,0 +1,407 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Doctor Dashboard</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css"
+        integrity="sha512-+mFNK84PgXH2y4GAdi2GBjJ5UIqU8tGJGgADj/AgcS/boG3Pbp7SkF/43VckZ6OqQwjr0j/zyv5JYzvjLISBUQ=="
+        crossorigin="anonymous" referrerpolicy="no-referrer" />
+    <style>
+        /* Add your existing styles here */
+        .modal {
+            display: none;
+            position: fixed;
+            z-index: 1;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            overflow: auto;
+            background-color: rgb(0, 0, 0);
+            background-color: rgba(0, 0, 0, 0.4);
+            padding-top: 60px;
+        }
+
+        .modal-content {
+            background-color: #fefefe;
+            margin: 5% auto;
+            padding: 20px;
+            border: 1px solid #888;
+            width: 80%;
+        }
+
+        .close {
+            color: #aaa;
+            float: right;
+            font-size: 28px;
+            font-weight: bold;
+        }
+
+        .close:hover,
+        .close:focus {
+            color: black;
+            text-decoration: none;
+            cursor: pointer;
+        }
+
+        .container {
+            display: flex;
+            flex-direction: row;
+            align-items: flex-start;
+            margin-bottom: 20px;
+        }
+
+        .details-container {
+            border: 1px solid #ccc;
+            padding: 20px;
+            border-radius: 5px;
+            margin-bottom: 20px;
+            flex: 1;
+        }
+
+        .appointment-card {
+            border: 1px solid #ccc;
+            padding: 20px;
+            border-radius: 5px;
+            margin-bottom: 20px;
+        }
+
+        .button-container {
+            display: flex;
+            gap: 10px;
+            margin-top: 20px;
+        }
+
+        .button-container button {
+            padding: 10px 20px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 16px;
+            transition: background-color 0.3s;
+        }
+
+        .button-container button.postpone-btn {
+            background-color: #007bff;
+            color: white;
+        }
+
+        .button-container button.delete-btn {
+            background-color: #dc3545;
+            color: white;
+        }
+
+        .button-container button:hover {
+            background-color: #0056b3;
+        }
+
+        .button-container .postpone-btn i,
+        .button-container .delete-btn i {
+            margin-right: 5px;
+        }
+
+        /* Styles for the modal */
+        .modal {
+            display: none;
+            position: fixed;
+            z-index: 1;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            overflow: auto;
+            background-color: rgb(0, 0, 0);
+            background-color: rgba(0, 0, 0, 0.4);
+            padding-top: 60px;
+        }
+
+        .modal-content {
+            background-color: #fefefe;
+            margin: 5% auto;
+            padding: 20px;
+            border: 1px solid #888;
+            width: 80%;
+        }
+
+        .close {
+            color: #aaa;
+            float: right;
+            font-size: 28px;
+            font-weight: bold;
+        }
+
+        .close:hover,
+        .close:focus {
+            color: black;
+            text-decoration: none;
+            cursor: pointer;
+        }
+    </style>
+
+</head>
+
+<body>
+    <!-- Modal -->
+    <div id="myModal" class="modal">
+        <div class="modal-content">
+            <span class="close" onclick="closeModal()">&times;</span>
+            <h2>Postpone Appointment</h2>
+            <form id="postponeForm">
+                <label for="newAppointmentDate">New Appointment Date:</label>
+                <input type="date" id="newAppointmentDate" name="newAppointmentDate" required>
+                <br>
+                <label for="newAppointmentTime">New Appointment Time:</label>
+                <input type="time" id="newAppointmentTime" name="newAppointmentTime" required>
+                <br>
+                <button type="button" onclick="submitPostponeForm()">Submit</button>
+            </form>
+        </div>
+    </div>
+    <div id="deleteModal" class="modal">
+        <div class="modal-content">
+            <span class="close" onclick="closeDeleteModal()">&times;</span>
+            <h2>Delete Appointment</h2>
+            <p>Are you sure you want to delete this appointment?</p>
+            <button onclick="confirmDeleteAppointment()">Yes, Delete</button>
+            <button onclick="closeDeleteModal()">Cancel</button>
+        </div>
+    </div>
+
+    <!-- Rest of your HTML -->
+
+    <h2 id="doctorNameHeading">Hello Doctor Name</h2>
+    <div class="container">
+        <!-- Doctor Details Container -->
+        <div style="margin-right: 20px;">
+            <h3>Doctor Details</h3>
+            <div id="doctorDetails"></div>
+        </div>
+
+        <!-- Patient Appointment Details Container -->
+        <div class="details-container" id="appointmentListContainer">
+            <h3>Patient Appointment Details</h3>
+        </div>
+    </div>
+
+</body>
+
+<script>
+    document.addEventListener('DOMContentLoaded', function () {
+        // This function will be called when the DOM is fully loaded
+        getAppointmentDetails();
+
+        // Retrieve doctor form data from sessionStorage
+        var doctorFormData = sessionStorage.getItem("doctorDetailss");
+        if (doctorFormData) {
+            // Parse the JSON data
+            var doctorData = JSON.parse(doctorFormData);
+
+            // Display doctor's name in the h2 tag
+            document.getElementById("doctorNameHeading").textContent = `Hello ${doctorData.DoctorName}`;
+
+            // Populate the container with the retrieved doctor data
+            document.getElementById("doctorDetails").innerHTML = `
+            <p>Name: ${doctorData.DoctorName}</p>
+            <p>Specialization: ${doctorData.Specialization}</p>
+            <p>Availability: ${doctorData.Availability}</p>
+        `;
+        }
+    });
+
+    function getAppointmentDetails() {
+        fetch('http://localhost:3000/appointment/appointment/all', {
+            method: 'GET',
+            headers: {
+                'Content-Type': 'application/json'
+            }
+        })
+            .then(response => {
+                if (!response.ok) {
+                    throw new Error(`HTTP error! Status: ${response.status}`);
+                }
+                return response.json();
+            })
+            .then(data => {
+                // Log the response in the console
+                console.log('All Patients:', data);
+                displayAppointments(data.appointments);
+            })
+            .catch(error => {
+                console.error('Error:', error);
+            });
+    }
+
+    function displayAppointments(appointments) {
+        var appointmentListContainer = document.getElementById("appointmentListContainer");
+
+        // Check if appointments is an array
+        if (Array.isArray(appointments)) {
+            appointments.forEach(appointment => {
+                var appointmentCard = document.createElement("div");
+                appointmentCard.classList.add("appointment-card");
+
+                appointmentCard.innerHTML = `
+                <p><strong>ID:</strong> ${appointment.id}</p>
+                <p><strong>Appointment ID:</strong> ${appointment.AppointmentId}</p>
+                <p><strong>Patient Name:</strong> ${appointment.PatientId}</p>
+                <p><strong>Appointment Date:</strong> ${appointment.AppointmentDate}</p>
+                <p><strong>Appointment Time:</strong> ${appointment.AppointmentTime}</p>
+                <p><strong>Remarks:</strong> ${appointment.Remarks}</p>
+                <p><strong>Symptoms:</strong> ${appointment.Symptoms}</p>
+                <div class="button-container">
+                    <button class="postpone-btn" onclick="postponeAppointment(${appointment.id})"><i class="fas fa-calendar-alt"></i> Postpone</button>
+                    <button class="delete-btn" onclick="deleteAppointmentConfirmation(${appointment.id})">Delete</button>
+                    <button class="diagnosis-btn" onclick="navigateToDiagnosisWindow(${appointment.id})">Diagnosis Report</button>
+                </div>
+            `;
+
+                appointmentListContainer.appendChild(appointmentCard);
+            });
+        } else {
+            // Handle the case where appointments is not an array
+            console.error('Error: Appointments data is not an array');
+        }
+    }
+
+    function postponeAppointment(appointmentId) {
+        // Open the modal
+        var modal = document.getElementById("myModal");
+        modal.style.display = "block";
+
+        // Store the appointmentId in a hidden input field
+        var hiddenAppointmentIdInput = document.createElement("input");
+        hiddenAppointmentIdInput.type = "hidden";
+        hiddenAppointmentIdInput.name = "appointmentId";
+        hiddenAppointmentIdInput.value = appointmentId;
+        document.getElementById("postponeForm").appendChild(hiddenAppointmentIdInput);
+    }
+
+    function closeModal() {
+        // Close the modal
+        var modal = document.getElementById("myModal");
+        modal.style.display = "none";
+
+        // Reset the form
+        document.getElementById("postponeForm").reset();
+        // Remove the hidden input
+        var hiddenAppointmentIdInput = document.querySelector("input[name='appointmentId']");
+        if (hiddenAppointmentIdInput) {
+            hiddenAppointmentIdInput.parentNode.removeChild(hiddenAppointmentIdInput);
+        }
+    }
+
+    function submitPostponeForm() {
+        // Retrieve data from the form
+        var appointmentId = document.querySelector("input[name='appointmentId']").value;
+        var newAppointmentDate = document.getElementById("newAppointmentDate").value;
+        var newAppointmentTime = document.getElementById("newAppointmentTime").value;
+
+        // Prepare data for the server
+        var postData = {
+            "AppointmentDate": newAppointmentDate,
+            "AppointmentTime": newAppointmentTime
+        };
+
+        // Send the data to the server to update the appointment
+        fetch(`http://localhost:3000/appointment/appointment/${appointmentId}`, {
+            method: 'PATCH',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify(postData)
+        })
+            .then(response => {
+                if (!response.ok) {
+                    throw new Error(`HTTP error! Status: ${response.status}`);
+                }
+                return response.json();
+            })
+            .then(data => {
+                // Log the response in the console
+                console.log('Updated Appointment:', data);
+
+                // Close the modal and update the UI as needed
+                closeModal();
+                // You may want to refresh the appointment details on the UI after updating
+                getAppointmentDetails();
+            })
+            .catch(error => {
+                console.error('Error:', error);
+                // Handle the error as needed
+            });
+    }
+
+    function deleteAppointmentConfirmation(appointmentId) {
+        // Open the delete confirmation modal
+        var deleteModal = document.getElementById("deleteModal");
+        deleteModal.style.display = "block";
+
+        // Store the appointmentId in a hidden input field
+        var hiddenAppointmentIdInput = document.createElement("input");
+        hiddenAppointmentIdInput.type = "hidden";
+        hiddenAppointmentIdInput.name = "deleteAppointmentId";
+        hiddenAppointmentIdInput.value = appointmentId;
+        document.getElementById("deleteModal").appendChild(hiddenAppointmentIdInput);
+    }
+
+    function closeDeleteModal() {
+        // Close the delete confirmation modal
+        var deleteModal = document.getElementById("deleteModal");
+        deleteModal.style.display = "none";
+
+        // Remove the hidden input
+        var hiddenAppointmentIdInput = document.querySelector("input[name='deleteAppointmentId']");
+        if (hiddenAppointmentIdInput) {
+            hiddenAppointmentIdInput.parentNode.removeChild(hiddenAppointmentIdInput);
+        }
+    }
+
+    function confirmDeleteAppointment() {
+        // Retrieve appointmentId from the hidden input
+        var appointmentIdToDelete = document.querySelector("input[name='deleteAppointmentId']").value;
+
+        // Send request to the server to delete the appointment
+        fetch(`http://localhost:3000/appointment/appointment/${appointmentIdToDelete}`, {
+            method: 'DELETE',
+            headers: {
+                'Content-Type': 'application/json'
+            }
+        })
+            .then(response => {
+                if (!response.ok) {
+                    throw new Error(`HTTP error! Status: ${response.status}`);
+                }
+                return response.json();
+            })
+            .then(data => {
+                // Log the response in the console
+                console.log('Deleted Appointment:', data);
+
+                // Close the delete confirmation modal
+                closeDeleteModal();
+
+                // Update the UI as needed
+                // You may want to refresh the appointment details on the UI after deletion
+                getAppointmentDetails();
+            })
+            .catch(error => {
+                console.error('Error:', error);
+                // Handle the error as needed
+            });
+    }
+    function navigateToDiagnosisWindow(id) {
+        console.log('Navigating to diagnosis window for appointment id:', id);
+        // Store the appointmentId in sessionStorage
+        sessionStorage.setItem("selectedAppointmentId", id);
+      //  console.log('Navigating to diagnosis window for appointment id:', id);
+
+        // Redirect to the diagnosis.html window
+        window.location.href = 'diagnosis.html';
+    }
+  
+</script>
+
+</html>

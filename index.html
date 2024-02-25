@@ -1,0 +1,709 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Doctor's Appointment</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta2/css/all.min.css"
+        integrity="sha512-YWzhKL2whUzgiheMoBFwW8CKV4qpHQAEuvilg9FAn5VJUDwKZZxkJNuGM4XkWuk94WCrrwslk8yWNGmY1EduTA=="
+        crossorigin="anonymous" referrerpolicy="no-referrer" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css" />
+    <link rel="stylesheet" href="style.css">
+    <style>
+        /* Modal Styles */
+        .modal {
+            display: none;
+            position: fixed;
+            z-index: 1000;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            overflow: auto;
+            background-color: rgba(0, 0, 0, 0.4);
+        }
+
+        .modal-content {
+            background-color: #fefefe;
+            margin: 15% auto;
+            padding: 20px;
+            border: 1px solid #888;
+            width: 80%;
+            max-width: 400px;
+            text-align: center;
+        }
+
+        .close {
+            color: #aaa;
+            float: right;
+            font-size: 28px;
+            font-weight: bold;
+        }
+
+        .close:hover,
+        .close:focus {
+            color: black;
+            text-decoration: none;
+            cursor: pointer;
+        }
+
+        /* Icon Styles */
+        .icon {
+            margin-right: 10px;
+        }
+
+        /* Form Styles */
+        .form-group {
+            margin-bottom: 20px;
+            display: flex;
+            align-items: center;
+        }
+
+        .form-group label {
+            flex: 0 0 30px;
+            /* Adjust based on icon size */
+            text-align: right;
+            margin-right: 10px;
+        }
+
+        .form-group input {
+            flex: 1;
+            padding: 10px;
+            border-radius: 5px;
+            border: 1px solid #ccc;
+            font-size: 16px;
+        }
+    </style>
+</head>
+
+<body>
+    <!-- Hero section  -->
+    <div class="hero-container">
+        <!-- navigation -->
+        <header>
+            <nav class="nav-container animate_animated animate_fadeInDown">
+                <div class="logo">
+                    <h2>HealthSync Hub</h2>
+                </div>
+                <div class="menu-links">
+                    <a href="index.html#home">Home</a>
+                    <a href="doctors.html#doctors">Doctors</a>
+                    <a href="pharmacy.html#pharmacy">Pharmacy</a>
+                    <a href="services.html#services">Services</a>
+                    <a href="appointments.html#appointments">Appointments</a>
+                    <a href="about.html#about">About</a>
+                </div>
+                <div class="nav-btn">
+                    <button id="signupBtn" class="btn btn-primary">Sign Up</button>
+                    <button id="loginBtn" class="btn btn-secondary">Login</button>
+                </div>
+            </nav>
+        </header>
+        <!-- hero-content  -->
+
+        <section class="hero">
+            <div class="container">
+                <div class="hero-section">
+                    <div class="hero-content">
+                        <h1 class="animate_animated animate_bounce">Your Path to Health and Happiness <span
+                                class="hero-text">begins with a click.
+                            </span> </h1>
+                        <p>Join us and take care of yourself and your family with health services that will make you
+                            feel
+                            confident and safe in your daily life.</p>
+                        <div class="hero-btn">
+                            <a href="#" class="btn btn-primary">Try Now</a>
+                            <a href="#" class="btn btn-secondary">Get Appointment</a>
+                        </div>
+                    </div>
+                    <div class="hero-img">
+                        <img src="images/doctor-img.svg" alt="Doctor">
+                    </div>
+                </div>
+            </div>
+        </section>
+
+    </div>
+
+    <!-- Modal -->
+    <div id="myModal" class="modal">
+        <div class="modal-content">
+            <span class="close">&times;</span>
+            <h3>Choose Account Type</h3>
+            <button class="btn btn-primary" id="patientBtn"><i class="fas fa-user icon"></i>Patient</button>
+            <button class="btn btn-primary" id="doctorBtn"><i class="fas fa-user-md icon"></i>Doctor</button>
+
+            <!-- Patient Form -->
+            <div id="patientForm" style="display: none;">
+                <h3>Patient Signup</h3>
+
+
+            <form id="signUpForm" method="post">
+    <label for="PatientName">Name:</label>
+    <input type="text" id="PatientName" name="PatientName" required>
+
+    <label for="PatientDOB">Date of Birth:</label>
+    <input type="date" id="PatientDOB" name="PatientDOB" >
+
+    <label for="Address">Address:</label>
+    <input type="text" id="Address" name="Address" required>
+
+    <label for="ContactNo">Contact Number:</label>
+    <input type="text" id="ContactNo" name="ContactNo" required>
+
+    <label for="PatientEmail">Email:</label>
+    <input type="email" id="PatientEmail" name="PatientEmail" required>
+
+    <label for="PatientPassword">Password:</label>
+    <input type="password" id="PatientPassword" name="PatientPassword" required>
+
+    <button type="button" onclick="submitForm()">Sign Up</button>
+</form>
+            </div>
+
+            <!-- Doctor Form -->
+            <div id="doctorForm" style="display: none;">
+                <h3>Doctor Signup</h3>
+                <form id="doctorSignupForm" onsubmit="saveDoctorFormData(event)">
+                    <div class="form-group">
+                        <label for="doctorName"><i class="fas fa-user-md icon"></i></label>
+                        <input type="text" placeholder="Name" id="doctorName" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="doctorEmail"><i class="fas fa-envelope icon"></i></label>
+                        <input type="email" placeholder="Email" id="doctorEmail" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="doctorPassword"><i class="fas fa-lock icon"></i></label>
+                        <input type="password" placeholder="Password" id="doctorPassword" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="doctorSpecialization"><i class="fas fa-user-tag icon"></i></label>
+                        <input type="text" placeholder="Specialization" id="doctorSpecialization" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="doctorAvailability"><i class="far fa-calendar-check icon"></i></label>
+                        <input type="text" placeholder="Availability" id="doctorAvailability" required>
+                    </div>
+                    <button type="submit" class="btn btn-primary">Signup</button>
+                </form>
+            </div>
+
+            <!-- Login Form -->
+            <div id="loginForm">
+                <h3>Login</h3>
+                <form id="loginFormContent" >
+                    <label for="PatientEmail">Email:</label>
+                    <input type="email" id="PatientEmail" name="PatientEmail" required>
+                
+                    <label for="PatientPassword">Password:</label>
+                    <input type="password" id="PatientPassword" name="PatientPassword" required>
+                
+                    <button type="submit" class="btn btn-primary" onclick="submitLoginForm()">Login</button>
+                </form>
+            </div>
+
+            <div id="doctorLoginForm" style="display: none;">
+                <h3>Doctor Login</h3>
+                <form id="doctorLoginFormContent">
+                    <label for="DoctorEmail">Email:</label>
+                    <input type="email" id="DoctorEmail" name="DoctorEmail" required>
+            
+                    <label for="DoctorPassword">Password:</label>
+                    <input type="password" id="DoctorPassword" name="DoctorPassword" required>
+            
+                    <button type="submit" class="btn btn-primary" onclick="submitDoctorLoginForm()">Login</button>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <!-- steps-section  -->
+    <section class="steps-section wow animate_animated animate_fadeInLeftBig">
+        <div class="container">
+            <div class="easy-steps">
+                <h2>Easy Steps and Get Your Solution</h2>
+
+                <div class="steps-icon-box">
+                    <div class="steps">
+                        <img src="images/search-icon.svg" alt="search icon">
+                        <h3>Find best doctor's</h3>
+                        <p>Find your doctor easily with a minimum of effort. We've kept everything organised for
+                            you.</p>
+                    </div>
+                    <div class="steps">
+                        <img src="images/Appointment-icon.png" alt="search icon">
+                        <h3>Find best Medicine's</h3>
+                        <p>Manage hustle free buying of medicines at your doorsteps</p>
+                    </div>
+                    <div class="steps">
+                        <img src="images/Consultancy-icon.png" alt="search icon">
+                        <h3>Find best Service</h3>
+                        <p>Elevate your healthcare facility's efficiency and patient care with our comprehensive
+                            service.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- about section  -->
+
+    <section class="about">
+        <div class="about-section">
+            <div class="about-img">
+                <img src="images/docs.jpg" alt="doctor">
+
+            </div>
+            <div class="about-content wow animate_animated animate_fadeInTopRight">
+                <h2>Best quality service with our experienced
+                    doctors</h2>
+                <p>With our top doctors, we are able to provide best medical services above average We have
+                    highly experienced doctors.</p>
+                <ul>
+                    <li> <i class="fas fa-check-circle"></i> Search your specialist & book at your fingertips</li>
+                    <li> <i class="fas fa-check-circle"></i> Search for medicine & Online order to your doorsteps</li>
+                    <li> <i class="fas fa-check-circle"></i> Search your specialist & Online consultations anywhere</li>
+                </ul>
+                <div class="about-btn">
+                    <a href="#" class="btn btn-primary"> Explore All Features</a>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- services section  -->
+    <section class="service">
+        <div class="container">
+            <div class="services-section">
+                <h2>Our Services</h2>
+                <p>Our doctors have highly qualified skills and are guaranteed to help you recover from your disease.
+                </p>
+
+                <div class="services-box">
+                    <div class="services">
+                        <img src="images/cardio-icon.svg" alt="cardio">
+                        <h3>Cardiology</h3>
+                        <p>Our cardiologists are skilled at the diagnosing and treating diseases of the cardiovascular
+                            system.</p>
+                    </div>
+                    <div class="services">
+                        <img src="images/lungs-icon.svg" alt="lungs">
+                        <h3>Dentistry</h3>
+                        <p>Dentists are doctors, scientists, and clinicians who play a key role in the early detection
+                            of oral cancer. </p>
+                    </div>
+                    <div class="services">
+                        <img src="images/lungs-icon.svg" alt="capsule">
+                        <h3>Ortho</h3>
+                        <p>Orthopaedics is the medical specialty that focuses on
+                            injuries and diseases of your
+                            body's musculoskeletal system.</p>
+                    </div>
+
+                </div>
+            </div>
+    </section>
+
+    <!-- our team section  -->
+    <section class="our-doctors">
+        <div class="container">
+            <div class="doctors-section">
+                <h2>Meet Our Certified Online Doctors</h2>
+                <div class="border"></div>
+                <p>Our online doctors have an average of 15 years experience and a 98% satisfaction rating, they really
+                    set us apart!</p>
+
+                <div class="team-section">
+                    <div class="doctors">
+                        <img src="images/doctor-linda.png" alt="Dr. Tsunade">
+                        <h3>Dr Tsunade</h3>
+                        <p>Dentist</p>
+                        <div class="social-icons">
+                            <i class="fab fa-facebook-f"></i>
+                            <i class="fab fa-twitter"></i>
+                            <i class="fab fa-linkedin-in"></i>
+                        </div>
+                    </div>
+                    <div class="doctors">
+                        <img src="images/doc.jpg" alt="Dr. Temari">
+                        <h3>Dr Temari</h3>
+                        <p>Cardiologist</p>
+                        <div class="social-icons">
+                            <i class="fab fa-facebook-f"></i>
+                            <i class="fab fa-twitter"></i>
+                            <i class="fab fa-linkedin-in"></i>
+                        </div>
+                    </div>
+                    <div class="doctors">
+                        <img src="images/dr-alisa.png" alt="Dr. Sakura">
+                        <h3>Dr Sakura </h3>
+                        <p>Ortho</p>
+                        <div class="social-icons">
+                            <i class="fab fa-facebook-f"></i>
+                            <i class="fab fa-twitter"></i>
+                            <i class="fab fa-linkedin-in"></i>
+                        </div>
+                    </div>
+                    <div class="doctors">
+                        <img src="images/dr-ant.png" alt="Dr. Hatake">
+                        <h3>Dr Hatake </h3>
+                        <p>Neurologist</p>
+                        <div class="social-icons">
+                            <i class="fab fa-facebook-f"></i>
+                            <i class="fab fa-twitter"></i>
+                            <i class="fab fa-linkedin-in"></i>
+                        </div>
+                    </div>
+                </div>
+                <div class="doctors-btn">
+                    <a href="#" class="btn btn-primary"> Explore All Features</a>
+                </div>
+            </div>
+        </div>
+    </section>
+    <!-- mobile app  -->
+    <section class="moblieapp">
+        <div class="container">
+            <div class="moblieapp-section">
+
+            </div>
+            <!-- book appointment  -->
+            <div class="bookappointment">
+                <div class="bookapp-content">
+                    <h2>It’s time change your<br>
+                        life today</h2>
+                    <a href="#" class="btn btn-bookapp"> Book an Appoinment </a>
+                    <div class="bookapp-img">
+                        <img src="images/smiling-young-female-doctor-wearing-medical-robe-with-stethoscope-spreading-hand-isolated-green-wall 1.png"
+                            alt="Doctor-sarah">
+                    </div>
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </section>
+
+    <!-- footer  -->
+
+    <footer>
+        <div class="container">
+            <div class="footer-section">
+                <div class="footer-content">
+                    <div class="footer-logo">
+                        <h2>
+                            HealthSync Hub.
+                        </h2>
+                        <div>
+                            <a>Mysore,Karnataka</a>
+                        </div>
+                        <div class="contact-num">
+                            <a>Contact us: 123-456-7891</a>
+                        </div>
+                        <div class="social-icon">
+                            <i class="fab fa-facebook-f"></i>
+                            <i class="fab fa-instagram"></i>
+                            <i class="fab fa-twitter"></i>
+                            <i class="fab fa-youtube"></i>
+                        </div>
+                    </div>
+                    <div class="footer-category">
+                        <h3>Category</h3>
+                        <a href="#home">Home</a>
+                        <a href="#about">About</a>
+                        <a href="#services">Services</a>
+                        <a href="#reviews">Reviews</a>
+                        <a href="#Article">Article</a>
+                    </div>
+                    <div class="footer-about">
+                        <h3>About</h3>
+                        <a href="#Partners">Partners</a>
+                        <a href="#Careers">Careers</a>
+                        <a href="#Press">Press</a>
+                        <a href="#Community">Community</a>
+                    </div>
+                    <div class="subscribe-newsletter">
+                        <h3>Subscribe newsletter</h3>
+                        <a>Sign up for tips, new destinations, and<br> exclusive promos.</a>
+                        <br>
+                        <input class="newsletter_field" type="text" placeholder="Enter your email">
+                        <div class="subcribe-btn">
+                            <a href="#" class="btn btn-primary"> Subcribe</a>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+
+        </div>
+
+        <div class="copyright-section">
+            <div class="container">
+                <div class="copyright-content">
+                    <div class="copyright-left">
+                        <span>© 2024 HealthSync Hub - All rights reserved.</span>
+                    </div>
+                    <div class="copyright-right">
+                        <a href="#Privacy">Privacy</a>
+                        <a href="#Security">Security</a>
+                        <a href="#Terms">Terms</a>
+                        <a href="#Diclaimer">Disclaimer</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <script>
+
+
+
+        function submitForm() {
+            // Get form data
+            var formData = new FormData(document.getElementById('signUpForm'));
+    
+            // Convert FormData to a plain JavaScript object
+            var formDataObject = {};
+            formData.forEach((value, key) => {
+                formDataObject[key] = value;
+            });
+    
+            // Make a POST request to the server with JSON data
+            fetch('http://localhost:3000/patient/sign-up', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify(formDataObject),
+                withCredentials: true
+            })
+            .then(response => response.json())
+            .then(data => {
+                // Log the response in the console
+                console.log('Server Response:', data);
+            })
+            .catch(error => {
+                console.error('Error:', error);
+            });
+        }
+
+                document.getElementById('loginFormContent').addEventListener('submit', submitLoginForm);
+                function submitLoginForm(event) {
+                    event.preventDefault(); // Prevent the default form submission behavior
+                
+                    var formData = new FormData(document.getElementById('loginFormContent'));
+                
+                    // Convert FormData to a plain JavaScript object
+                    var formDataObject = {};
+                    formData.forEach((value, key) => {
+                        formDataObject[key] = value;
+                    });
+                
+                    // Make a POST request to the server with JSON data
+                    fetch('http://localhost:3000/patient/login', {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json',
+                        },
+                        body: JSON.stringify(formDataObject),
+                        withCredentials: true
+                    })
+                    .then(response => response.json())
+                    .then(data => {
+                        // Log the response in the console
+                        console.log('Server Response:', data);
+                        var patientDetails = data.patient;
+                        sessionStorage.setItem("patientDetailss", JSON.stringify(patientDetails));
+                
+                        console.log(patientDetails);
+                
+                        window.location.assign("patient_window.html"); // Move this line here
+                    })
+                    .catch(error => {
+                        console.error('Error:', error);
+                    });
+                }
+                
+                // Move the event listener outside the function
+                document.getElementById('loginFormContent').addEventListener('submit', submitLoginForm);
+                
+        
+                doctorLoginFormContent
+
+
+
+                document.getElementById('doctorLoginFormContent').addEventListener('submit', submitDoctorLoginForm);
+                function submitDoctorLoginForm(event) {
+                    event.preventDefault(); // Prevent the default form submission behavior
+                
+                    var formData = new FormData(document.getElementById('doctorLoginFormContent'));
+                
+                    // Convert FormData to a plain JavaScript object
+                    var formDataObject = {};
+                    formData.forEach((value, key) => {
+                        formDataObject[key] = value;
+                    });
+                
+                    // Make a POST request to the server with JSON data
+                    fetch('http://localhost:3000/doctor/login', {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json',
+                        },
+                        body: JSON.stringify(formDataObject),
+                        withCredentials: true
+                    })
+                    .then(response => response.json())
+                    .then(data => {
+                        // Log the response in the console
+                        console.log('Server Response:', data);
+                        var doctorDetails = data.doctor;
+                       sessionStorage.setItem("doctorDetailss", JSON.stringify(doctorDetails));
+                
+                        console.log(doctorDetails);
+                
+                        window.location.assign("doc_window.html"); // Move this line here
+                    })
+                    .catch(error => {
+                        console.error('Error:', error);
+                    });
+                }
+                
+                // Move the event listener outside the function
+                document.getElementById('doctorLoginFormContent').addEventListener('submit', submitDoctorLoginForm);
+                
+        
+        
+        // Get the modal
+        var modal = document.getElementById("myModal");
+
+        // Get the button that opens the modal
+        var signupBtn = document.getElementById("signupBtn");
+        var loginBtn = document.getElementById("loginBtn");
+
+        // Get the <span> element that closes the modal
+        var span = document.getElementsByClassName("close")[0];
+
+        // When the user clicks the button to open the modal
+        signupBtn.onclick = function () {
+            modal.style.display = "block";
+            // Hide the login form
+            document.getElementById("loginForm").style.display = "none";
+        }
+
+        loginBtn.onclick = function () {
+            modal.style.display = "block";
+            showLoginForm();
+        }
+
+        // When the user clicks on <span> (x), close the modal
+        span.onclick = function () {
+            modal.style.display = "none";
+        }
+
+        // When the user clicks anywhere outside of the modal, close it
+        window.onclick = function (event) {
+            if (event.target == modal) {
+                modal.style.display = "none";
+            }
+        }
+
+        // Show login form
+        function showLoginForm() {
+            var loginForm = document.getElementById("loginForm");
+            loginForm.style.display = "block";
+            // Hide unnecessary fields
+            var patientForm = document.getElementById("patientForm");
+            var doctorForm = document.getElementById("doctorForm");
+            patientForm.style.display = "none";
+            doctorForm.style.display = "none";
+        }
+
+        // Show Patient Form
+        var patientBtn = document.getElementById("patientBtn");
+        var patientForm = document.getElementById("patientForm");
+        patientBtn.onclick = function () {
+            modal.style.display = "block"; // Display modal
+            patientForm.style.display = "block";
+            doctorForm.style.display = "none";
+            hideLoginForm();
+        }
+
+        // Show Doctor Form
+        var doctorBtn = document.getElementById("doctorBtn");
+        var doctorForm = document.getElementById("doctorForm");
+
+       /* doctorBtn.onclick = function () {
+            modal.style.display = "block"; // Display modal
+            doctorForm.style.display = "block";
+            patientForm.style.display = "none";
+            hideLoginForm();
+        }  */
+
+        doctorBtn.onclick = function () {
+            modal.style.display = "block"; // Display modal
+            patientForm.style.display = "none";
+            doctorForm.style.display = "none";
+            doctorLoginForm.style.display = "block";
+            hideLoginForm();
+        }
+
+        // Hide login form
+        function hideLoginForm() {
+            var loginForm = document.getElementById("loginForm");
+            loginForm.style.display = "none";
+        }
+
+        // Show pop-up message on successful login form submission
+        document.getElementById("loginForm").onsubmit = function (event) {
+            // Prevent default form submission
+            event.preventDefault();
+
+            // Show pop-up message
+            //alert("Logged in successfully!");
+            submitLoginForm(event);
+            // Close the modal
+          //  modal.style.display = "none";
+            // You can add additional functionality here such as redirecting the user to another page
+        }
+
+        // Redirect to patient signup page after filling patient signup form
+        document.getElementById("patientSignupForm").onsubmit = function () {
+            // Get form data
+            var formData = {
+                patientName: document.getElementById("patientName").value,
+                patientPhone: document.getElementById("patientPhone").value,
+                patientDOB: document.getElementById("patientDOB").value,
+                patientAddress: document.getElementById("patientAddress").value
+            };
+            // Store form data in sessionStorage
+            sessionStorage.setItem("patientFormData", JSON.stringify(formData));
+            // Redirect to patient signup page
+            window.location.href = "patient_window.html";
+            return false; // Prevent default form submission
+        }
+
+        // Redirect to doctor signup page after filling doctor signup form
+        document.getElementById("doctorSignupForm").onsubmit = function () {
+            // Get form data
+            var formData = {
+                doctorName: document.getElementById("doctorName").value,
+                doctorSpecialization: document.getElementById("doctorSpecialization").value,
+                doctorAvailability: document.getElementById("doctorAvailability").value
+            };
+            sessionStorage.setItem("doctorFormData", JSON.stringify(formData));
+            window.location.href = "doc_window.html";
+            return false; // Prevent default form submission
+        }
+    </script>
+
+
+
+</body>
+
+</html>

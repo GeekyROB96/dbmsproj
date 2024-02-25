@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Cart Page</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 20px;
+        }
+
+        h1 {
+            text-align: center;
+        }
+
+        .cart-product {
+            border-bottom: 1px solid #ccc;
+            padding: 10px 0;
+            display: flex;
+            align-items: center;
+        }
+
+        .product-image {
+            width: 80px;
+            height: 80px;
+            margin-right: 20px;
+        }
+
+        .product-info {
+            flex-grow: 1;
+        }
+
+        .product-info h3 {
+            margin: 0;
+            font-size: 18px;
+        }
+
+        .product-info p {
+            margin: 5px 0;
+        }
+
+        .total-price {
+            font-weight: bold;
+            margin-top: 20px;
+            text-align: right;
+        }
+    </style>
+</head>
+
+<body>
+    <h1>Cart</h1>
+    <div id="cartItems"></div>
+    <div id="cartTotal" class="total-price"></div>
+
+    <script>
+        var cart = JSON.parse(localStorage.getItem('cart'));
+
+        if (cart && cart.length > 0) {
+            var cartItemsDiv = document.getElementById('cartItems');
+            var cartTotalDiv = document.getElementById('cartTotal');
+            var totalPrice = 0;
+
+            cart.forEach(function (item) {
+                var itemTotal = item.price * item.quantity;
+                totalPrice += itemTotal;
+
+                var productDiv = document.createElement('div');
+                productDiv.classList.add('cart-product');
+
+                var productImage = document.createElement('img');
+                productImage.src = 'images/' + item.name + '.jpg';
+                productImage.alt = item.name;
+                productImage.classList.add('product-image');
+
+                var productInfoDiv = document.createElement('div');
+                productInfoDiv.classList.add('product-info');
+
+                var productNameHeading = document.createElement('h3');
+                productNameHeading.textContent = item.name;
+
+                var quantityParagraph = document.createElement('p');
+                quantityParagraph.textContent = 'Quantity: ' + item.quantity;
+
+                var totalPriceParagraph = document.createElement('p');
+                totalPriceParagraph.textContent = 'Total Price: ₹' + itemTotal;
+
+                productInfoDiv.appendChild(productNameHeading);
+                productInfoDiv.appendChild(quantityParagraph);
+                productInfoDiv.appendChild(totalPriceParagraph);
+
+                productDiv.appendChild(productImage);
+                productDiv.appendChild(productInfoDiv);
+
+                cartItemsDiv.appendChild(productDiv);
+            });
+
+            cartTotalDiv.textContent = 'Total Price: ₹' + totalPrice;
+        } else {
+            document.body.innerHTML = '<h1>Your cart is empty</h1>';
+        }
+    </script>
+</body>
+
+</html>
