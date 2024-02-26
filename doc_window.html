@@ -7,10 +7,32 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Doctor Dashboard</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css"
-        integrity="sha512-+mFNK84PgXH2y4GAdi2GBjJ5UIqU8tGJGgADj/AgcS/boG3Pbp7SkF/43VckZ6OqQwjr0j/zyv5JYzvjLISBUQ=="
-        crossorigin="anonymous" referrerpolicy="no-referrer" />
+    crossorigin="anonymous" referrerpolicy="no-referrer" />
 
         <style>
+
+           
+
+            .button-container button.logout-btn {
+                padding: 10px 20px !important;
+                background-color: blue !important;
+                color: black !important;
+                border: none !important;
+                border-radius: 5px !important;
+                cursor: pointer !important;
+                font-size: 16px !important;
+                transition: background-color 0.3s !important;
+            }
+            
+            .button-container button.logout-btn:hover {
+                background-color: darkblue !important;
+            }
+            
+
+
+        
+            
+            
         body {
             font-family: 'Arial', sans-serif;
             margin: 0;
@@ -46,9 +68,21 @@
 
         .info-card {
             background-color: #f8f9fa;
-            border: 1px solid #dee2e6;
+            border: 1px solid #2f3438;
             border-radius: 5px;
-            padding: 12px;
+            padding: 10px;
+            margin-bottom: 10px;
+            position: relative;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .patient-info-card {
+            background-color: #f8f9fa;
+            border: 1px solid #2f3438;
+            border-radius: 5px;
+            padding: 25px;
             margin-bottom: 10px;
             position: relative;
             display: flex;
@@ -181,26 +215,43 @@
             width: auto;
             max-width: 80px;
         }
+        header {
+            margin-top: 10px; /* Add margin-top for spacing */
+            background-color: #007bff;
+            color: white;
+            text-align: center;
+            padding: 20px;
+            font-size: 28px;
+        }
     </style>
 
 
 </head>
 
 <body>
+    <header style="background-color: #007bff; color: white; text-align: center; font-size: x-large; padding: 40px; ">
+        Doctor  Dashboard
+    </header>
     <!-- Modal -->
     <div id="myModal" class="modal">
         <div class="modal-content">
             <span class="close" onclick="closeModal()">&times;</span>
             <h2>Postpone Appointment</h2>
             <form id="postponeForm">
+                <!-- Existing form fields -->
                 <label for="newAppointmentDate">New Appointment Date:</label>
                 <input type="date" id="newAppointmentDate" name="newAppointmentDate" required>
                 <br>
                 <label for="newAppointmentTime">New Appointment Time:</label>
                 <input type="time" id="newAppointmentTime" name="newAppointmentTime" required>
                 <br>
+                <!-- New Symptoms field -->
+                <label for="symptoms">Symptoms:</label>
+                <input type="text" id="symptoms" name="symptoms" required>
+                <br>
                 <button type="button" onclick="submitPostponeForm()">Submit</button>
             </form>
+            
         </div>
     </div>
     <div id="deleteModal" class="modal">
@@ -216,41 +267,53 @@
 
  
 
-    <h2 id="doctorNameHeading">Hello Doctor Name</h2>
+    <h2 id="doctorNameHeading" style="padding-left: 20px;">Hello Doctor Name</h2>
+    
     <div class="container">
         <div class="doctor-details-container">
-            <h3>Doctor Details</h3>
-            <img class="avatar" src="images/person.jpg" alt="Doctor Avatar"> <!-- Add this line for the avatar -->
+            <!-- Doctor Details bar with border radius on right top and bottom -->
+            <h3 style="background-color: #4d14a25d; color: rgb(24, 21, 21); padding: 10px; border-radius :5px; margin: 0;">Doctor Details</h3>
+  <img class="avatar" src="images/person.jpg" alt="Doctor Avatar"> <!-- Add this line for the avatar -->
 
             <!-- Card 1 -->
-            <div class="info-card">
-                <h4>Total Patients</h4>
-                <div class="progress-indicator">
-                    <i class="fas fa-user" style="animation: spin 2s linear infinite;"></i> 
-                    <span>42</span> 
-                </div>
-            </div>
+           
 
  
             <div class="info-card">
-                <h4>Appointments</h4>
+                <h4>Appointments </h4>
+
+              
+            </div>
+            <div class="patient-info-card">
+                <h4 style="font-weight: bold;">Patients </h4>
+
               
             </div>
 
+
+
             <div id="doctorDetails"></div>
-            <button type="logout-btn" onclick="logout()">Log Out</button> <!-- Add this line for the Log Out button -->
+            <button class="logout-btn" onclick="logout()" style="padding: 10px 20px; background-color: rgba(239, 24, 9, 0.982); color: black; border: none; border-radius: 5px; cursor: pointer; font-size: 16px; transition: background-color 0.3s;" onmouseover="this.style.backgroundColor='darkblue'" onmouseout="this.style.backgroundColor='blue'">Log Out</button>
         </div>
         <!-- Patient Appointment Details Container -->
-        <div class="details-container" id="appointmentListContainer">
-            <h3>Patient Appointment Details</h3>
+        <div class="details-container" id="appointmentListContainer" >
+            <h3 style="background-color: #4d14a25d; color: rgb(24, 21, 21); padding: 10px;border-radius:5px; margin: 0;">Patient Appointment Details</h3>
         </div>
     </div>
 
 </body>
 <script>
+
+            history.pushState(null, null, window.location.href);
+              window.onpopstate = function () {
+            history.go(1);
+        };
+
     document.addEventListener('DOMContentLoaded', function () {
         // This function will be called when the DOM is fully loaded
         getAppointmentDetails();
+        getPatientDetails(); // Call the new function to get patient details
+
 
         // Retrieve doctor form data from sessionStorage
         var doctorFormData = sessionStorage.getItem("doctorDetailss");
@@ -270,8 +333,9 @@
         }
     });
 
-    function getAppointmentDetails() {
-        fetch('http://localhost:3000/appointment/appointment/all', {
+
+    function getPatientDetails() {
+        fetch('http://localhost:3000/patient', {
             method: 'GET',
             headers: {
                 'Content-Type': 'application/json'
@@ -286,23 +350,75 @@
             .then(data => {
                 // Log the response in the console
                 console.log('All Patients:', data);
-                displayAppointments(data.appointments);
+
+                if (Array.isArray(data)) {
+                    var numberOfPatients = data.length;
+                }
+
+                // Display the number of patients
+                console.log('Number of Patients:', numberOfPatients);
+
+                // Update the Patient Info Card
+                var patientInfoCard = document.querySelector(".patient-info-card");
+                if (patientInfoCard) {
+                    patientInfoCard.innerHTML = `Patients ${numberOfPatients}`;
+                }
             })
             .catch(error => {
                 console.error('Error:', error);
             });
     }
 
+    function getAppointmentDetails() {
+        if (!sessionStorage.getItem("doctorDetailss")) {
+            window.location.href = 'index.html';  // Redirect to the login page
+            return;
+        }
+    
+        fetch('http://localhost:3000/appointment/appointment/all', {
+            method: 'GET',
+            headers: {
+                'Content-Type': 'application/json'
+            }
+        })
+        .then(response => {
+            if (!response.ok) {
+                throw new Error(`HTTP error! Status: ${response.status}`);
+            }
+            return response.json();
+        })
+        .then(data => {
+            // Log the response in the console
+            console.log('All Patients:', data);
+    
+            // Display the number of appointments
+            var numberOfAppointments = data.appointments.length;
+            console.log('Number of Appointments:', numberOfAppointments);
+    
+            // Display the appointments
+            displayAppointments(data.appointments);
+        })
+        .catch(error => {
+            console.error('Error:', error);
+        });
+    }
     function displayAppointments(appointments) {
-        var appointmentListContainer = document.getElementById("appointmentListContainer");
+    var appointmentListContainer = document.getElementById("appointmentListContainer");
 
-        // Check if appointments is an array
+    // Check if appointments is an array
         if (Array.isArray(appointments)) {
-            appointments.forEach(appointment => {
-                var appointmentCard = document.createElement("div");
-                appointmentCard.classList.add("appointment-card");
+            var numberOfAppointments = appointments.length;
 
-                appointmentCard.innerHTML = `
+        // Update the Appointments info-card
+        var appointmentsCard = document.querySelector(".info-card h4");
+        appointmentsCard.innerHTML = `Appointments ${numberOfAppointments}`;
+
+        // Loop through and display individual appointments
+        appointments.forEach(appointment => {
+            var appointmentCard = document.createElement("div");
+            appointmentCard.classList.add("appointment-card");
+
+            appointmentCard.innerHTML = `
                 <p><strong>ID:</strong> ${appointment.id}</p>
                 <p><strong>Appointment ID:</strong> ${appointment.AppointmentId}</p>
                 <p><strong>Patient Name:</strong> ${appointment.PatientId}</p>
@@ -314,30 +430,29 @@
                     <button class="postpone-btn" onclick="postponeAppointment(${appointment.id})"><i class="fas fa-calendar-alt"></i> Postpone</button>
                     <button class="delete-btn" onclick="deleteAppointmentConfirmation(${appointment.id})">Delete</button>
                     <button class="diagnosis-btn" onclick="navigateToDiagnosisWindow(${appointment.id})">Diagnosis Report</button>
-                    
                 </div>
             `;
 
-                appointmentListContainer.appendChild(appointmentCard);
-            });
-        } else {
-            // Handle the case where appointments is not an array
-            console.error('Error: Appointments data is not an array');
-        }
+            appointmentListContainer.appendChild(appointmentCard);
+        });
+    } else {
+        // Handle the case where appointments is not an array
+        console.error('Error: Appointments data is not an array');
     }
+}
 
-    function postponeAppointment(appointmentId) {
-        // Open the modal
-        var modal = document.getElementById("myModal");
-        modal.style.display = "block";
+function postponeAppointment(appointmentId) {
+    // Open the modal
+    var modal = document.getElementById("myModal");
+    modal.style.display = "block";
 
-        // Store the appointmentId in a hidden input field
-        var hiddenAppointmentIdInput = document.createElement("input");
-        hiddenAppointmentIdInput.type = "hidden";
-        hiddenAppointmentIdInput.name = "appointmentId";
-        hiddenAppointmentIdInput.value = appointmentId;
-        document.getElementById("postponeForm").appendChild(hiddenAppointmentIdInput);
-    }
+    // Store the appointmentId in a hidden input field
+    var hiddenAppointmentIdInput = document.createElement("input");
+    hiddenAppointmentIdInput.type = "hidden";
+    hiddenAppointmentIdInput.name = "appointmentId";
+    hiddenAppointmentIdInput.value = appointmentId;
+    document.getElementById("postponeForm").appendChild(hiddenAppointmentIdInput);
+}
 
     function closeModal() {
         // Close the modal
@@ -358,13 +473,15 @@
         var appointmentId = document.querySelector("input[name='appointmentId']").value;
         var newAppointmentDate = document.getElementById("newAppointmentDate").value;
         var newAppointmentTime = document.getElementById("newAppointmentTime").value;
-
+        var symptoms = document.getElementById("symptoms").value; // New line
+    
         // Prepare data for the server
         var postData = {
             "AppointmentDate": newAppointmentDate,
-            "AppointmentTime": newAppointmentTime
+            "AppointmentTime": newAppointmentTime,
+            "Symptoms": symptoms // New line
         };
-
+    
         // Send the data to the server to update the appointment
         fetch(`http://localhost:3000/appointment/appointment/${appointmentId}`, {
             method: 'PATCH',
@@ -374,6 +491,7 @@
             body: JSON.stringify(postData)
         })
             .then(response => {
+                // Handle the response
                 if (!response.ok) {
                     throw new Error(`HTTP error! Status: ${response.status}`);
                 }
@@ -382,7 +500,7 @@
             .then(data => {
                 // Log the response in the console
                 console.log('Updated Appointment:', data);
-
+    
                 // Close the modal and update the UI as needed
                 closeModal();
                 // You may want to refresh the appointment details on the UI after updating
@@ -393,6 +511,7 @@
                 // Handle the error as needed
             });
     }
+    
 
     function deleteAppointmentConfirmation(appointmentId) {
         // Open the delete confirmation modal
@@ -461,10 +580,15 @@
         // Redirect to the diagnosis.html window
         window.location.href = 'diagnosis.html';
     }
-    function logout() {
+   /* function logout() {
           sessionStorage.removeItem("doctorDetailss");
         window.location.href = 'index.html'; 
+    } */closeDeleteModal
+    function logout() {
+        sessionStorage.removeItem("doctorDetailss");
+        window.location.href = 'index.html';  // Redirect to the login page
     }
+    
   
 </script>
 

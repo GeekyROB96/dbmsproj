@@ -1,0 +1,155 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <!-- Add your head content here -->
+  <style>
+    header {
+      background-color: #6b5b95; /* Slightly darker purple */
+      color: white;
+      text-align: center;
+      font-size: larger;
+      padding: 15px;
+      border-top-left-radius: 15px;
+      border-top-right-radius: 15px;
+      border-bottom-right-radius: 15px;
+      border-bottom-left-radius: 15px;
+    }
+
+    /* Updated styles for the medicine cards */
+    .medicine-card {
+      border: 1px solid #ccc;
+      padding: 20px;
+      margin: 20px auto; /* Center the card horizontally */
+      border-radius: 12px;
+      box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); /* Added box shadow */
+      width: 70%;
+    }
+
+    .download-pdf-btn {
+      background-color: green;
+      color: white;
+      padding: 8px 12px;
+      border: none;
+      border-radius: 5px;
+      cursor: pointer;
+      margin-top: 10px;
+    }
+
+    .download-pdf-btn:hover {
+      background-color: darkgreen;
+    }
+
+    .message-container {
+      text-align: center;
+      padding: 20px;
+      margin: 20px auto;
+      border: 1px solid #ccc;
+      border-radius: 12px;
+      box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+      width: 70%;
+    }
+
+    .message-container p {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .message-icon {
+      margin-right: 10px;
+      color: #f00; /* Red color for the alert icon */
+    }
+  </style>
+  <script src="https://rawgit.com/eKoopmans/html2pdf/master/dist/html2pdf.bundle.js"></script> <!-- Include html2pdf library from CDN -->
+</head>
+
+<body>
+  <header>
+    Medicine Details
+  </header>
+
+  <div id="medicines">
+    <!-- This section will be filled with medicine cards dynamically -->
+  </div>
+
+  <script>
+    // Retrieve the selected appointment ID from session storage
+    var selectedAppointmentID = sessionStorage.getItem("selectedID");
+
+    // Fetch medicines data for the selected appointment ID
+    fetch(`http://localhost:3000/medicine/${selectedAppointmentID}`)
+      .then(response => response.json())
+      .then(data => {
+        // Log the medicine details to the console
+        console.log('Medicine Details:', data);
+
+        // Display the medicine details or a message on the page
+        if (data && data.medicines && data.medicines.length > 0) {
+          renderMedicines(data.medicines);
+        } else {
+          console.log('No medicines found.');
+          displayNoMedicinesMessage();
+        }
+      })
+      .catch(error => console.error('Error fetching medicines:', error));
+
+    function renderMedicines(medicines) {
+      var medicinesContainer = document.getElementById('medicines');
+
+      medicines.forEach(medicine => {
+        // Create medicine card
+        var medicineCard = document.createElement('div');
+        medicineCard.className = 'medicine-card';
+
+        // Display medicine details
+        medicineCard.innerHTML = `
+          <p>Medicine ID: ${medicine.mediid}</p>
+          <p>Name: ${medicine.MedName}</p>
+          <p>Price: ${medicine.Price}</p>
+          <p>Manufacturer: ${medicine.Manufacturer}</p>
+          <p>Dosage: ${medicine.Dosage}</p>
+          <p>Duration: ${medicine.Duration} days</p>
+          <p>Created At: ${medicine.createdAt}</p>
+          <p>Updated At: ${medicine.updatedAt}</p>
+          <button class="download-pdf-btn" onclick="downloadPDF('${medicine.MedName}')">Download PDF</button>
+        `;
+
+        // Append card to the container
+        medicinesContainer.appendChild(medicineCard);
+      });
+    }
+
+    function displayNoMedicinesMessage() {
+      var medicinesContainer = document.getElementById('medicines');
+
+      // Create a message container
+      var messageContainer = document.createElement('div');
+      messageContainer.className = 'message-container';
+
+      // Display the message with an alert icon
+      messageContainer.innerHTML = `
+        <p>
+          <span class="message-icon">&#9888;</span>
+          No medicines available at the moment.
+        </p>
+      `;
+
+      // Append message container to the medicines container
+      medicinesContainer.appendChild(messageContainer);
+    }
+
+    function downloadPDF(medicineName) {
+      var element = document.querySelector('.medicine-card');
+      html2pdf(element, {
+        margin: 10,
+        filename: `${medicineName}_details.pdf`,
+        image: { type: 'jpeg', quality: 0.98 },
+        html2canvas: { scale: 2 },
+        jsPDF: { unit: 'mm', format: 'a4', orientation: 'portrait' }
+      });
+    }
+  </script>
+</body>
+
+</html>

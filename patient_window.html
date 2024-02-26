@@ -2,173 +2,198 @@
 <html lang="en">
 
 <head>
-  <meta charset="UTF-8">
-  <meta http-equiv="X-UA-Compatible" content="IE=edge">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Patient Window</title>
-  <style>
-    /* Add some basic styles for the appointment cards */
-    .appointment-card {
-      border: 1px solid #ccc;
-      padding: 10px;
-      margin: 50px auto; /* Center the card horizontally */
-      border-radius: 12px;
-      box-shadow: 0 0 5px rgba(0, 0, 0, 0.1);
-      width: 750px;
-    }
-   
-    #appointments h2 {
-      margin: 20px 0; /* Add some vertical margin for spacing */
-    }
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Patient Window</title>
+    <style>
+        /* Add some basic styles for the appointment cards */
+        .appointment-card {
+            border: 1px solid #ccc;
+            padding: 10px;
+            margin: 50px auto; /* Center the card horizontally */
+            border-radius: 12px;
+            box-shadow: 0 0 5px rgba(0, 0, 0, 0.1);
+            width: 750px;
+        }
 
-    .diagnosis-btn-container {
-      display: flex;
-      align-items: center;
-    }
+        #appointments h2 {
+            margin: 20px 0; /* Add some vertical margin for spacing */
+        }
 
-    .diagnosis-btn {
-      background-color: red;
-      color: white;
-      padding: 8px 12px;
-      border: none;
-      border-radius: 5px;
-      cursor: pointer;
-    }
+        .diagnosis-btn-container {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
 
-    .diagnosis-btn:hover {
-      background-color: darkred;
-    }
+        .diagnosis-btn {
+            background-color: red;
+            color: white;
+            padding: 8px 12px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+        }
 
-    /* Use flexbox for layout */
-    .flex-container {
-      display: flex;
-      flex-wrap: wrap;
-      justify-content: space-between;
-    }
+        .diagnosis-btn:hover {
+            background-color: darkred;
+        }
 
-    /* Add styles for the patient details container */
-    .patient-container {
-      flex: 1;
-      margin-top: 20px;
-      max-width: 35%; /* Adjust the width as needed */
-      border: 1px solid #ccc;
-      padding: 10px;
-      margin: 10px;
-      border-radius: 12px;
-      box-shadow: 0 0 5px rgba(0, 0, 0, 0.1);
-      position: relative;
-    }
+        /* Use flexbox for layout */
+        .flex-container {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: space-between;
+        }
 
-    /* Add styles for the patient image */
-    #patientImage {
-      width:70px;
-      height: 75px;
-      height: auto;
-      border-radius: 5px;
-    }
+        /* Add styles for the patient details container */
+        .patient-container {
+            flex: 1;
+            margin-top: 10px;
+            max-width: 35%; /* Adjust the width as needed */
+            border: 1px solid #ccc;
+            padding: 10px;
+            margin: 10px;
+            border-radius: 12px;
+            box-shadow: 0 0 5px rgba(0, 0, 0, 0.1);
+            position: relative;
+        }
 
-    .button-container {
-      flex: 2;
-      max-width: 40%;
-      margin-top: 20px;
-      margin-left: auto; /* Center the container horizontally */
-      margin-right: auto; /* Center the container horizontally */
-      border: 1px solid #ccc;
-      padding: 30px;
-      border-radius: 12px;
-      box-shadow: 0 0 5px rgba(0, 0, 0, 0.1);
-      display: flex;
-      flex-direction: column;
-      align-items: center; /* Center the items inside the container */
-    }
+        /* Add styles for the show medicines button */
+        .show-medicines-btn {
+            background-color: blue;
+            color: white;
+            padding: 8px 12px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            margin-top: 5px;
+        }
 
-    /* Style for the button */
-    .go-to-doctors-btn {
-      background-color: blue;
-      width: 100px;
-      color: white;
-      padding: 8px 12px;
-      border: none;
-      border-radius: 5px;
-      cursor: pointer;
-      margin-top: 10px;
-    }
+        .show-medicines-btn:hover {
+            background-color: darkblue;
+        }
 
-    .go-to-doctors-btn:hover {
-      background-color: darkblue;
-    }
+        /* Add styles for the patient image */
+        #patientImage {
+            width: 70px;
+            height: 75px;
+            height: auto;
+            border-radius: 5px;
+        }
 
-    #buttonImage {
-      width: 60%;
-      height: 90%;
-      height: auto;
-      border-radius: 5px;
-      margin-left: 10px;
-      animation: floatAnimation 3s ease-in-out infinite;
-    }
-    
-    @keyframes floatAnimation {
-      0%, 100% {
-        transform: translateY(0);
-      }
-      50% {
-        transform: translateY(-10px);
-      }
-    }
-    .patient-container,
-    #appointments {
-      opacity: 0; /* Initially set opacity to 0 */
-    }
+        .button-container {
+            flex: 2;
+            max-width: 40%;
+            margin-top: 20px;
+            margin-left: auto; /* Center the container horizontally */
+            margin-right: auto; /* Center the container horizontally */
+            border: 1px solid #ccc;
+            padding: 30px;
+            border-radius: 12px;
+            box-shadow: 0 0 5px rgba(0, 0, 0, 0.1);
+            display: flex;
+            flex-direction: column;
+            align-items: center; /* Center the items inside the container */
+        }
 
-    .patient-container.animated,
-    #appointments.animated {
-      opacity: 1; /* Set opacity to 1 for animated state */
-    }
+        /* Style for the button */
+        .go-to-doctors-btn {
+            background-color: rgba(9, 79, 5, 0.923);
+            width: 100px;
+            color: white;
+            padding: 8px 12px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            margin-top: 10px;
+        }
 
-    /* Entrance animation for patient details */
-    .patient-container.animated {
-      animation: fadeInUp 1s ease-in-out;
-    }
+        .go-to-doctors-btn:hover {
+            background-color: darkblue;
+        }
 
-    /* Entrance animation for appointments section */
-    #appointments.animated {
-      animation: fadeIn 1s ease-in-out;
-    }
-  </style>
+        #buttonImage {
+            width: 60%;
+            height: 90%;
+            height: auto;
+            border-radius: 5px;
+            margin-left: 10px;
+            animation: floatAnimation 3s ease-in-out infinite;
+        }
+
+        @keyframes floatAnimation {
+            0%, 100% {
+                transform: translateY(0);
+            }
+            50% {
+                transform: translateY(-10px);
+            }
+        }
+
+        .patient-container,
+        #appointments {
+            opacity: 0; /* Initially set opacity to 0 */
+        }
+
+        .patient-container.animated,
+        #appointments.animated {
+            opacity: 1; /* Set opacity to 1 for animated state */
+        }
+
+        /* Entrance animation for patient details */
+        .patient-container.animated {
+            animation: fadeInUp 1s ease-in-out;
+        }
+
+        /* Entrance animation for appointments section */
+        #appointments.animated {
+            animation: fadeIn 1s ease-in-out;
+        }
+    </style>
 </head>
 
 <body>
-  <header style="background-color: #8f83eb; color: white; text-align: center;font-size:larger; padding: 50px;">
+  <header style="background-color: #007bff; color: white; text-align: center; font-size: x-large; padding: 40px; border-radius: 20px;">
     Patient Dashboard
-  </header>
-  <div class="flex-container">
-    <div id="patientContainer" class="patient-container">
-      <h2>Patient Details</h2>
-      <img id="patientImage" src="images/person.jpg" alt="Patient Image">
-      <p>Name: <span id="patientName"></span></p>
-      <p>Email: <span id="patientEmail"></span></p>
-      <p>Phone: <span id="patientPhone"></span></p>
-      <p>Address: <span id="patientAddress"></span></p>
+</header>
+    <div class="flex-container">
+        <div id="patientContainer" class="patient-container">
+          <h2>Patient Details</h2>
+          <img id="patientImage" src="images/person.jpg" alt="Patient Image">
+            <p>Name: <span id="patientName"></span></p>
+            <p>Email: <span id="patientEmail"></span></p>
+            <p>Phone: <span id="patientPhone"></span></p>
+            <p>Address: <span id="patientAddress"></span></p>
+            <button class="logout-btn" onclick="logout()" style="padding: 10px 20px; background-color: rgba(223, 16, 16, 0.992); color: black; border: none; border-radius: 5px; cursor: pointer; font-size: 16px; transition: background-color 0.3s;" onmouseover="this.style.backgroundColor='darkblue'" onmouseout="this.style.backgroundColor='blue'">Log Out</button>
+        </div>
+
+        <div class="button-container" style="margin-top: 20px;">
+            <div class="diagnosis-btn-container">
+                <img id="buttonImage" src="images/book.jpg" alt="Additional Image">
+            </div>
+            <div class="go-to-doctors-btn" onclick="navigateToDoctors()">Go to Doctors</div>
+            <p>Want to book an appointment?</p>
+        </div>
     </div>
 
-    <div class="button-container">
-      <p>Want to book an appointment?</p>
-      <div class="diagnosis-btn-container">
-        <div class="go-to-doctors-btn" onclick="navigateToDoctors()">Go to Doctors</div>
-        <img id="buttonImage" src="images/book.jpg" alt="Additional Image">
-      </div>
+    <div id="appointments">
+        <h2 style="background-color: #007bff; color: white; padding: 10px; border-radius: 10px;">Appointments</h2>
+        <!-- This section will be filled with appointment cards dynamically -->
     </div>
-  </div>
- 
-  <div id="appointments">
-    <h2>Appointments</h2>
-    <!-- This section will be filled with appointment cards dynamically -->
-  </div>
 
   <script>
+
+    history.pushState(null, null, window.location.href);
+  window.onpopstate = function () {
+    history.go(1);
+  };
+
     // Retrieve the patient details from session storage
     var patientDetails = JSON.parse(sessionStorage.getItem('patientDetailss'));
   
+    
     // Log the patient details to the console
     console.log('Patient Details:', patientDetails);
   
@@ -195,6 +220,10 @@
     }
   
     function renderAppointments(appointments) {
+      if (!sessionStorage.getItem("patientDetailss")) {
+        window.location.href = 'index.html';  // Redirect to the login page
+        return;
+      }
       var appointmentsContainer = document.getElementById('appointments');
   
       if (appointments && appointments.length > 0) {
@@ -214,6 +243,8 @@
             <p>Remarks: ${appointment.Remarks}</p>
             <p>Diagnosis: ${appointment.Diagnosis || 'Not available'}</p>
             <button class="diagnosis-btn" onclick="navigateToReport(${appointment.id})">Diagnosis Report</button>
+            <button class="show-medicines-btn" onclick="navigateToShowMedicines(${appointment.id})">Show Medicines</button>
+
           `;
   
           // Append card to the container
@@ -232,15 +263,27 @@
       }
     }
   
+  
     function navigateToReport(id) {
       console.log("Navigating to report for appointment id: ", id);
       sessionStorage.setItem("selectedID", id);
       window.location.href = 'report.html';
     }
-  
+    function navigateToShowMedicines(id) {
+      console.log("Navigating to medicines for appointment id: ", id);
+      sessionStorage.setItem("selectedID", id);
+      window.location.href = 'show_medicine.html';
+    }
     // Function to navigate to doctors.html
     function navigateToDoctors() {
       window.location.href = 'doctors.html';
+    }
+
+    function logout() {
+      // Clear session storage
+      sessionStorage.removeItem("patientDetailss");
+      // Redirect to index.html
+      window.location.href = 'index.html';
     }
   </script>
   

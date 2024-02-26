@@ -6,6 +6,7 @@
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
         <title>Diagnosis Report</title>
         <style>
+          
             body {
                 font-family: Arial, sans-serif;
                 margin: 0;
@@ -114,6 +115,8 @@
     <script>
         function submitForm() {
             // Get form data
+
+            var appointmentId = sessionStorage.getItem("selectedAppointmentId");
             var formData = new FormData(document.getElementById('diagnosisForm'));
 
             // Convert FormData to a plain JavaScript object
@@ -123,7 +126,8 @@
             });
 
             // Add hardcoded appointmentId to formDataObject
-            formDataObject.appointmentId = 5;
+            
+            formDataObject['appointmentId'] = appointmentId;
 
             console.log('FormDataObject:', formDataObject);
 
