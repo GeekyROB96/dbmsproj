@@ -12,10 +12,10 @@
             margin: 0;
             padding: 0;
             background-image: url('images/booking.jpg');
-            background-repeat:repeat  ;
-          
-            
-            
+            background-repeat: repeat;
+
+
+
         }
 
         .container {
@@ -173,15 +173,64 @@
 
 
         function bookAppointment() {
-            const appointmentDate = document.getElementById("appointment-date").value;
-            const appointmentTime = document.getElementById("appointment-time").value;
-            const remarks = document.getElementById("remarks").value;
-            const symptoms = document.getElementById("symptoms").value;
+            /* const appointmentDate = document.getElementById("appointment-date").value;
+             const appointmentTime = document.getElementById("appointment-time").value;
+             const remarks = document.getElementById("remarks").value;
+             const symptoms = document.getElementById("symptoms").value; */
 
-            // Your existing code for logging details
 
-            // Show the popup container
-            showPopup();
+            // Retrieve the patient details from session storage
+            var patientDetails = JSON.parse(sessionStorage.getItem('patientDetailss'));
+
+            // Check if patientDetails is not null and contains the patient ID
+            if (patientDetails && patientDetails.id) {
+                // Generate random 5-digit AppointmentId
+                const appointmentId = Math.floor(10000 + Math.random() * 90000);
+
+                // Retrieve PatientId from patientDetails
+                const patientId = patientDetails.id;
+
+                // Fetch other details from input fields
+                const appointmentDate = document.getElementById("appointment-date").value;
+                const appointmentTime = document.getElementById("appointment-time").value;
+                const remarks = document.getElementById("remarks").value;
+                const symptoms = document.getElementById("symptoms").value;
+
+                // Construct JSON object
+                const appointmentData = {
+                    "AppointmentId": appointmentId,
+                    "PatientId": patientId,
+                    "AppointmentDate": appointmentDate,
+                    "Symptoms": symptoms,
+                    "AppointmentTime": appointmentTime,
+                    "Remarks": remarks
+                };
+
+                // Send POST request to the server
+                fetch('http://localhost:3000/appointment/', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify(appointmentData)
+                })
+                    .then(response => {
+                        if (response.ok) {
+                            // Show success popup
+                            showPopup();
+                        } else {
+                            // Handle error response
+                            throw new Error('Failed to book appointment');
+                        }
+                    })
+                    .catch(error => {
+                        console.error('Error:', error);
+                        // Handle error scenario, show error message or retry option
+                    });
+            } else {
+                console.error('Patient details not found in session storage');
+                // Handle scenario where patient details are not available
+            }
         }
 
         function showPopup() {

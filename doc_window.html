@@ -9,42 +9,12 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css"
         integrity="sha512-+mFNK84PgXH2y4GAdi2GBjJ5UIqU8tGJGgADj/AgcS/boG3Pbp7SkF/43VckZ6OqQwjr0j/zyv5JYzvjLISBUQ=="
         crossorigin="anonymous" referrerpolicy="no-referrer" />
-    <style>
-        /* Add your existing styles here */
-        .modal {
-            display: none;
-            position: fixed;
-            z-index: 1;
-            left: 0;
-            top: 0;
-            width: 100%;
-            height: 100%;
-            overflow: auto;
-            background-color: rgb(0, 0, 0);
-            background-color: rgba(0, 0, 0, 0.4);
-            padding-top: 60px;
-        }
 
-        .modal-content {
-            background-color: #fefefe;
-            margin: 5% auto;
-            padding: 20px;
-            border: 1px solid #888;
-            width: 80%;
-        }
-
-        .close {
-            color: #aaa;
-            float: right;
-            font-size: 28px;
-            font-weight: bold;
-        }
-
-        .close:hover,
-        .close:focus {
-            color: black;
-            text-decoration: none;
-            cursor: pointer;
+        <style>
+        body {
+            font-family: 'Arial', sans-serif;
+            margin: 0;
+            padding: 0;
         }
 
         .container {
@@ -52,9 +22,10 @@
             flex-direction: row;
             align-items: flex-start;
             margin-bottom: 20px;
+            margin-top: 15px;
         }
 
-        .doctor-details-container {
+        .details-container {
             border: 1px solid #ccc;
             padding: 20px;
             border-radius: 5px;
@@ -62,19 +33,64 @@
             flex: 1;
         }
 
-        .details-container {
+        .doctor-details-container {
             border: 1px solid #ccc;
             padding: 20px;
             border-radius: 5px;
-            margin-bottom: 20px;
-            flex: 1;
+            flex: 0.5;
+            height: fit-content;
+            display: flex;
+            flex-direction: column;
+            margin-right: 30px;
         }
 
-        .appointment-card {
-            border: 1px solid #ccc;
-            padding: 20px;
+        .info-card {
+            background-color: #f8f9fa;
+            border: 1px solid #dee2e6;
             border-radius: 5px;
-            margin-bottom: 20px;
+            padding: 12px;
+            margin-bottom: 10px;
+            position: relative;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .progress-bar {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            border-radius: 50%;
+            clip: rect(0, 100%, 100%, 50%);
+            background-color: #007bff; /* Blue color, you can change this */
+            animation: progress 2s linear infinite;
+        }
+
+        @keyframes progress {
+            0% {
+                transform: rotate(0deg);
+            }
+            50% {
+                transform: rotate(180deg);
+            }
+            100% {
+                transform: rotate(360deg);
+            }
+        }
+
+        .progress-digit {
+            font-size: 24px;
+            font-weight: bold;
+            z-index: 1;
+            color: white; /* Adjust text color as needed */
+        }
+
+        .avatar {
+            width: 100px;
+            height: 100px;
+            object-fit: cover;
+            border-radius: 50%;
+            margin-bottom: 10px;
         }
 
         .button-container {
@@ -147,7 +163,26 @@
             text-decoration: none;
             cursor: pointer;
         }
+
+        .appointment-card {
+            border-bottom: 1px solid #ccc;
+            margin-bottom: 15px;
+            padding-bottom: 15px;
+        }
+
+        .appointment-card:last-child {
+            border-bottom: none;
+            margin-bottom: 0;
+            padding-bottom: 0;
+        }
+
+        .button-container button.logout-btn {
+            padding: 30px;
+            width: auto;
+            max-width: 80px;
+        }
     </style>
+
 
 </head>
 
@@ -176,18 +211,35 @@
             <button onclick="confirmDeleteAppointment()">Yes, Delete</button>
             <button onclick="closeDeleteModal()">Cancel</button>
         </div>
+
     </div>
 
-    <!-- Rest of your HTML -->
+ 
 
     <h2 id="doctorNameHeading">Hello Doctor Name</h2>
     <div class="container">
-        <!-- Doctor Details Container -->
         <div class="doctor-details-container">
             <h3>Doctor Details</h3>
-            <div id="doctorDetails"></div>
-        </div>
+            <img class="avatar" src="images/person.jpg" alt="Doctor Avatar"> <!-- Add this line for the avatar -->
 
+            <!-- Card 1 -->
+            <div class="info-card">
+                <h4>Total Patients</h4>
+                <div class="progress-indicator">
+                    <i class="fas fa-user" style="animation: spin 2s linear infinite;"></i> 
+                    <span>42</span> 
+                </div>
+            </div>
+
+ 
+            <div class="info-card">
+                <h4>Appointments</h4>
+              
+            </div>
+
+            <div id="doctorDetails"></div>
+            <button type="logout-btn" onclick="logout()">Log Out</button> <!-- Add this line for the Log Out button -->
+        </div>
         <!-- Patient Appointment Details Container -->
         <div class="details-container" id="appointmentListContainer">
             <h3>Patient Appointment Details</h3>
@@ -195,7 +247,6 @@
     </div>
 
 </body>
-
 <script>
     document.addEventListener('DOMContentLoaded', function () {
         // This function will be called when the DOM is fully loaded
@@ -263,6 +314,7 @@
                     <button class="postpone-btn" onclick="postponeAppointment(${appointment.id})"><i class="fas fa-calendar-alt"></i> Postpone</button>
                     <button class="delete-btn" onclick="deleteAppointmentConfirmation(${appointment.id})">Delete</button>
                     <button class="diagnosis-btn" onclick="navigateToDiagnosisWindow(${appointment.id})">Diagnosis Report</button>
+                    
                 </div>
             `;
 
@@ -400,14 +452,20 @@
                 // Handle the error as needed
             });
     }
-
     function navigateToDiagnosisWindow(id) {
         console.log('Navigating to diagnosis window for appointment id:', id);
         // Store the appointmentId in sessionStorage
         sessionStorage.setItem("selectedAppointmentId", id);
+      //  console.log('Navigating to diagnosis window for appointment id:', id);
+
+        // Redirect to the diagnosis.html window
         window.location.href = 'diagnosis.html';
     }
-
+    function logout() {
+          sessionStorage.removeItem("doctorDetailss");
+        window.location.href = 'index.html'; 
+    }
+  
 </script>
 
 </html>

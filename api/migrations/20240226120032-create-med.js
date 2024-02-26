@@ -1,12 +1,16 @@
 'use strict';
+const { DataTypes } = require('sequelize');
 
 module.exports = {
   async up(queryInterface, Sequelize) {
     await queryInterface.createTable('Meds', {
-      mediid: {
+      id: {
         allowNull: false,
         autoIncrement: true,
         primaryKey: true,
+        type: Sequelize.INTEGER
+      },
+      mediid: {
         type: Sequelize.INTEGER
       },
       MedName: {
@@ -26,12 +30,12 @@ module.exports = {
       },
       AppointmentId: {
         type: Sequelize.INTEGER,
-        allowNull: false,
+        allowNull: false, // Ensure the foreign key does not allow null values
         references: {
-          model: 'Appointments', // Assuming your Appointment model is named 'Appointment'
-          key: 'id' // Assuming 'id' is the primary key of the Appointment model
+          model: 'Appointments', // Name of the referenced model
+          key: 'id', // Name of the referenced column (primary key)
         },
-        onDelete: 'CASCADE' // Cascade delete when associated Appointment is deleted
+        onDelete: 'CASCADE', // Define the onDelete behavior
       },
       createdAt: {
         allowNull: false,

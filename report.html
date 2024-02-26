@@ -19,7 +19,9 @@
 </head>
 
 <body>
-    <center><h2>Diagnosis Report</h2></center>
+  <center>
+    <h2>Diagnosis Report</h2>
+  </center>
   <div id="diagnosisDetails">
     <!-- This section will be filled with diagnosis report details dynamically -->
   </div>
@@ -28,11 +30,12 @@
     // Retrieve the selected appointment ID from session storage
     var selectedID = sessionStorage.getItem('selectedID');
 
-    // Fetch the diagnosis report details based on the appointment ID
+    // Fetch the diagnosis report details based on the selectedID
     fetch(`http://localhost:3000/diagnosisreport/${selectedID}`)
       .then(response => response.json())
       .then(diagnosisReports => {
         renderDiagnosisReports(diagnosisReports);
+        fetchMedicines(selectedID); // Fetch medicines after rendering diagnosis reports
       })
       .catch(error => console.error('Error fetching diagnosis report:', error));
 
@@ -56,6 +59,7 @@
             <p>Measures: ${report.measures}</p>
             <p>Created At: ${new Date(report.createdAt).toLocaleString()}</p>
             <p>Updated At: ${new Date(report.updatedAt).toLocaleString()}</p>
+            <div id="medicineList_${report.id}"></div> <!-- Placeholder for medicine list -->
           `;
 
           // Append card to the container
@@ -64,6 +68,49 @@
       } else {
         console.log('No diagnosis report found.');
         diagnosisDetailsContainer.innerHTML = '<p>No diagnosis report found.</p>';
+      }
+    }
+
+    function fetchMedicines(selectedID) {
+      fetch(`http://localhost:3000/medicine/${selectedID}`)
+        .then(response => response.json())
+        .then(data => {
+          renderMedicines(data.medicines, selectedID);
+        })
+        .catch(error => {
+          console.error('Error fetching medicines:', error);
+        });
+    }
+
+    function renderMedicines(medicines, selectedID) {
+      var medicineListContainer = document.getElementById(`medicineList_${selectedID}`);
+
+      if (medicineListContainer) { // Check if the container exists
+        if (medicines && medicines.length > 0) {
+          var medicineList = document.createElement('ul');
+
+          medicines.forEach(medicine => {
+            var listItem = document.createElement('li');
+            listItem.innerHTML = `
+              <strong>Medicine ID:</strong> ${medicine.mediid}<br>
+              <strong>Name:</strong> ${medicine.MedName}<br>
+              <strong>Price:</strong> ${medicine.Price}<br>
+              <strong>Manufacturer:</strong> ${medicine.Manufacturer}<br>
+              <strong>Dosage:</strong> ${medicine.Dosage}<br>
+              <strong>Duration:</strong> ${medicine.Duration}<br>
+              <br>
+            `;
+            medicineList.appendChild(listItem);
+          });
+
+          // Append medicine list to the container
+          medicineListContainer.appendChild(medicineList);
+        } else {
+          console.log('No medicines found for selected ID:', selectedID);
+          medicineListContainer.innerHTML = '<p>No medicines found.</p>';
+        }
+      } else {
+        console.error('Medicine list container not found.');
       }
     }
   </script>

@@ -51,6 +51,28 @@ function getMedicineRecordsByPatientId(req, res) {
   }
 
 
+  function getMedicinesByAppointmentId(req, res) {
+    const appointmentId = req.params.appointmentId; // Assuming the appointmentId is passed as a parameter in the request
+  
+    models.Med.findAll({
+      where: {
+        AppointmentId: appointmentId,
+      },
+    })
+      .then(medicines => {
+        res.status(200).json({
+          message: "Medicines retrieved successfully",
+          medicines: medicines,
+        });
+      })
+      .catch(error => {
+        console.error('Error retrieving medicines:', error.message);
+        res.status(500).json({
+          message: "Error retrieving medicines",
+          error: error
+        });
+      });
+  }
   function updateMedicine(req, res) {
     const medId = req.params.medId;
   
@@ -106,6 +128,8 @@ function getMedicineRecordsByPatientId(req, res) {
         });
       });
   }
+
+  
   
 
   function deleteMedicine(req, res) {
@@ -140,7 +164,8 @@ module.exports = {
   saveMedicine: saveMedicine,
     getMedicineRecordsByPatientId:getMedicineRecordsByPatientId,
     updateMedicine:updateMedicine,
-    deleteMedicine:deleteMedicine
+    deleteMedicine:deleteMedicine,
+    getMedicinesByAppointmentId:getMedicinesByAppointmentId
 };
 
 

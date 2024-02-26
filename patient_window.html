@@ -11,9 +11,14 @@
     .appointment-card {
       border: 1px solid #ccc;
       padding: 10px;
-      margin: 10px;
-      border-radius: 5px;
+      margin: 50px auto; /* Center the card horizontally */
+      border-radius: 12px;
       box-shadow: 0 0 5px rgba(0, 0, 0, 0.1);
+      width: 750px;
+    }
+   
+    #appointments h2 {
+      margin: 20px 0; /* Add some vertical margin for spacing */
     }
 
     .diagnosis-btn-container {
@@ -44,11 +49,12 @@
     /* Add styles for the patient details container */
     .patient-container {
       flex: 1;
+      margin-top: 20px;
       max-width: 35%; /* Adjust the width as needed */
       border: 1px solid #ccc;
       padding: 10px;
       margin: 10px;
-      border-radius: 5px;
+      border-radius: 12px;
       box-shadow: 0 0 5px rgba(0, 0, 0, 0.1);
       position: relative;
     }
@@ -61,19 +67,19 @@
       border-radius: 5px;
     }
 
-    /* Add styles for the button container */
     .button-container {
       flex: 2;
-      max-width: 40%; /* Adjust the width as needed */
+      max-width: 40%;
       margin-top: 20px;
-      margin-left: 30px; /* Adjust the margin as needed */
+      margin-left: auto; /* Center the container horizontally */
+      margin-right: auto; /* Center the container horizontally */
       border: 1px solid #ccc;
       padding: 30px;
-      border-radius: 5px;
+      border-radius: 12px;
       box-shadow: 0 0 5px rgba(0, 0, 0, 0.1);
       display: flex;
       flex-direction: column;
-      align-items: flex-start;
+      align-items: center; /* Center the items inside the container */
     }
 
     /* Style for the button */
@@ -132,6 +138,9 @@
 </head>
 
 <body>
+  <header style="background-color: #8f83eb; color: white; text-align: center;font-size:larger; padding: 50px;">
+    Patient Dashboard
+  </header>
   <div class="flex-container">
     <div id="patientContainer" class="patient-container">
       <h2>Patient Details</h2>
@@ -150,7 +159,7 @@
       </div>
     </div>
   </div>
-
+ 
   <div id="appointments">
     <h2>Appointments</h2>
     <!-- This section will be filled with appointment cards dynamically -->
