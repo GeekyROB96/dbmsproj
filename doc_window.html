@@ -54,6 +54,14 @@
             margin-bottom: 20px;
         }
 
+        .doctor-details-container {
+            border: 1px solid #ccc;
+            padding: 20px;
+            border-radius: 5px;
+            margin-right: 20px;
+            flex: 1;
+        }
+
         .details-container {
             border: 1px solid #ccc;
             padding: 20px;
@@ -175,7 +183,7 @@
     <h2 id="doctorNameHeading">Hello Doctor Name</h2>
     <div class="container">
         <!-- Doctor Details Container -->
-        <div style="margin-right: 20px;">
+        <div class="doctor-details-container">
             <h3>Doctor Details</h3>
             <div id="doctorDetails"></div>
         </div>
@@ -392,16 +400,14 @@
                 // Handle the error as needed
             });
     }
+
     function navigateToDiagnosisWindow(id) {
         console.log('Navigating to diagnosis window for appointment id:', id);
         // Store the appointmentId in sessionStorage
         sessionStorage.setItem("selectedAppointmentId", id);
-      //  console.log('Navigating to diagnosis window for appointment id:', id);
-
-        // Redirect to the diagnosis.html window
         window.location.href = 'diagnosis.html';
     }
-  
+
 </script>
 
 </html>

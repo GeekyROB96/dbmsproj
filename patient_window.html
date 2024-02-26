@@ -16,6 +16,11 @@
       box-shadow: 0 0 5px rgba(0, 0, 0, 0.1);
     }
 
+    .diagnosis-btn-container {
+      display: flex;
+      align-items: center;
+    }
+
     .diagnosis-btn {
       background-color: red;
       color: white;
@@ -28,16 +33,122 @@
     .diagnosis-btn:hover {
       background-color: darkred;
     }
+
+    /* Use flexbox for layout */
+    .flex-container {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: space-between;
+    }
+
+    /* Add styles for the patient details container */
+    .patient-container {
+      flex: 1;
+      max-width: 35%; /* Adjust the width as needed */
+      border: 1px solid #ccc;
+      padding: 10px;
+      margin: 10px;
+      border-radius: 5px;
+      box-shadow: 0 0 5px rgba(0, 0, 0, 0.1);
+      position: relative;
+    }
+
+    /* Add styles for the patient image */
+    #patientImage {
+      width:70px;
+      height: 75px;
+      height: auto;
+      border-radius: 5px;
+    }
+
+    /* Add styles for the button container */
+    .button-container {
+      flex: 2;
+      max-width: 40%; /* Adjust the width as needed */
+      margin-top: 20px;
+      margin-left: 30px; /* Adjust the margin as needed */
+      border: 1px solid #ccc;
+      padding: 30px;
+      border-radius: 5px;
+      box-shadow: 0 0 5px rgba(0, 0, 0, 0.1);
+      display: flex;
+      flex-direction: column;
+      align-items: flex-start;
+    }
+
+    /* Style for the button */
+    .go-to-doctors-btn {
+      background-color: blue;
+      width: 100px;
+      color: white;
+      padding: 8px 12px;
+      border: none;
+      border-radius: 5px;
+      cursor: pointer;
+      margin-top: 10px;
+    }
+
+    .go-to-doctors-btn:hover {
+      background-color: darkblue;
+    }
+
+    #buttonImage {
+      width: 60%;
+      height: 90%;
+      height: auto;
+      border-radius: 5px;
+      margin-left: 10px;
+      animation: floatAnimation 3s ease-in-out infinite;
+    }
+    
+    @keyframes floatAnimation {
+      0%, 100% {
+        transform: translateY(0);
+      }
+      50% {
+        transform: translateY(-10px);
+      }
+    }
+    .patient-container,
+    #appointments {
+      opacity: 0; /* Initially set opacity to 0 */
+    }
+
+    .patient-container.animated,
+    #appointments.animated {
+      opacity: 1; /* Set opacity to 1 for animated state */
+    }
+
+    /* Entrance animation for patient details */
+    .patient-container.animated {
+      animation: fadeInUp 1s ease-in-out;
+    }
+
+    /* Entrance animation for appointments section */
+    #appointments.animated {
+      animation: fadeIn 1s ease-in-out;
+    }
   </style>
 </head>
 
 <body>
-  <div id="patientDetails">
-    <h2>Patient Details</h2>
-    <p>Name: <span id="patientName"></span></p>
-    <p>Email: <span id="patientEmail"></span></p>
-    <p>Phone: <span id="patientPhone"></span></p>
-    <p>Address: <span id="patientAddress"></span></p>
+  <div class="flex-container">
+    <div id="patientContainer" class="patient-container">
+      <h2>Patient Details</h2>
+      <img id="patientImage" src="images/person.jpg" alt="Patient Image">
+      <p>Name: <span id="patientName"></span></p>
+      <p>Email: <span id="patientEmail"></span></p>
+      <p>Phone: <span id="patientPhone"></span></p>
+      <p>Address: <span id="patientAddress"></span></p>
+    </div>
+
+    <div class="button-container">
+      <p>Want to book an appointment?</p>
+      <div class="diagnosis-btn-container">
+        <div class="go-to-doctors-btn" onclick="navigateToDoctors()">Go to Doctors</div>
+        <img id="buttonImage" src="images/book.jpg" alt="Additional Image">
+      </div>
+    </div>
   </div>
 
   <div id="appointments">
@@ -45,78 +156,84 @@
     <!-- This section will be filled with appointment cards dynamically -->
   </div>
 
-
-<script>
-  // Retrieve the patient details from session storage
-  var patientDetails = JSON.parse(sessionStorage.getItem('patientDetailss'));
-
-  // Log the patient details to the console
-  console.log('Patient Details:', patientDetails);
-
-  // Display the patient details on the page
-  if (patientDetails) {
-    // Update the HTML elements with patient details using the correct case
-    document.getElementById('patientName').innerText = patientDetails.PatientName;
-    document.getElementById('patientEmail').innerText = patientDetails.PatientEmail;
-    document.getElementById('patientPhone').innerText = patientDetails.ContactNo;
-    document.getElementById('patientAddress').innerText = patientDetails.Address;
-
-    // Fetch and display appointments
-    fetch('http://localhost:3000/appointment/appointment/all')
-      .then(response => response.json())
-      .then(appointments => {
-        renderAppointments(appointments.appointments);
-      })
-      .catch(error => console.error('Error fetching appointments:', error));
-  }
-
-  function renderAppointments(appointments) {
-    var appointmentsContainer = document.getElementById('appointments');
-
-    if (appointments && appointments.length > 0) {
-      appointments.forEach(appointment => {
-        // Create appointment card
-        var appointmentCard = document.createElement('div');
-        appointmentCard.className = 'appointment-card';
-
-        // Display appointment details
-        appointmentCard.innerHTML = `
-          <p>ID:${appointment.id}</p>
-          <p>Appointment id: ${appointment.AppointmentId}</p>
-          <p>Patient Name: ${appointment.PatientId}</p>
-          <p>Appointment Date: ${appointment.AppointmentDate}</p>
-          <p>Appointment Time: ${appointment.AppointmentTime}</p>
-          <p>Symptoms: ${appointment.Symptoms}</p>
-          <p>Remarks: ${appointment.Remarks}</p>
-          <p>Diagnosis: ${appointment.Diagnosis || 'Not available'}</p>
-          <!-- Add a button for Diagnosis with a click event -->
-          <button class="diagnosis-btn" onclick="navigateToReport(${appointment.id})">Diagnosis Report</button>
-        `;
-
-        // Append card to the container
-        appointmentsContainer.appendChild(appointmentCard);
-
-        // Add click event listener to the Diagnosis button
-        var diagnosisBtn = appointmentCard.querySelector('.diagnosis-btn');
-        diagnosisBtn.addEventListener('click', function () {
-          // Print some text to the console when the button is clicked
-          console.log('Diagnosis button clicked for appointment:', appointment.AppointmentId);
+  <script>
+    // Retrieve the patient details from session storage
+    var patientDetails = JSON.parse(sessionStorage.getItem('patientDetailss'));
+  
+    // Log the patient details to the console
+    console.log('Patient Details:', patientDetails);
+  
+    // Display the patient details on the page
+    if (patientDetails) {
+      // Update the HTML elements with patient details using the correct case
+      document.getElementById('patientName').innerText = patientDetails.PatientName;
+      document.getElementById('patientEmail').innerText = patientDetails.PatientEmail;
+      document.getElementById('patientPhone').innerText = patientDetails.ContactNo;
+      document.getElementById('patientAddress').innerText = patientDetails.Address;
+  
+      // Add "animated" class to trigger entrance animation for patient container
+      document.getElementById('patientContainer').classList.add('animated');
+  
+      // Fetch and display appointments
+      fetch('http://localhost:3000/appointment/appointment/all')
+        .then(response => response.json())
+        .then(appointments => {
+          renderAppointments(appointments.appointments);
+          // Add "animated" class to trigger entrance animation for appointments section
+          document.getElementById('appointments').classList.add('animated');
+        })
+        .catch(error => console.error('Error fetching appointments:', error));
+    }
+  
+    function renderAppointments(appointments) {
+      var appointmentsContainer = document.getElementById('appointments');
+  
+      if (appointments && appointments.length > 0) {
+        appointments.forEach(appointment => {
+          // Create appointment card
+          var appointmentCard = document.createElement('div');
+          appointmentCard.className = 'appointment-card';
+  
+          // Display appointment details
+          appointmentCard.innerHTML = `
+            <p>ID:${appointment.id}</p>
+            <p>Appointment id: ${appointment.AppointmentId}</p>
+            <p>Patient Name: ${appointment.PatientId}</p>
+            <p>Appointment Date: ${appointment.AppointmentDate}</p>
+            <p>Appointment Time: ${appointment.AppointmentTime}</p>
+            <p>Symptoms: ${appointment.Symptoms}</p>
+            <p>Remarks: ${appointment.Remarks}</p>
+            <p>Diagnosis: ${appointment.Diagnosis || 'Not available'}</p>
+            <button class="diagnosis-btn" onclick="navigateToReport(${appointment.id})">Diagnosis Report</button>
+          `;
+  
+          // Append card to the container
+          appointmentsContainer.appendChild(appointmentCard);
+  
+          // Add click event listener to the Diagnosis button
+          var diagnosisBtn = appointmentCard.querySelector('.diagnosis-btn');
+          diagnosisBtn.addEventListener('click', function () {
+            // Print some text to the console when the button is clicked
+            console.log('Diagnosis button clicked for appointment:', appointment.AppointmentId);
+          });
         });
-      });
-    } else {
-      console.log('No appointments found.');
-      appointmentsContainer.innerHTML = '<p>No appointments found.</p>';
+      } else {
+        console.log('No appointments found.');
+        appointmentsContainer.innerHTML = '<p>No appointments found.</p>';
+      }
     }
-  }
-  function navigateToReport(id){
-    console.log("Navigating to report for appointment id: " ,id);
-    sessionStorage.setItem("selectedID",id);
-    window.location.href='report.html';
+  
+    function navigateToReport(id) {
+      console.log("Navigating to report for appointment id: ", id);
+      sessionStorage.setItem("selectedID", id);
+      window.location.href = 'report.html';
     }
-</script>
-
-
-
+  
+    // Function to navigate to doctors.html
+    function navigateToDoctors() {
+      window.location.href = 'doctors.html';
+    }
+  </script>
   
 </body>
 

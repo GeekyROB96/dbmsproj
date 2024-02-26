@@ -1,10 +1,9 @@
 'use strict';
 
-/** @type {import('sequelize-cli').Migration} */
 module.exports = {
   async up(queryInterface, Sequelize) {
-    await queryInterface.createTable('MedicineRecords', {
-      id: {
+    await queryInterface.createTable('Meds', {
+      mediid: {
         allowNull: false,
         autoIncrement: true,
         primaryKey: true,
@@ -13,26 +12,26 @@ module.exports = {
       MedName: {
         type: Sequelize.STRING
       },
-      ExpiryDate: {
-        type: Sequelize.DATE
-      },
       Price: {
-        type: Sequelize.FLOAT
+        type: Sequelize.INTEGER
       },
       Manufacturer: {
         type: Sequelize.STRING
       },
-      Units: {
-        type: Sequelize.INTEGER
+      Dosage: {
+        type: Sequelize.STRING
       },
-      PatientId: {
+      Duration: {
+        type: Sequelize.STRING
+      },
+      AppointmentId: {
         type: Sequelize.INTEGER,
+        allowNull: false,
         references: {
-          model: 'Patients', // Name of the referenced table
-          key: 'id', // Primary key of the referenced table
+          model: 'Appointments', // Assuming your Appointment model is named 'Appointment'
+          key: 'id' // Assuming 'id' is the primary key of the Appointment model
         },
-        onUpdate: 'CASCADE',
-        onDelete: 'CASCADE',
+        onDelete: 'CASCADE' // Cascade delete when associated Appointment is deleted
       },
       createdAt: {
         allowNull: false,
@@ -43,9 +42,8 @@ module.exports = {
         type: Sequelize.DATE
       }
     });
-    
   },
   async down(queryInterface, Sequelize) {
-    await queryInterface.dropTable('MedicineRecords');
+    await queryInterface.dropTable('Meds');
   }
 };

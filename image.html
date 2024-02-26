@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Image Upload</title>
+</head>
+<body>
+    <h2>Image Upload</h2>
+    <form id="uploadForm" enctype="multipart/form-data">
+        <input type="file" id="imageInput" accept="image/*">
+        <button type="submit">Upload</button>
+    </form>
+
+    <script>
+        document.getElementById('uploadForm').addEventListener('submit', function(event) {
+            event.preventDefault(); // Prevent the default form submission
+            
+            // Get the form and image input element
+            const form = document.getElementById('uploadForm');
+            const imageInput = document.getElementById('imageInput');
+
+            // Create a FormData object to send the form data
+            const formData = new FormData(form);
+
+            // Make a fetch request to handle the image upload
+            fetch('http://localhost:3000/image/uploads', { // Updated URL
+                method: 'POST',
+                body: formData
+            })
+            .then(response => {
+                if (response.ok) {
+                    // If the response is successful, log the message to the console
+                    console.log('Image uploaded successfully!');
+                } else {
+                    // If there's an error in the response, log the error message to the console
+                    console.error('Error uploading image:', response.statusText);
+                }
+            })
+            .catch(error => {
+                // If there's a network error, log the error message to the console
+                console.error('Network error:', error);
+            });
+        });
+    </script>
+</body>
+</html>

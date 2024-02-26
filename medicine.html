@@ -1,0 +1,142 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Medicine Page</title>
+    <style>
+        /* Your CSS styles here */
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #f4f4f4;
+        }
+
+        .container {
+            max-width: 800px;
+            margin: 20px auto;
+            padding: 20px;
+            background-color: #fff;
+            border-radius: 8px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        }
+
+        h2 {
+            text-align: center;
+            margin-bottom: 20px;
+        }
+
+        .field {
+            margin-bottom: 10px;
+        }
+
+        .field label {
+            font-weight: bold;
+        }
+
+        .field input[type="text"],
+        .field textarea {
+            width: 100%;
+            padding: 8px;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+            box-sizing: border-box;
+        }
+
+        .field textarea {
+            height: 100px;
+        }
+
+        .field:last-child {
+            margin-bottom: 0;
+        }
+
+        .btn-submit {
+            display: block;
+            width: 100%;
+            padding: 10px;
+            background-color: #007bff;
+            color: #fff;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 16px;
+            text-align: center;
+            text-decoration: none;
+        }
+
+        .btn-submit:hover {
+            background-color: #0056b3;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="container">
+        <h2>Medicine Page</h2>
+        <form id="medicineForm">
+            <div class="field">
+                <label for="MedName">Medicine Name:</label>
+                <input type="text" id="MedName" name="MedName" required>
+            </div>
+            <div class="field">
+                <label for="Price">Price:</label>
+                <input type="number" id="Price" name="Price" required>
+            </div>
+            <div class="field">
+                <label for="Manufacturer">Manufacturer:</label>
+                <input type="text" id="Manufacturer" name="Manufacturer" required>
+            </div>
+            <div class="field">
+                <label for="Dosage">Dosage:</label>
+                <input type="text" id="Dosage" name="Dosage" required>
+            </div>
+            <div class="field">
+                <label for="Duration">Duration:</label>
+                <input type="text" id="Duration" name="Duration" required>
+            </div>
+            <div class="field">
+                <label for="AppointmentId">Appointment ID:</label>
+                <input type="number" id="AppointmentId" name="AppointmentId" required>
+            </div>
+            <button type="button" class="btn-submit" onclick="submitForm()">Submit</button>
+        </form>
+    </div>
+
+    <script>
+        function submitForm() {
+            // Get form data
+            var formData = new FormData(document.getElementById('medicineForm'));
+
+            // Convert FormData to a plain JavaScript object
+            var formDataObject = {};
+            formData.forEach((value, key) => {
+                formDataObject[key] = value;
+            });
+
+            console.log('FormDataObject:', formDataObject);
+
+            // Make a POST request to the server with JSON data
+            fetch('http://localhost:3000/medicine/', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify(formDataObject),
+                withCredentials: true // or 'include' if you need to send cookies
+            })
+                .then(response => response.json())
+                .then(data => {
+                    // Log the response in the console
+                    console.log('Server Response:', data);
+                })
+                .catch(error => {
+                    console.error('Error:', error);
+                });
+        }
+    </script>
+</body>
+
+</html>

@@ -11,11 +11,14 @@
             background-color: #f4f4f4;
             margin: 0;
             padding: 0;
+            background-image: url('images/backy.jpg');
+            background-repeat: no-repeat;
+            background-position: center;
+            background-size: cover;
         }
 
         header {
             background-color: #673ab7;
-            /* Deep Purple */
             color: #fff;
             padding: 10px;
             text-align: center;
@@ -64,9 +67,9 @@
         .doctor-card img {
             width: 100%;
             max-height: 150px;
-            border-radius: 45%;
-            object-fit: fill;
-            margin-bottom: 2px;
+            border-radius: 50%;
+            object-fit: cover;
+            margin-bottom: 10px;
         }
 
         .doctor-card h3 {
@@ -98,9 +101,7 @@
         .doctor-card .know-more-button {
             background-color: #fff;
             color: #673ab7;
-            /* Deep Purple */
             border: 1px solid #673ab7;
-            /* Deep Purple */
             padding: 6px;
             border-radius: 5px;
             cursor: pointer;
@@ -109,7 +110,6 @@
 
         .doctor-card .know-more-button:hover {
             background-color: #673ab7;
-            /* Deep Purple */
             color: #fff;
         }
     </style>
@@ -137,7 +137,8 @@
                             <i class="fa fa-star"></i>
                             <span>4.5</span>
                         </div>
-                        <button class="know-more-button">Know More</button>
+                        <button class="know-more-button"
+                            onclick="navigateToDetails('doctor_details.html?name=Dr%20Shizune&amp;specialization=Neurologist&amp;rating=4.5&amp;bio=Completed%20degree&amp;consultationFee=400&amp;experience=5%2B%20years&amp;availability=10%20AM%20-%202%20PM&amp;center=MedTech&amp;image=images/doc.jpg')">Know More</button>
                     </div>
                     <div class="doctor-card">
                         <img src="images/doc.jpg" alt="Doctor Image">
@@ -145,9 +146,10 @@
                         <p>Nephrologist</p>
                         <div class="rating">
                             <i class="fa fa-star"></i>
-                            <span>4.5</span>
+                            <span>4.6</span>
                         </div>
-                        <button class="know-more-button">Know More</button>
+                        <button class="know-more-button"
+                            onclick="navigateToDetails('doctor_details.html?name=Dr%20Sakura&amp;specialization=Nephrologist&amp;rating=4.6&amp;bio=Completed%20degree&amp;consultationFee=450&amp;experience=6%2B%20years&amp;availability=9%20AM%20-%204%20PM&amp;center=Kidney%20Care&amp;image=images/doc.jpg')">Know More</button>
                     </div>
                     <div class="doctor-card">
                         <img src="images/doc1.png" alt="Doctor Image">
@@ -155,9 +157,11 @@
                         <p>Dentist</p>
                         <div class="rating">
                             <i class="fa fa-star"></i>
-                            <span>4.5</span>
+                            <span>4.7</span>
                         </div>
-                        <button class="know-more-button">Know More</button>
+                        <button class="know-more-button"
+                            onclick="navigateToDetails('doctor_details.html?name=Dr%20Hatake&amp;specialization=Dentist&amp;rating=4.7&amp;bio=Completed%20degree&amp;consultationFee=500&amp;experience=7%2B%20years&amp;availability=8%20AM%20-%201%20PM&amp;center=Dental%20Care&amp;image=images/doc1.png')">Know
+                            More</button>
                     </div>
                     <div class="doctor-card">
                         <img src="images/doc3.jpg" alt="Doctor Image">
@@ -165,9 +169,11 @@
                         <p>Cardiologist</p>
                         <div class="rating">
                             <i class="fa fa-star"></i>
-                            <span>4.5</span>
+                            <span>4.8</span>
                         </div>
-                        <button class="know-more-button">Know More</button>
+                        <button class="know-more-button"
+                            onclick="navigateToDetails('doctor_details.html?name=Dr%20Temari&amp;specialization=Cardiologist&amp;rating=4.8&amp;bio=Completed%20degree&amp;consultationFee=550&amp;experience=8%2B%20years&amp;availability=10%20AM%20-%203%20PM&amp;center=Heart%20Clinic&amp;image=images/doc3.jpg')">Know
+                            More</button>
                     </div>
                     <div class="doctor-card">
                         <img src="images/doc2.jpg" alt="Doctor Image">
@@ -175,21 +181,12 @@
                         <p>Ortho</p>
                         <div class="rating">
                             <i class="fa fa-star"></i>
-                            <span>4.5</span>
+                            <span>4.6</span>
                         </div>
-                        <button class="know-more-button" onclick="navigateToDetails('doctor_details.html')">Know
+                        <button class="know-more-button"
+                            onclick="navigateToDetails('doctor_details.html?name=Dr%20Shikamaru&amp;specialization=Ortho&amp;rating=4.6&amp;bio=Completed%20degree&amp;consultationFee=600&amp;experience=9%2B%20years&amp;availability=11%20AM%20-%204%20PM&amp;center=Bone%20Care&amp;image=images/doc2.jpg')">Know
                             More</button>
                     </div>
-
-                    <!-- ... Existing code ... -->
-
-                    <script>
-                        function navigateToDetails(page) {
-                            window.location.href = page;
-                        }
-                    </script>
-
-                    <!-- End of repeated section -->
                 </div>
             </div>
 
@@ -205,7 +202,8 @@
                             <i class="fa fa-star"></i>
                             <span>4.7</span>
                         </div>
-                        <button class="know-more-button">Know More</button>
+                        <button class="know-more-button"
+                            onclick="navigateToDetails('doctor_details.html?name=Dr%20Yamato&amp;specialization=Cardiologist&amp;rating=4.7&amp;bio=Completed%20degree&amp;consultationFee=450&amp;experience=8%2B%20years&amp;availability=8%20AM%20-%204%20PM&amp;center=HeartCare&amp;image=images/doc3.jpg')">Know More</button>
                     </div>
                     <div class="doctor-card">
                         <img src="images/doc2.jpg" alt="Cardiologist Image">
@@ -213,9 +211,11 @@
                         <p>Cardiologist</p>
                         <div class="rating">
                             <i class="fa fa-star"></i>
-                            <span>4.7</span>
+                            <span>4.5</span>
                         </div>
-                        <button class="know-more-button">Know More</button>
+                        <button class="know-more-button"
+                            onclick="navigateToDetails('doctor_details.html?name=Dr%20Kisame&amp;specialization=Cardiologist&amp;rating=4.5&amp;bio=Completed%20degree&amp;consultationFee=400&amp;experience=6%2B%20years&amp;availability=10%20AM%20-%204%20PM&amp;center=CardioMed&amp;image=images/doc2.jpg')">Know
+                            More</button>
                     </div>
                     <div class="doctor-card">
                         <img src="images/doc3.jpg" alt="Cardiologist Image">
@@ -223,9 +223,23 @@
                         <p>Cardiologist</p>
                         <div class="rating">
                             <i class="fa fa-star"></i>
-                            <span>4.7</span>
+                            <span>4.2</span>
                         </div>
-                        <button class="know-more-button">Know More</button>
+                        <button class="know-more-button"
+                            onclick="navigateToDetails('doctor_details.html?name=Dr%20Orochimaro&amp;specialization=Cardiologist&amp;rating=4.2&amp;bio=Completed%20degree&amp;consultationFee=500&amp;experience=10%2B%20years&amp;availability=9%20AM%20-%201%20PM&amp;center=CardiaCare&amp;image=images/doc3.jpg')">Know
+                            More</button>
+                    </div>
+                    <div class="doctor-card">
+                        <img src="images/doc2.jpg" alt="Cardiologist Image">
+                        <h3>Dr Choji</h3>
+                        <p>Cardiologist</p>
+                        <div class="rating">
+                            <i class="fa fa-star"></i>
+                            <span>4.3</span>
+                        </div>
+                        <button class="know-more-button"
+                            onclick="navigateToDetails('doctor_details.html?name=Dr%20Choji&amp;specialization=Cardiologist&amp;rating=4.3&amp;bio=Completed%20degree&amp;consultationFee=400&amp;experience=6%2B%20years&amp;availability=10%20AM%20-%204%20PM&amp;center=CardioTech&amp;image=images/doc2.jpg')">Know
+                            More</button>
                     </div>
                     <div class="doctor-card">
                         <img src="images/doc2.jpg" alt="Cardiologist Image">
@@ -233,27 +247,34 @@
                         <p>Cardiologist</p>
                         <div class="rating">
                             <i class="fa fa-star"></i>
-                            <span>4.7</span>
+                            <span>4.5</span>
                         </div>
-                        <button class="know-more-button">Know More</button>
+                        <button class="know-more-button"
+                            onclick="navigateToDetails('doctor_details.html?name=Dr%20Kisame&amp;specialization=Cardiologist&amp;rating=4.5&amp;bio=Completed%20degree&amp;consultationFee=400&amp;experience=6%2B%20years&amp;availability=10%20AM%20-%204%20PM&amp;center=CardioMed&amp;image=images/doc2.jpg')">Know
+                            More</button>
                     </div>
-                    <div class="doctor-card">
-                        <img src="images/doc3.jpg" alt="Cardiologist Image">
-                        <h3>Dr Kisame</h3>
-                        <p>Cardiologist</p>
-                        <div class="rating">
-                            <i class="fa fa-star"></i>
-                            <span>4.7</span>
-                        </div>
-                        <button class="know-more-button">Know More</button>
                     </div>
-                    <!-- End of repeated section -->
-                </div>
             </div>
 
         </div>
 
     </main>
+
+    <script>
+        function navigateToDetails(url) {
+            window.location.href = url;
+        }
+
+        function bookAppointment(doctorName, specialization, consultationFee, experience, availability, center) {
+            // Print details to console
+            console.log("Doctor Name:", doctorName);
+            console.log("Specialization:", specialization);
+            console.log("Consultation Fee:", consultationFee);
+            console.log("Experience:", experience);
+            console.log("Availability:", availability);
+            console.log("Center:", center);
+        }
+    </script>
 
 </body>
 

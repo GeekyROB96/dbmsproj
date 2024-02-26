@@ -11,6 +11,11 @@
             background-color: #f4f4f4;
             margin: 0;
             padding: 0;
+            background-image: url('images/booking.jpg');
+            background-repeat:repeat  ;
+          
+            
+            
         }
 
         .container {
@@ -18,7 +23,8 @@
             justify-content: space-between;
             align-items: flex-start;
             max-width: 800px;
-            margin: 20px auto;
+            margin-right: 100px;
+            margin: 50px auto;
             padding: 20px;
             background-color: #fff;
             border-radius: 10px;
@@ -77,6 +83,29 @@
             border-radius: 5px;
             cursor: pointer;
         }
+
+        /* Popup container styles */
+        .popup-container {
+            display: none;
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            background-color: #fff;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.3);
+            z-index: 1000;
+        }
+
+        .popup-container img {
+            width: 100px;
+            border-radius: 50%;
+            margin-bottom: 20px;
+            margin: 0 auto;
+            display: block;
+
+        }
     </style>
 </head>
 
@@ -111,6 +140,12 @@
         </div>
     </div>
 
+    <!-- Popup container -->
+    <div id="popup" class="popup-container">
+        <img src="images/check.gif" alt="Success Image">
+        <p>Appointment booked successfully! 🎉</p>
+    </div>
+
     <script>
         window.onload = function () {
             const queryString = window.location.search;
@@ -136,18 +171,34 @@
             document.getElementById("doctor-center").innerText = "Center: " + center;
         };
 
+
         function bookAppointment() {
             const appointmentDate = document.getElementById("appointment-date").value;
             const appointmentTime = document.getElementById("appointment-time").value;
             const remarks = document.getElementById("remarks").value;
             const symptoms = document.getElementById("symptoms").value;
 
-            // You can construct the URL with appointment details and navigate to the next page here
-            // For now, let's log the details
-            console.log("Appointment Date:", appointmentDate);
-            console.log("Appointment Time:", appointmentTime);
-            console.log("Remarks:", remarks);
-            console.log("Symptoms:", symptoms);
+            // Your existing code for logging details
+
+            // Show the popup container
+            showPopup();
+        }
+
+        function showPopup() {
+            // Display the popup container
+            const popup = document.getElementById("popup");
+            popup.style.display = "block";
+
+            // Close the popup after a delay (e.g., 3 seconds)
+            setTimeout(function () {
+                hidePopup();
+            }, 3000);
+        }
+
+        function hidePopup() {
+            // Hide the popup container
+            const popup = document.getElementById("popup");
+            popup.style.display = "none";
         }
     </script>
 

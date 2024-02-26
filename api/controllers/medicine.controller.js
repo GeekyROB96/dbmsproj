@@ -1,58 +1,31 @@
 const models = require('../models');
 const Validator = require("fastest-validator");
 
+function saveMedicine(req, res) {
+  const medicine = {
+      MedName: req.body.MedName,
+      Price: req.body.Price,
+      Manufacturer: req.body.Manufacturer,
+      Dosage: req.body.Dosage,
+      Duration: req.body.Duration,
+      AppointmentId: req.body.AppointmentId
+  };
 
-function saveMedicine(req,res){
-
-    const medicine = {
-
-       
-            MedName: req.body.MedName,
-            ExpiryDate: new Date(req.body.ExpiryDate),
-            Price: req.body.Price,
-            Manufacturer: req.body.Manufacturer,
-            Units: req.body.Units,
-            PatientId: req.body.PatientId, // Assuming you receive PatientId in the request body
-        };
-
-        const schema = {
-            MedName: { type: 'string', min: 3, max: 255 },
-            ExpiryDate: { type: 'date' },
-            Price: { type: 'number' },
-            Manufacturer: { type: 'string', min: 3, max: 255 },
-            Units: { type: 'number' },
-            PatientId: { type: 'number' }, // Adjust the type as per your PatientId type
-        };
-
-        
-    const v = new Validator();
-
-    const validationResponse = v.validate(medicine, schema);
-
-    if (validationResponse !== true) {
-        return res.status(400).json({
-            message: "Validation Failed",
-            errors: validationResponse
-        });
-    }
-
-    
-    models.MedicineRecord.create(medicine)
-        .then(result => {
-            res.status(201).json({
-                message: "Medicine Record Created Successfully!",
-                medicine: result
-            });
-        })
-        .catch(error => {
-            console.error('Error Creating Medicine Record:', error.message);
-            res.status(500).json({
-                message: "Error Creating Medicine Record",
-                error: error
-            });
-        });
+  models.Med.create(medicine)
+      .then(result => {
+          res.status(201).json({
+              message: "Medicine Record Created Successfully!",
+              medicine: result
+          });
+      })
+      .catch(error => {
+          console.error('Error Creating Medicine Record:', error.message);
+          res.status(500).json({
+              message: "Error Creating Medicine Record",
+              error: error
+          });
+      });
 }
-
 
 
 function getMedicineRecordsByPatientId(req, res) {
@@ -164,7 +137,7 @@ function getMedicineRecordsByPatientId(req, res) {
   }
 
 module.exports = {
-    saveMedicine: saveMedicine,
+  saveMedicine: saveMedicine,
     getMedicineRecordsByPatientId:getMedicineRecordsByPatientId,
     updateMedicine:updateMedicine,
     deleteMedicine:deleteMedicine
