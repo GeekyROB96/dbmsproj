@@ -1,0 +1,171 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Services</title>
+    <link rel="stylesheet" href="styles.css">
+    <script defer src="https://use.fontawesome.com/releases/v5.15.4/js/all.js"
+        integrity="sha384-sHwmdU5oxY+2G6GCj5g3rK9PWNgB7hvgobz0PUX31rWJPLpZiFpZVIa1gEk3D7pH"
+        crossorigin="anonymous"></script>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+        }
+
+        header {
+            background: linear-gradient(135deg, #6698f6, #f754fd);
+            color: white;
+            text-align: center;
+            padding: 20px 0;
+        }
+
+        main {
+            padding: 20px;
+        }
+
+        h1,
+        h2 {
+            text-align: center;
+            margin-bottom: 20px;
+        }
+
+        .hexagon-container {
+            display: flex;
+            justify-content: space-evenly;
+            flex-wrap: wrap;
+        }
+
+        .hexagon {
+            width: 120px;
+            height: 138px;
+            /* Adjusted to maintain hexagon shape */
+            position: relative;
+            background-color: #fc85a1;
+            color: white;
+            text-align: center;
+            margin-bottom: 20px;
+            clip-path: polygon(50% 0%, 100% 25%, 100% 75%, 50% 100%, 0% 75%, 0% 25%);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            transition: transform 0.3s ease;
+        }
+
+        .hexagon.rotate-once {
+            animation: spin 3s ease-in-out;
+        }
+
+        .hexagon:hover {
+            transform: scale(1.05);
+            /* Increase size on hover */
+        }
+
+        .hexagon i {
+            font-size: 30px;
+        }
+
+        .hexagon p {
+            margin-top: 10px;
+        }
+
+        @keyframes spin {
+            0% {
+                transform: rotateY(0deg);
+            }
+
+            100% {
+                transform: rotateY(360deg);
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <header>
+        <h1>Services</h1>
+    </header>
+
+    <main>
+        <section class="speciality-section">
+            <h2>Speciality</h2>
+            <div class="hexagon-container">
+                <div class="hexagon">
+                    <i class="fas fa-heart"></i>
+                    <p>Cardiology</p>
+                </div>
+                <div class="hexagon">
+                    <i class="fas fa-brain"></i>
+                    <p>Neurology</p>
+                </div>
+                <div class="hexagon">
+                    <i class="fas fa-tooth"></i>
+                    <p>Dentistry</p>
+                </div>
+                <div class="hexagon">
+                    <i class="fas fa-bone"></i>
+                    <p>Orthopedic</p>
+                </div>
+                <div class="hexagon">
+                    <i class="fas fa-hospital"></i>
+                    <p>Therapist</p>
+                </div>
+                <div class="hexagon">
+                    <i class="fas fa-user-md"></i>
+                    <p>General Physician</p>
+                </div>
+            </div>
+        </section>
+
+        <section class="remedies-section">
+            <h2>Remedies</h2>
+            <div class="hexagon-container">
+                <div class="hexagon">
+                    <i class="fas fa-apple"></i>
+                    <p>Healthy Diet</p>
+                </div>
+                <div class="hexagon">
+                    <i class="fas fa-running"></i>
+                    <p>Exercise</p>
+                </div>
+                <div class="hexagon">
+                    <i class="fas fa-bed"></i>
+                    <p>Adequate Sleep</p>
+                </div>
+                <div class="hexagon">
+                    <i class="fas fa-stethoscope"></i>
+                    <p>Consult a Doctor</p>
+                </div>
+                <div class="hexagon">
+                    <i class="fas fa-user-nurse"></i>
+                    <p>Nursing Care</p>
+                </div>
+                <div class="hexagon">
+                    <i class="fas fa-medkit"></i>
+                    <p>Medication</p>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <script>
+        document.addEventListener("DOMContentLoaded", function () {
+            const hexagons = document.querySelectorAll(".hexagon");
+
+            // Add a class to trigger the rotation animation once
+            hexagons.forEach(hexagon => {
+                hexagon.classList.add("rotate-once");
+                hexagon.addEventListener("animationend", () => {
+                    hexagon.classList.remove("rotate-once");
+                });
+            });
+        });
+
+    </script>
+</body>
+
+</html>
