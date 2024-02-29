@@ -46,6 +46,7 @@ const medicineRoute = require('./routes/medicine');
 const appointmentRoute = require('./routes/appointment');
 const diagnosisReportRoute = require('./routes/diagnosisreport');
 const stripeRoute = require('./routes/stripe.payment');
+const adminRoute = require('./routes/admin');
 const cors = require('cors');
 
 app.use(cors({
@@ -53,11 +54,13 @@ app.use(cors({
     methods: ['POST', 'GET','PATCH','PUT','DELETE'],
     credentials: true  // Enable credentials (cookies, HTTP authentication) for cross-origin requests
 }));
+app.use(express.static('public'));
 
  app.use(bodyParser.urlencoded({ extended: true }));
 app.use(bodyParser.json());
 
 app.use('/patient', patientRoute);
+app.use('/admin',adminRoute);
 app.use('/uploads', express.static('uploads'));
 app.use('/doctor', doctorRoute);
 app.use('/image', imageRoute);
@@ -68,8 +71,5 @@ app.use('/payment', stripeRoute);
 
 
 
-app.get('/', (req, res) => {
-    res.sendFile(path.join(__dirname, 'index.html'));
-  });
 
 module.exports = app;

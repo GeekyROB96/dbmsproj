@@ -13,9 +13,6 @@
             padding: 0;
             background-image: url('images/booking.jpg');
             background-repeat: repeat;
-
-
-
         }
 
         .container {
@@ -49,6 +46,21 @@
 
         .doctor-details p {
             font-size: 16px;
+            margin-bottom: 10px;
+            color: #333; /* Set the color for regular text */
+        }
+
+        /* Styles for the Consultation Fee, Experience, and Availability */
+        .doctor-details .attribute-label {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            font-weight: bold;
+            font-size: 16px;
+            color: #111111; /* Set color for labels */
+        }
+
+        .doctor-details .attribute-value {
+            font-weight: normal;
+            color: #111111; /* Set color for values */
             margin-bottom: 10px;
         }
 
@@ -104,7 +116,6 @@
             margin-bottom: 20px;
             margin: 0 auto;
             display: block;
-
         }
     </style>
 </head>
@@ -113,18 +124,23 @@
 
     <div class="container">
         <div class="doctor-details">
-            <img id="doctor-img" src="" alt="Doctor Image">
+            <img id="doctor-img" src="{imageUrl}" alt="Doctor Image">
             <h2 id="doctor-name"></h2>
-            <p id="doctor-specialization"></p>
+            <p id="doctor-specialization" class="attribute-label">Specialization: <span
+                    id="doctor-specialization-value" class="attribute-value"></span></p>
             <div class="rating" id="doctor-rating">
                 <i class="fa fa-star"></i>
                 <span></span>
             </div>
             <p id="doctor-bio"></p>
-            <p id="doctor-consultation-fee"></p>
-            <p id="doctor-experience"></p>
-            <p id="doctor-availability"></p>
-            <p id="doctor-center"></p>
+            <!-- Consultation Fee -->
+            <p class="attribute-label">Consultation Fee: <span id="doctor-consultation-fee" class="attribute-value"></span></p>
+            <!-- Experience -->
+            <p class="attribute-label">Experience: <span id="doctor-experience" class="attribute-value"></span></p>
+            <!-- Availability -->
+            <p class="attribute-label">Availability: <span id="doctor-availability"
+                    class="attribute-value"></span></p>
+
         </div>
         <div class="appointment-details">
             <h3>Choose your slot</h3>
@@ -148,54 +164,69 @@
 
     <script>
         window.onload = function () {
+            // Extract doctor ID from the URL
             const queryString = window.location.search;
             const urlParams = new URLSearchParams(queryString);
-            const image = urlParams.get('image');
-            const name = urlParams.get('name');
-            const specialization = urlParams.get('specialization');
-            const rating = urlParams.get('rating');
-            const bio = urlParams.get('bio');
-            const consultationFee = urlParams.get('consultationFee');
-            const experience = urlParams.get('experience');
-            const availability = urlParams.get('availability');
-            const center = urlParams.get('center');
+            const doctorId = urlParams.get('id');
 
-            document.getElementById("doctor-img").src = image;
-            document.getElementById("doctor-name").innerText = name;
-            document.getElementById("doctor-specialization").innerText = specialization;
-            document.getElementById("doctor-rating").getElementsByTagName("span")[0].innerText = rating;
-            document.getElementById("doctor-bio").innerText = "Bio: " + bio;
-            document.getElementById("doctor-consultation-fee").innerText = "Consultation Fee: " + consultationFee;
-            document.getElementById("doctor-experience").innerText = "Experience: " + experience;
-            document.getElementById("doctor-availability").innerText = "Availability: " + availability;
-            document.getElementById("doctor-center").innerText = "Center: " + center;
+            // Fetch doctor details using the doctor ID
+            fetch(`http://localhost:3000/doctor/${doctorId}`)
+                .then(response => {
+                    if (response.ok) {
+                        var docemail = response.DoctorEmail;
+                        var imageUrl = "api/uploads/" + docemail + ".jpeg";
+                        return response.json();
+                       
+                    } else {
+                        // Handle error response
+                        throw new Error('Failed to fetch doctor details');
+                    }
+                })
+                .then(doctorDetails => {
+                    const docemail = doctorDetails.DoctorEmail;
+                    const imageUrl = `api/uploads/${docemail}doctor.jpeg`;
+        
+                    // Set the doctor's image source
+                    document.getElementById("doctor-img").src = imageUrl;// Replace with actual image property
+                    document.getElementById("doctor-name").innerText = "Doctor Name: " + doctorDetails.DoctorName;
+                    document.getElementById("doctor-specialization-value").innerText = doctorDetails.Specialization;
+                    document.getElementById("doctor-consultation-fee").innerText = "₹ " + doctorDetails.ConsultationFee;
+                    document.getElementById("doctor-experience").innerText =   doctorDetails.Experience;
+                    document.getElementById("doctor-availability").innerText =  doctorDetails.Availability;
+
+                })
+                .catch(error => {
+                    console.error('Error:', error);
+                    // Handle error scenario, show error message or redirect to an error page
+                });
         };
 
-
         function bookAppointment() {
-            /* const appointmentDate = document.getElementById("appointment-date").value;
-             const appointmentTime = document.getElementById("appointment-time").value;
-             const remarks = document.getElementById("remarks").value;
-             const symptoms = document.getElementById("symptoms").value; */
-
-
             // Retrieve the patient details from session storage
             var patientDetails = JSON.parse(sessionStorage.getItem('patientDetailss'));
-
+        
             // Check if patientDetails is not null and contains the patient ID
             if (patientDetails && patientDetails.id) {
                 // Generate random 5-digit AppointmentId
                 const appointmentId = Math.floor(10000 + Math.random() * 90000);
-
+        
                 // Retrieve PatientId from patientDetails
                 const patientId = patientDetails.id;
-
+        
                 // Fetch other details from input fields
                 const appointmentDate = document.getElementById("appointment-date").value;
                 const appointmentTime = document.getElementById("appointment-time").value;
+        
+                const currentDate = new Date();
+        
+                if (new Date(appointmentDate) < currentDate) {
+                    alert("Appointment Date cannot be less than the current date");
+                    return;
+                }
+        
                 const remarks = document.getElementById("remarks").value;
                 const symptoms = document.getElementById("symptoms").value;
-
+        
                 // Construct JSON object
                 const appointmentData = {
                     "AppointmentId": appointmentId,
@@ -205,7 +236,7 @@
                     "AppointmentTime": appointmentTime,
                     "Remarks": remarks
                 };
-
+        
                 // Send POST request to the server
                 fetch('http://localhost:3000/appointment/', {
                     method: 'POST',
@@ -214,25 +245,22 @@
                     },
                     body: JSON.stringify(appointmentData)
                 })
-                    .then(response => {
-                        if (response.ok) {
-                            // Show success popup
-                            showPopup();
-                        } else {
-                            // Handle error response
-                            throw new Error('Failed to book appointment');
-                        }
-                    })
-                    .catch(error => {
-                        console.error('Error:', error);
-                        // Handle error scenario, show error message or retry option
-                    });
-            } else {
-                console.error('Patient details not found in session storage');
-                // Handle scenario where patient details are not available
+                .then(response => {
+                    if (response.ok) {
+                        // Show success popup
+                        showPopup();
+                    } else {
+                        // Handle error response
+                        throw new Error('Failed to book appointment');
+                    }
+                })
+                .catch(error => {
+                    console.error('Error:', error);
+                    // Handle error scenario, show error message or retry option
+                });
             }
         }
-
+        
         function showPopup() {
             // Display the popup container
             const popup = document.getElementById("popup");

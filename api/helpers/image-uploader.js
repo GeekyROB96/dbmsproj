@@ -3,18 +3,21 @@ const multer = require('multer');
 const path = require('path');
 
 const storage = multer.diskStorage({
-
     destination: function (req, file, cb) {
-        cb(null,'./uploads');
+        cb(null, './uploads');
     },
     filename: function (req, file, cb) {
-        cb(null,new Date().getTime()+ path.extname(file.originalname));
-    }
+        // Use the image name from the request body or keep the original name
+        const imageName = req.params.imageName || new Date().getTime();
+       // cb(null, imageName +"patient"+ path.extname(file.originalname));
+       cb(null, imageName + path.extname(file.originalname));
+
+    },
 });
 
 const filefilter = (req, file, cb) => {
 
-    if(file.mimetype === 'image/jpeg' || file.mimetype === 'image/png'){
+    if(file.mimetype === 'image/jpeg'){
         cb(null, true);
     } else {
         cb(new Error("Unsuported Files"),false);

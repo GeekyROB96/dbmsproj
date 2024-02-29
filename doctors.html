@@ -30,6 +30,15 @@
             padding: 16px;
         }
 
+        #searchBar {
+            width: 80%;
+            padding: 10px;
+            font-size: 16px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            margin-bottom: 16px;
+        }
+
         .doctors-container {
             display: flex;
             flex-direction: column;
@@ -42,12 +51,14 @@
 
         .doctor-cards {
             display: flex;
+            flex-wrap: wrap;
             gap: 20px;
-            overflow-x: auto;
+            justify-content: space-between; /* Adjust the alignment as needed */
+            max-width: 100%;
         }
 
         .doctor-card {
-            width: 180px;
+            width: calc(20% - 20px); /* 20% width with 20px gap */
             background-color: #fff;
             border-radius: 10px;
             margin-bottom: 12px;
@@ -65,8 +76,8 @@
         }
 
         .doctor-card img {
-            width: 100%;
-            max-height: 150px;
+            width: 80px;
+            height: 80px;
             border-radius: 50%;
             object-fit: cover;
             margin-bottom: 10px;
@@ -122,160 +133,131 @@
     </header>
 
     <main>
+        <input type="text" id="searchBar" placeholder="Search by Specialization" oninput="searchDoctors()">
+
+        <h2>Search Results</h2>
+        <div class="doctor-cards" id="searchedDoctorsContainer"></div>
 
         <div class="doctors-container">
-
-            <div class="doctor-category">
+            <div class="doctor-category" id="popularDoctorsCategory">
                 <h2>Popular Doctors</h2>
-                <div class="doctor-cards">
-                    <!-- Repeat the following doctor-card section for each doctor -->
-                    <div class="doctor-card">
-                        <img src="images/doc.jpg" alt="Doctor Image">
-                        <h3>Dr Shizune</h3>
-                        <p>Neurologist</p>
-                        <div class="rating">
-                            <i class="fa fa-star"></i>
-                            <span>4.5</span>
-                        </div>
-                        <button class="know-more-button"
-                            onclick="navigateToDetails('doctor_details.html?name=Dr%20Shizune&amp;specialization=Neurologist&amp;rating=4.5&amp;bio=Completed%20degree&amp;consultationFee=400&amp;experience=5%2B%20years&amp;availability=10%20AM%20-%202%20PM&amp;center=MedTech&amp;image=images/doc.jpg')">Know More</button>
-                    </div>
-                    <div class="doctor-card">
-                        <img src="images/doc.jpg" alt="Doctor Image">
-                        <h3>Dr Sakura</h3>
-                        <p>Nephrologist</p>
-                        <div class="rating">
-                            <i class="fa fa-star"></i>
-                            <span>4.6</span>
-                        </div>
-                        <button class="know-more-button"
-                            onclick="navigateToDetails('doctor_details.html?name=Dr%20Sakura&amp;specialization=Nephrologist&amp;rating=4.6&amp;bio=Completed%20degree&amp;consultationFee=450&amp;experience=6%2B%20years&amp;availability=9%20AM%20-%204%20PM&amp;center=Kidney%20Care&amp;image=images/doc.jpg')">Know More</button>
-                    </div>
-                    <div class="doctor-card">
-                        <img src="images/doc1.png" alt="Doctor Image">
-                        <h3>Dr Hatake</h3>
-                        <p>Dentist</p>
-                        <div class="rating">
-                            <i class="fa fa-star"></i>
-                            <span>4.7</span>
-                        </div>
-                        <button class="know-more-button"
-                            onclick="navigateToDetails('doctor_details.html?name=Dr%20Hatake&amp;specialization=Dentist&amp;rating=4.7&amp;bio=Completed%20degree&amp;consultationFee=500&amp;experience=7%2B%20years&amp;availability=8%20AM%20-%201%20PM&amp;center=Dental%20Care&amp;image=images/doc1.png')">Know
-                            More</button>
-                    </div>
-                    <div class="doctor-card">
-                        <img src="images/doc3.jpg" alt="Doctor Image">
-                        <h3>Dr Temari</h3>
-                        <p>Cardiologist</p>
-                        <div class="rating">
-                            <i class="fa fa-star"></i>
-                            <span>4.8</span>
-                        </div>
-                        <button class="know-more-button"
-                            onclick="navigateToDetails('doctor_details.html?name=Dr%20Temari&amp;specialization=Cardiologist&amp;rating=4.8&amp;bio=Completed%20degree&amp;consultationFee=550&amp;experience=8%2B%20years&amp;availability=10%20AM%20-%203%20PM&amp;center=Heart%20Clinic&amp;image=images/doc3.jpg')">Know
-                            More</button>
-                    </div>
-                    <div class="doctor-card">
-                        <img src="images/doc2.jpg" alt="Doctor Image">
-                        <h3>Dr Shikamaru</h3>
-                        <p>Ortho</p>
-                        <div class="rating">
-                            <i class="fa fa-star"></i>
-                            <span>4.6</span>
-                        </div>
-                        <button class="know-more-button"
-                            onclick="navigateToDetails('doctor_details.html?name=Dr%20Shikamaru&amp;specialization=Ortho&amp;rating=4.6&amp;bio=Completed%20degree&amp;consultationFee=600&amp;experience=9%2B%20years&amp;availability=11%20AM%20-%204%20PM&amp;center=Bone%20Care&amp;image=images/doc2.jpg')">Know
-                            More</button>
-                    </div>
-                </div>
+                <div class="doctor-cards" id="popularDoctorsContainer"></div>
             </div>
 
-            <div class="doctor-category">
-                <h2>Cardiologist</h2>
-                <div class="doctor-cards">
-                    <!-- Repeat the following doctor-card section for each doctor -->
-                    <div class="doctor-card">
-                        <img src="images/doc3.jpg" alt="Cardiologist Image">
-                        <h3>Dr Yamato</h3>
-                        <p>Cardiologist</p>
-                        <div class="rating">
-                            <i class="fa fa-star"></i>
-                            <span>4.7</span>
-                        </div>
-                        <button class="know-more-button"
-                            onclick="navigateToDetails('doctor_details.html?name=Dr%20Yamato&amp;specialization=Cardiologist&amp;rating=4.7&amp;bio=Completed%20degree&amp;consultationFee=450&amp;experience=8%2B%20years&amp;availability=8%20AM%20-%204%20PM&amp;center=HeartCare&amp;image=images/doc3.jpg')">Know More</button>
-                    </div>
-                    <div class="doctor-card">
-                        <img src="images/doc2.jpg" alt="Cardiologist Image">
-                        <h3>Dr Kisame</h3>
-                        <p>Cardiologist</p>
-                        <div class="rating">
-                            <i class="fa fa-star"></i>
-                            <span>4.5</span>
-                        </div>
-                        <button class="know-more-button"
-                            onclick="navigateToDetails('doctor_details.html?name=Dr%20Kisame&amp;specialization=Cardiologist&amp;rating=4.5&amp;bio=Completed%20degree&amp;consultationFee=400&amp;experience=6%2B%20years&amp;availability=10%20AM%20-%204%20PM&amp;center=CardioMed&amp;image=images/doc2.jpg')">Know
-                            More</button>
-                    </div>
-                    <div class="doctor-card">
-                        <img src="images/doc3.jpg" alt="Cardiologist Image">
-                        <h3>Dr Orochimaro</h3>
-                        <p>Cardiologist</p>
-                        <div class="rating">
-                            <i class="fa fa-star"></i>
-                            <span>4.2</span>
-                        </div>
-                        <button class="know-more-button"
-                            onclick="navigateToDetails('doctor_details.html?name=Dr%20Orochimaro&amp;specialization=Cardiologist&amp;rating=4.2&amp;bio=Completed%20degree&amp;consultationFee=500&amp;experience=10%2B%20years&amp;availability=9%20AM%20-%201%20PM&amp;center=CardiaCare&amp;image=images/doc3.jpg')">Know
-                            More</button>
-                    </div>
-                    <div class="doctor-card">
-                        <img src="images/doc2.jpg" alt="Cardiologist Image">
-                        <h3>Dr Choji</h3>
-                        <p>Cardiologist</p>
-                        <div class="rating">
-                            <i class="fa fa-star"></i>
-                            <span>4.3</span>
-                        </div>
-                        <button class="know-more-button"
-                            onclick="navigateToDetails('doctor_details.html?name=Dr%20Choji&amp;specialization=Cardiologist&amp;rating=4.3&amp;bio=Completed%20degree&amp;consultationFee=400&amp;experience=6%2B%20years&amp;availability=10%20AM%20-%204%20PM&amp;center=CardioTech&amp;image=images/doc2.jpg')">Know
-                            More</button>
-                    </div>
-                    <div class="doctor-card">
-                        <img src="images/doc2.jpg" alt="Cardiologist Image">
-                        <h3>Dr Kisame</h3>
-                        <p>Cardiologist</p>
-                        <div class="rating">
-                            <i class="fa fa-star"></i>
-                            <span>4.5</span>
-                        </div>
-                        <button class="know-more-button"
-                            onclick="navigateToDetails('doctor_details.html?name=Dr%20Kisame&amp;specialization=Cardiologist&amp;rating=4.5&amp;bio=Completed%20degree&amp;consultationFee=400&amp;experience=6%2B%20years&amp;availability=10%20AM%20-%204%20PM&amp;center=CardioMed&amp;image=images/doc2.jpg')">Know
-                            More</button>
-                    </div>
-                    </div>
+            <div class="doctor-category" id="cardiologistCategory">
+                <h2>Cardiologists</h2>
+                <div class="doctor-cards" id="cardiologistContainer"></div>
             </div>
 
+            <div class="doctor-category" id="searchedDoctorsCategory">
         </div>
-
     </main>
 
     <script>
+        document.addEventListener("DOMContentLoaded", function () {
+            // Fetch data from the API
+            fetch('http://localhost:3000/doctor/')
+                .then(response => response.json())
+                .then(data => {
+                    // Store the fetched data globally for later use
+                    window.doctorData = data;
+
+                    // Separate doctors into categories
+                    const popularDoctors = data.Doctors.filter(doctor => doctor.Specialization !== "Cardio");
+                    const cardiologists = data.Doctors.filter(doctor => doctor.Specialization === "Cardiologist");
+
+                    // Display popular doctors
+                    displayDoctors(popularDoctors, 'popularDoctorsContainer');
+
+                    // Display cardiologists
+                    displayDoctors(cardiologists, 'cardiologistContainer');
+                })
+                .catch(error => console.error('Error fetching data:', error));
+        });
+
+        function searchDoctors() {
+            const searchKeyword = document.getElementById('searchBar').value.toLowerCase();
+            const searchedDoctorsContainer = document.getElementById('searchedDoctorsContainer');
+            searchedDoctorsContainer.innerHTML = ''; // Clear previous search results
+
+            const searchedDoctors = window.doctorData.Doctors.filter(doctor => doctor.Specialization.toLowerCase().includes(searchKeyword));
+            displayDoctors(searchedDoctors, 'searchedDoctorsContainer');
+        }
+
+        function displayDoctors(doctors, containerId) {
+            const container = document.getElementById(containerId);
+
+            doctors.forEach(doctor => {
+                const doctorCard = createDoctorCard(doctor);
+                container.appendChild(doctorCard);
+            });
+        }
+
+        function createDoctorCard(doctor) {
+            const doctorCard = document.createElement('div');
+            doctorCard.className = 'doctor-card';
+                var docemail ;
+                console.log(docemail);
+             docemail = doctor.DoctorEmail;
+            console.log(docemail);
+            // Create and append elements for the doctor card
+            var img = document.createElement('img');
+            var imgPath = `api/uploads/${docemail}doctor.jpeg`;
+            
+            img.onload = function() {
+                // Image loaded successfully
+                console.log('Image exists at:', imgPath);
+            };
+            
+            img.onerror = function() {
+                // Image failed to load
+                console.log('Image not found at:', imgPath);
+                // You can set a default image source here if needed
+                img.src = 'images/person.jpg';
+            };
+            
+            img.src = imgPath;
+            
+            
+            //img.alt = 'images/doc2.jpg';
+
+            const name = document.createElement('h3');
+            name.textContent = doctor.DoctorName;
+
+            const specialization = document.createElement('p');
+            specialization.textContent = doctor.Specialization;
+
+            const rating = document.createElement('div');
+            rating.className = 'rating';
+            const starIcon = document.createElement('i');
+            starIcon.className = 'fa fa-star';
+            const ratingValue = document.createElement('span');
+            ratingValue.textContent = '4.5'; // You may use doctor's actual rating here
+            rating.appendChild(starIcon);
+            rating.appendChild(ratingValue);
+
+            const knowMoreButton = document.createElement('button');
+            knowMoreButton.className = 'know-more-button';
+            knowMoreButton.textContent = 'Know More';
+            knowMoreButton.addEventListener('click', function () {
+                navigateToDetails('doctor_details.html?id=' + doctor.id);
+            });
+
+            // Append elements to the doctor card
+            doctorCard.appendChild(img);
+            doctorCard.appendChild(name);
+            doctorCard.appendChild(specialization);
+            doctorCard.appendChild(rating);
+            doctorCard.appendChild(knowMoreButton);
+
+            return doctorCard;
+        }
+
         function navigateToDetails(url) {
+            sessionStorage.setItem('selectedDoctorId', url.split('=')[1]);
             window.location.href = url;
         }
-
-        function bookAppointment(doctorName, specialization, consultationFee, experience, availability, center) {
-            // Print details to console
-            console.log("Doctor Name:", doctorName);
-            console.log("Specialization:", specialization);
-            console.log("Consultation Fee:", consultationFee);
-            console.log("Experience:", experience);
-            console.log("Availability:", availability);
-            console.log("Center:", center);
-        }
     </script>
-
 </body>
 
 </html>

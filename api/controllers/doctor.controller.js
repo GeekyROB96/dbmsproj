@@ -14,8 +14,8 @@ const signUpSchema = {
    // ContactNo: { type: 'number'},
     DoctorEmail: { type: 'email' },
     DoctorPassword: { type: 'string', min: 6, max: 255 },
-    Experience: { type: 'string', min: 2, max: 255 },
-    ConsultationFee:{ type: 'number' }
+    // Experience: { type: 'string', min: 2, max: 255 },
+    // ConsultationFee:{ type: 'number' }
 
 };  
 
@@ -60,7 +60,7 @@ function signUp(req, res) {
                             DoctorName: req.body.DoctorName,
                             Availability: req.body.Availability,
                             Specialization: req.body.Specialization,
-                            ContactNo: req.body.ContactNo,
+                            Contact: req.body.Contact,
                             DoctorEmail: req.body.DoctorEmail,
                             DoctorPassword: hash,
                             Experience:req.body.Experience,
@@ -165,9 +165,9 @@ function show(req, res) {
 }
 
 function index(req, res) {
-    models.Doctor.findAll().then((result) => {
-        if (result.length > 0) {
-            res.status(200).json(result);
+    models.Doctor.findAll().then((Doctors) => {
+        if (Doctors.length > 0) {
+            res.status(200).json({Doctors:Doctors});
         } else {
             res.status(404).json({
                 message: "No Doctors found"
@@ -180,6 +180,25 @@ function index(req, res) {
         });
     });
 }
+
+function doctorbyid(req, res) {
+    const id = req.params.id;
+
+    models.Doctor.findByPk(id).then((Doctor) => {
+        if (Doctor) {
+            res.status(200).json({ Doctor: Doctor });
+        } else {
+            res.status(404).json({
+                message: "Can't find Doctor"
+            });
+        }
+    }).catch(error => {
+        res.status(500).json({
+            message: "Error in server!!",
+        });
+    });
+}
+
 
 function update(req, res) {
     const id = req.params.id;
@@ -261,5 +280,6 @@ module.exports = {
     index: index,
     update: update,
     login: login,
-    destroy: destroy
+    destroy: destroy,
+    doctorbyid:doctorbyid
 };

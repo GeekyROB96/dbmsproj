@@ -7,32 +7,63 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Doctor Dashboard</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css"
-    crossorigin="anonymous" referrerpolicy="no-referrer" />
+        crossorigin="anonymous" referrerpolicy="no-referrer" />
 
-        <style>
+    <style>
+        .avatar-container {
+            position: relative;
+            width: 100px;
+            height: 100px;
+            overflow: hidden;
+            border-radius: 50%;
+            margin-bottom: 10px; /* Add margin to create space below the circular avatar */
+        }
+    
+        .avatar-container img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            border-radius: 50%;
+        }
+    
+        .upload-image-btn {
+            display: none;
+            position: absolute;
+            bottom: 0; /* Position at the bottom of the circular avatar */
+            left: 50%;
+            transform: translateX(-50%);
+            background-color: #007bff;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 14px;
+            padding: 5px 10px;
+            transition: background-color 0.3s;
+        }
+    
+        .avatar-container:hover .upload-image-btn {
+            display: block;
+        }
+    
+        .upload-image-btn:hover {
+            background-color: #0056b3;
+        }
 
-           
+        .button-container button.logout-btn {
+            padding: 10px 20px !important;
+            background-color: blue !important;
+            color: black !important;
+            border: none !important;
+            border-radius: 5px !important;
+            cursor: pointer !important;
+            font-size: 16px !important;
+            transition: background-color 0.3s !important;
+        }
 
-            .button-container button.logout-btn {
-                padding: 10px 20px !important;
-                background-color: blue !important;
-                color: black !important;
-                border: none !important;
-                border-radius: 5px !important;
-                cursor: pointer !important;
-                font-size: 16px !important;
-                transition: background-color 0.3s !important;
-            }
-            
-            .button-container button.logout-btn:hover {
-                background-color: darkblue !important;
-            }
-            
-
-
-        
-            
-            
+        .button-container button.logout-btn:hover {
+            background-color: darkblue !important;
+        }
         body {
             font-family: 'Arial', sans-serif;
             margin: 0;
@@ -96,7 +127,8 @@
             height: 100%;
             border-radius: 50%;
             clip: rect(0, 100%, 100%, 50%);
-            background-color: #007bff; /* Blue color, you can change this */
+            background-color: #007bff;
+            /* Blue color, you can change this */
             animation: progress 2s linear infinite;
         }
 
@@ -104,9 +136,11 @@
             0% {
                 transform: rotate(0deg);
             }
+
             50% {
                 transform: rotate(180deg);
             }
+
             100% {
                 transform: rotate(360deg);
             }
@@ -116,7 +150,8 @@
             font-size: 24px;
             font-weight: bold;
             z-index: 1;
-            color: white; /* Adjust text color as needed */
+            color: white;
+            /* Adjust text color as needed */
         }
 
         .avatar {
@@ -215,8 +250,10 @@
             width: auto;
             max-width: 80px;
         }
+
         header {
-            margin-top: 10px; /* Add margin-top for spacing */
+            margin-top: 10px;
+            /* Add margin-top for spacing */
             background-color: #007bff;
             color: white;
             text-align: center;
@@ -230,7 +267,7 @@
 
 <body>
     <header style="background-color: #007bff; color: white; text-align: center; font-size: x-large; padding: 40px; ">
-        Doctor  Dashboard
+        Doctor Dashboard
     </header>
     <!-- Modal -->
     <div id="myModal" class="modal">
@@ -251,7 +288,7 @@
                 <br>
                 <button type="button" onclick="submitPostponeForm()">Submit</button>
             </form>
-            
+
         </div>
     </div>
     <div id="deleteModal" class="modal">
@@ -265,49 +302,61 @@
 
     </div>
 
- 
+
 
     <h2 id="doctorNameHeading" style="padding-left: 20px;">Hello Doctor Name</h2>
-    
+
     <div class="container">
         <div class="doctor-details-container">
             <!-- Doctor Details bar with border radius on right top and bottom -->
-            <h3 style="background-color: #4d14a25d; color: rgb(24, 21, 21); padding: 10px; border-radius :5px; margin: 0;">Doctor Details</h3>
-  <img class="avatar" src="images/person.jpg" alt="Doctor Avatar"> <!-- Add this line for the avatar -->
+            <h3
+                style="background-color: #4d14a25d; color: rgb(24, 21, 21); padding: 10px; border-radius :5px; margin: 0;">
+                Doctor Details</h3>
+            <br>
+            <div class="avatar-container">
+                <img id="doctorImage" src="${getimageurl}" alt="Doctor Image">
+                <!-- Modified button with onclick event -->
+                <button class="upload-image-btn" onclick="document.getElementById('image').click()">Upload Image</button>
+                <!-- Hidden file input field -->
+                <input type="file" name="image" id="image" accept="image/*" style="display: none;" onchange="uploadImage()">
+            </div>
+            <br>
 
-            <!-- Card 1 -->
-           
 
- 
             <div class="info-card">
                 <h4>Appointments </h4>
 
-              
+
             </div>
             <div class="patient-info-card">
                 <h4 style="font-weight: bold;">Patients </h4>
 
-              
+
             </div>
 
 
 
             <div id="doctorDetails"></div>
-            <button class="logout-btn" onclick="logout()" style="padding: 10px 20px; background-color: rgba(239, 24, 9, 0.982); color: black; border: none; border-radius: 5px; cursor: pointer; font-size: 16px; transition: background-color 0.3s;" onmouseover="this.style.backgroundColor='darkblue'" onmouseout="this.style.backgroundColor='blue'">Log Out</button>
+            <button class="logout-btn" onclick="logout()"
+                style="padding: 10px 20px; background-color: rgba(239, 24, 9, 0.982); color: black; border: none; border-radius: 5px; cursor: pointer; font-size: 16px; transition: background-color 0.3s;"
+                onmouseover="this.style.backgroundColor='darkblue'" onmouseout="this.style.backgroundColor='blue'">Log
+                Out</button>
         </div>
         <!-- Patient Appointment Details Container -->
-        <div class="details-container" id="appointmentListContainer" >
-            <h3 style="background-color: #4d14a25d; color: rgb(24, 21, 21); padding: 10px;border-radius:5px; margin: 0;">Patient Appointment Details</h3>
+        <div class="details-container" id="appointmentListContainer">
+            <h3
+                style="background-color: #4d14a25d; color: rgb(24, 21, 21); padding: 10px;border-radius:5px; margin: 0;">
+                Patient Appointment Details</h3>
         </div>
     </div>
 
 </body>
 <script>
 
-            history.pushState(null, null, window.location.href);
-              window.onpopstate = function () {
-            history.go(1);
-        };
+    history.pushState(null, null, window.location.href);
+    window.onpopstate = function () {
+        history.go(1);
+    };
 
     document.addEventListener('DOMContentLoaded', function () {
         // This function will be called when the DOM is fully loaded
@@ -317,6 +366,12 @@
 
         // Retrieve doctor form data from sessionStorage
         var doctorFormData = sessionStorage.getItem("doctorDetailss");
+        var doctorEmail = JSON.parse(doctorFormData).DoctorEmail;
+
+        var doctorImageElement = document.getElementById('doctorImage');
+        var getImageUrl = `api/uploads/${doctorEmail}doctor.jpeg`;
+        doctorImageElement.src = getImageUrl;
+        doctorImageElement.src = getImageUrl;
         if (doctorFormData) {
             // Parse the JSON data
             var doctorData = JSON.parse(doctorFormData);
@@ -369,6 +424,7 @@
             });
     }
 
+
     function getAppointmentDetails() {
         if (!sessionStorage.getItem("doctorDetailss")) {
             window.location.href = 'index.html';  // Redirect to the login page
@@ -402,26 +458,27 @@
             console.error('Error:', error);
         });
     }
-    function displayAppointments(appointments) {
-    var appointmentListContainer = document.getElementById("appointmentListContainer");
 
-    // Check if appointments is an array
+    function displayAppointments(appointments) {
+        var appointmentListContainer = document.getElementById("appointmentListContainer");
+
+        // Check if appointments is an array
         if (Array.isArray(appointments)) {
             var numberOfAppointments = appointments.length;
 
-        // Update the Appointments info-card
-        var appointmentsCard = document.querySelector(".info-card h4");
-        appointmentsCard.innerHTML = `Appointments ${numberOfAppointments}`;
+            // Update the Appointments info-card
+            var appointmentsCard = document.querySelector(".info-card h4");
+            appointmentsCard.innerHTML = `Appointments ${numberOfAppointments}`;
 
-        // Loop through and display individual appointments
-        appointments.forEach(appointment => {
-            var appointmentCard = document.createElement("div");
-            appointmentCard.classList.add("appointment-card");
+            // Loop through and display individual appointments
+            appointments.forEach(appointment => {
+                var appointmentCard = document.createElement("div");
+                appointmentCard.classList.add("appointment-card");
 
-            appointmentCard.innerHTML = `
+                appointmentCard.innerHTML = `
                 <p><strong>ID:</strong> ${appointment.id}</p>
                 <p><strong>Appointment ID:</strong> ${appointment.AppointmentId}</p>
-                <p><strong>Patient Name:</strong> ${appointment.PatientId}</p>
+                <p><strong>Patient ID:</strong> ${appointment.PatientId}</p>
                 <p><strong>Appointment Date:</strong> ${appointment.AppointmentDate}</p>
                 <p><strong>Appointment Time:</strong> ${appointment.AppointmentTime}</p>
                 <p><strong>Remarks:</strong> ${appointment.Remarks}</p>
@@ -433,26 +490,26 @@
                 </div>
             `;
 
-            appointmentListContainer.appendChild(appointmentCard);
-        });
-    } else {
-        // Handle the case where appointments is not an array
-        console.error('Error: Appointments data is not an array');
+                appointmentListContainer.appendChild(appointmentCard);
+            });
+        } else {
+            // Handle the case where appointments is not an array
+            console.error('Error: Appointments data is not an array');
+        }
     }
-}
 
-function postponeAppointment(appointmentId) {
-    // Open the modal
-    var modal = document.getElementById("myModal");
-    modal.style.display = "block";
+    function postponeAppointment(appointmentId) {
+        // Open the modal
+        var modal = document.getElementById("myModal");
+        modal.style.display = "block";
 
-    // Store the appointmentId in a hidden input field
-    var hiddenAppointmentIdInput = document.createElement("input");
-    hiddenAppointmentIdInput.type = "hidden";
-    hiddenAppointmentIdInput.name = "appointmentId";
-    hiddenAppointmentIdInput.value = appointmentId;
-    document.getElementById("postponeForm").appendChild(hiddenAppointmentIdInput);
-}
+        // Store the appointmentId in a hidden input field
+        var hiddenAppointmentIdInput = document.createElement("input");
+        hiddenAppointmentIdInput.type = "hidden";
+        hiddenAppointmentIdInput.name = "appointmentId";
+        hiddenAppointmentIdInput.value = appointmentId;
+        document.getElementById("postponeForm").appendChild(hiddenAppointmentIdInput);
+    }
 
     function closeModal() {
         // Close the modal
@@ -467,52 +524,58 @@ function postponeAppointment(appointmentId) {
             hiddenAppointmentIdInput.parentNode.removeChild(hiddenAppointmentIdInput);
         }
     }
-
     function submitPostponeForm() {
         // Retrieve data from the form
         var appointmentId = document.querySelector("input[name='appointmentId']").value;
-        var newAppointmentDate = document.getElementById("newAppointmentDate").value;
-        var newAppointmentTime = document.getElementById("newAppointmentTime").value;
-        var symptoms = document.getElementById("symptoms").value; // New line
+        var newAppointmentDate = new Date(document.getElementById("newAppointmentDate").value);
+        var currentDate = new Date();  // Get the current date
     
-        // Prepare data for the server
-        var postData = {
-            "AppointmentDate": newAppointmentDate,
-            "AppointmentTime": newAppointmentTime,
-            "Symptoms": symptoms // New line
-        };
-    
-        // Send the data to the server to update the appointment
-        fetch(`http://localhost:3000/appointment/appointment/${appointmentId}`, {
-            method: 'PATCH',
-            headers: {
-                'Content-Type': 'application/json'
-            },
-            body: JSON.stringify(postData)
-        })
-            .then(response => {
-                // Handle the response
-                if (!response.ok) {
-                    throw new Error(`HTTP error! Status: ${response.status}`);
-                }
-                return response.json();
+        if (newAppointmentDate < currentDate) {
+            // Invalid date, show an alert or take appropriate action
+            alert("Appointment date must be equal to or later than the current date.");
+            return;
+        } else {
+            var newAppointmentTime = document.getElementById("newAppointmentTime").value;
+            var symptoms = document.getElementById("symptoms").value; // New line
+        
+            // Prepare data for the server
+            var postData = {
+                "AppointmentDate": newAppointmentDate.toISOString(), // Convert to string for JSON serialization
+                "AppointmentTime": newAppointmentTime,
+                "Symptoms": symptoms // New line
+            };
+        
+            // Send the data to the server to update the appointment
+            fetch(`http://localhost:3000/appointment/appointment/${appointmentId}`, {
+                method: 'PATCH',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify(postData)
             })
-            .then(data => {
-                // Log the response in the console
-                console.log('Updated Appointment:', data);
-    
-                // Close the modal and update the UI as needed
-                closeModal();
-                // You may want to refresh the appointment details on the UI after updating
-                getAppointmentDetails();
-            })
-            .catch(error => {
-                console.error('Error:', error);
-                // Handle the error as needed
-            });
+                .then(response => {
+                    // Handle the response
+                    if (!response.ok) {
+                        throw new Error(`HTTP error! Status: ${response.status}`);
+                    }
+                    return response.json();
+                })
+                .then(data => {
+                    // Log the response in the console
+                    console.log('Updated Appointment:', data);
+        
+                    // Close the modal and update the UI as needed
+                    closeModal();
+                    // You may want to refresh the appointment details on the UI after updating
+                    getAppointmentDetails();
+                })
+                .catch(error => {
+                    console.error('Error:', error);
+                    // Handle the error as needed
+                });
+        }
     }
     
-
     function deleteAppointmentConfirmation(appointmentId) {
         // Open the delete confirmation modal
         var deleteModal = document.getElementById("deleteModal");
@@ -537,6 +600,8 @@ function postponeAppointment(appointmentId) {
             hiddenAppointmentIdInput.parentNode.removeChild(hiddenAppointmentIdInput);
         }
     }
+
+  
 
     function confirmDeleteAppointment() {
         // Retrieve appointmentId from the hidden input
@@ -571,25 +636,91 @@ function postponeAppointment(appointmentId) {
                 // Handle the error as needed
             });
     }
+
     function navigateToDiagnosisWindow(id) {
         console.log('Navigating to diagnosis window for appointment id:', id);
         // Store the appointmentId in sessionStorage
         sessionStorage.setItem("selectedAppointmentId", id);
-      //  console.log('Navigating to diagnosis window for appointment id:', id);
-
-        // Redirect to the diagnosis.html window
         window.location.href = 'diagnosis.html';
     }
-   /* function logout() {
-          sessionStorage.removeItem("doctorDetailss");
-        window.location.href = 'index.html'; 
-    } */closeDeleteModal
+    closeDeleteModal
     function logout() {
         sessionStorage.removeItem("doctorDetailss");
         window.location.href = 'index.html';  // Redirect to the login page
     }
+    function uploadImage() {
+        var doctorFormData = sessionStorage.getItem("doctorDetailss");
+        var doctorEmail = JSON.parse(doctorFormData).DoctorEmail; // Parse the JSON string
     
-  
+        // Retrieve the file input element
+        var fileInput = document.getElementById('image');
+        // Retrieve the selected file
+        var file = fileInput.files[0];
+    
+        // Create a FormData object
+        var formData = new FormData();
+        formData.append('image', file);
+    
+        // Create an HTMLImageElement to load the selected image
+        var img = new Image();
+        
+        // Load the selected image into the HTMLImageElement
+        img.src = URL.createObjectURL(file);
+    
+        // Define a function to be executed when the image is loaded
+        img.onload = function () {
+            // Create a canvas element
+            var canvas = document.createElement('canvas');
+            var ctx = canvas.getContext('2d');
+    
+            // Set the canvas dimensions to match the image dimensions
+            canvas.width = 100; // Set the desired width (you can adjust this)
+            canvas.height = 100; // Set the desired height (you can adjust this)
+    
+            // Draw the image onto the canvas
+            ctx.drawImage(img, 0, 0, canvas.width, canvas.height);
+    
+            // Convert the canvas content to a base64 encoded data URL with JPEG format
+            var resizedImageDataUrl = canvas.toDataURL('image/jpeg');
+    
+            // Convert the base64 data URL to a Blob
+            var blob = dataURLtoBlob(resizedImageDataUrl);
+    
+            // Create a new FormData object
+            var resizedFormData = new FormData();
+            resizedFormData.append('image', blob, 'avatar.jpeg');
+    
+            // Send the resized image data to the server
+            fetch(`http://localhost:3000/image/uploads/${doctorEmail}doctor`, {
+                method: 'POST',
+                body: resizedFormData
+            })
+                .then(response => {
+                    if (!response.ok) {
+                        throw new Error('Network response was not ok');
+                    }
+                    return response.json();
+                })
+                .then(data => {
+                    // Handle the response data
+                    console.log('Resized image uploaded successfully:', data);
+                })
+                .catch(error => {
+                    console.error('There was a problem with the resized image upload:', error);
+                });
+        };
+    }
+    
+    // Function to convert a data URL to a Blob
+    function dataURLtoBlob(dataURL) {
+        var arr = dataURL.split(','), mime = arr[0].match(/:(.*?);/)[1],
+            bstr = atob(arr[1]), n = bstr.length, u8arr = new Uint8Array(n);
+        while (n--) {
+            u8arr[n] = bstr.charCodeAt(n);
+        }
+        return new Blob([u8arr], { type: mime });
+    }
+    
 </script>
 
 </html>

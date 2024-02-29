@@ -10,8 +10,7 @@ function saveAppointment(req, res) {
         Symptoms: req.body.Symptoms,
         AppointmentTime: req.body.AppointmentTime,
         Remarks: req.body.Remarks,
-        Experience: req.body.Experience,
-        ConsultationFee:req.body.ConsultationFee
+       
     };
 
         const schema = {
@@ -21,8 +20,7 @@ function saveAppointment(req, res) {
             Symptoms: { type: 'string', min: 3, max: 255 },
             AppointmentTime: { type: 'string' },
             Remarks: { type: 'string', min: 3, max: 255 },
-            Experience: {type: 'string', min: 3, max: 255 },
-            ConsultationFee: {type: 'number'}
+            
         };
         
     const v = new Validator();
@@ -61,7 +59,8 @@ function getAppointmentsByPatientId(req, res) {
                 return;
             }
 
-            res.status(200).json(appointments);
+            res.status(200).json({
+                appointments:appointments});
         })
         .catch(error => {
             console.error('Error getting appointments by PatientId:', error.message);
@@ -73,13 +72,14 @@ function getAppointmentById(req, res) {
     const id = req.params.id;
 
     models.Appointment.findByPk(id)
-        .then(appointment => {
-            if (!appointment) {
+        .then(appointments => {
+            if (!appointments) {
                 res.status(404).json({ message: 'Appointment not found' });
                 return;
             }
 
-            res.status(200).json(appointment);
+            res.status(200).json({
+                appointments:appointments});
         })
         .catch(error => {
             console.error('Error getting appointment by id:', error.message);

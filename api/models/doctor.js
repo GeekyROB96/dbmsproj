@@ -32,7 +32,7 @@ module.exports = (sequelize, DataTypes) => {
     Specialization: {
       type: DataTypes.STRING,
     },
-    ContactNo: {
+    Contact: {
       type: DataTypes.STRING,
     },
     Experience: {

@@ -295,25 +295,28 @@
 
             </div>
             <div id="doctorForm" style="display: none;">
+                <div id="popupContainer"></div>
+
                 <h3>Doctor Signup</h3>
                 <form id="doctorSignupForm" method="post">
                     <div class="form-group">
                         <label for="DoctorName"><i class="fas fa-user-md icon"></i></label>
                         <input type="text" placeholder="Name" id="DoctorName" name="DoctorName" required>
                     </div>
-                    <div class="form-group">
-                        <label for="DoctorEmail"><i class="fas fa-envelope icon"></i></label>
-                        <input type="email" placeholder="Email" id="DoctorEmail" name="DoctorEmail"
-                            pattern="[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}" required>
-                        <span id="emailMessage" class="error-message"></span>
-                    </div>
+                
+<div class="form-group">
+    <label for="DoctorEmail"><i class="fas fa-envelope icon"></i></label>
+    <input type="email" placeholder="Email" id="DoctorEmail" name="DoctorEmail"
+       required>
+    <!-- <span id="emailMessage" class="error-message"></span> -->
+</div>
                     <div class="form-group">
                         <label for="DoctorPassword"><i class="fas fa-lock icon"></i></label>
                         <input type="password" placeholder="Password" id="DoctorPassword" name="DoctorPassword"
                             pattern=".{6,}" title="Password must be at least 6 characters long" required>
                         <span class="password-suffix" onclick="togglePasswordVisibility('DoctorPassword')"><i
                                 class="fas fa-eye"></i></span>
-                        <span id="passwordMessage" class="error-message"></span>
+                        <span id="ppasswordMessage" class="error-message"></span>
                     </div>
                     <div class="form-group">
                         <label for="Specialization"><i class="fas fa-user-tag icon"></i></label>
@@ -325,10 +328,22 @@
                         <input type="text" placeholder="Availability" id="Availability" name="Availability" required>
                     </div>
                     <div class="form-group">
-                        <label for="ContactNo"><i class="far fa-calendar-check icon"></i></label>
-                        <input type="text" placeholder="Contact No" id="ContactNo" name="ContactNo" pattern="[0-9]{10}"
+                        <label for="Contact"><i class="far fa-calendar-check icon"></i></label>
+                        <input type="text" placeholder="Contact" id="Contact" name="Contact" pattern="[0-9]{10}"
                             title="Contact number must be 10 digits" required>
-                        <span id="contactNoMessage" class="error-message"></span>
+                        <span id="contactMessage" class="error-message"></span>
+                    </div>
+                    <div class="form-group">
+                        <label for="Experience"><i class="fas fa-lock icon"></i></label>
+                        <input type="text" placeholder="Experience" id="Experience" name="Experience"
+                             required>
+
+                    </div>
+                    <div class="form-group">
+                        <label for="ConsultationFee"><i class="fas fa-lock icon"></i></label>
+                        <input type="text" placeholder="ConsultationFee" id="ConsultationFee" name="ConsultationFee"
+                             required>
+
                     </div>
                     <button type="submit" onclick="submitDForm(event)"
                         style="background-color: #28a745; color: #fff; padding: 10px 20px; border: none; border-radius: 5px; cursor: pointer; font-size: 16px;">Signup</button>
@@ -641,10 +656,10 @@
             var password = this.value;
             if (password.length < 6) {
                 this.setCustomValidity("Password must be at least 6 characters long");
-                document.getElementById("passwordMessage").textContent = "Password must be at least 6 characters long";
+                document.getElementById("ppasswordMessage").textContent = "Password must be at least 6 characters long";
             } else {
                 this.setCustomValidity("");
-                document.getElementById("passwordMessage").textContent = "";
+                document.getElementById("ppasswordMessage").textContent = "";
             }
         });
 
@@ -745,10 +760,11 @@
             event.preventDefault();
             var formData = new FormData(document.getElementById('doctorSignupForm'));
             var formDataObject = {};
+
             formData.forEach((value, key) => {
                 formDataObject[key] = value;
             });
-            var contactNo = formDataObject["ContactNo"];
+            var contactNo = formDataObject["Contact"];
             if (contactNo.length === 10 && /^\d+$/.test(contactNo)) {
                 // Validate password
                 var password = formDataObject["DoctorPassword"];
@@ -778,13 +794,13 @@
                         });
                 } else {
                     // Password is invalid, show error message
-                    var passwordMessage = document.getElementById("passwordMessage");
-                    passwordMessage.textContent = "Password must be at least 6 characters long";
+                    var ppasswordMessage = document.getElementById("ppasswordMessage");
+                    ppasswordMessage.textContent = "Password must be at least 6 characters long";
                 }
             } else {
                 // Contact number is invalid, show error message
-                var contactNoMessage = document.getElementById("contactNoMessage");
-                contactNoMessage.textContent = "Contact number must be 10 digits";
+                var contactMessage = document.getElementById("contactMessage");
+                contactMessage.textContent = "Contact number must be 10 digits";
             }
         }
         var loginBtn = document.getElementById("loginBtn");
