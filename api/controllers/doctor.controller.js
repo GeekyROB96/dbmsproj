@@ -3,7 +3,50 @@ const Validator = require('fastest-validator');
 const bcryptjs = require('bcryptjs');
 const jwt = require('jsonwebtoken');
 
+
+
+
+
+const signUpSchema = {
+    DoctorName: { type: 'string', min: 1, max: 255 },
+    Availability: { type: 'string', min: 2, max: 255 },
+    Specialization:{ type: 'string', min: 3, max: 255 },
+   // ContactNo: { type: 'number'},
+    DoctorEmail: { type: 'email' },
+    DoctorPassword: { type: 'string', min: 6, max: 255 },
+    Experience: { type: 'string', min: 2, max: 255 },
+    ConsultationFee:{ type: 'number' }
+
+};  
+
+// Create a validator instance
+const validator = new Validator();
+
+// Create a validation function
+const validateSignUp = (data) => {
+    const validationResult = validator.validate(data, signUpSchema);
+    return validationResult;
+};
+
+
+
 function signUp(req, res) {
+
+    const validationErrors = validateSignUp(req.body);
+
+    if (validationErrors !== true) {
+        return res.status(400).json({
+            message: 'Validation error',
+            errors: validationErrors
+        });
+    }
+
+    // if (req.body["ContactNo"].toString().length !== 10) {
+    //     return res.status(400).json({
+    //         message: "Contact Number must be of 10 digits"
+    //     });
+    // }
+    
     models.Doctor.findOne({ where: { DoctorEmail: req.body.DoctorEmail } }).then(
         result => {
             if (result) {
@@ -19,7 +62,9 @@ function signUp(req, res) {
                             Specialization: req.body.Specialization,
                             ContactNo: req.body.ContactNo,
                             DoctorEmail: req.body.DoctorEmail,
-                            DoctorPassword: hash
+                            DoctorPassword: hash,
+                            Experience:req.body.Experience,
+                            ConsultationFee:req.body.ConsultationFee,
                         };
 
                         models.Doctor.create(doctor)

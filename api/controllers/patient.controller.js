@@ -3,11 +3,47 @@ const Validator = require('fastest-validator');
 const bcryptjs = require('bcryptjs');
 const jwt = require('jsonwebtoken');
 
+const signUpSchema = {
+    PatientName: { type: 'string', min: 1, max: 255 },
+    // PatientDOB: { type: 'date' },
+    Address: { type: 'string', min: 1, max: 255 },
+   // ContactNo: { type: 'number' },
+    PatientEmail: { type: 'email' },
+    PatientPassword: { type: 'string', min: 6, max: 255 }
+};  
 
+// Create a validator instance
+const validator = new Validator();
+
+// Create a validation function
+const validateSignUp = (data) => {
+    const validationResult = validator.validate(data, signUpSchema);
+    return validationResult;
+};
+
+// Modify your signUp function
 function signUp(req, res) {
-    console.log('test1')
-    console.log("input",req.body);
+    console.log('test1');
+    console.log("input", req.body);
 
+    // Validate the input data
+    const validationErrors = validateSignUp(req.body);
+
+    if (validationErrors !== true) {
+        return res.status(400).json({
+            message: 'Validation error',
+            errors: validationErrors
+        });
+    }
+
+
+
+
+    // if (req.body["ContactNo"].toString().length !== 10) {
+    //     return res.status(400).json({
+    //         message: "Contact Number must be of 10 digits"
+    //     });
+    // }
     models.Patient.findOne({ where: { PatientEmail: req.body.PatientEmail } })
         .then(result => {
             if (result) {

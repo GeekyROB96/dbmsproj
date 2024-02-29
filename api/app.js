@@ -66,4 +66,10 @@ app.use('/appointment', appointmentRoute);
 app.use('/diagnosisreport', diagnosisReportRoute);
 app.use('/payment', stripeRoute);
 
+
+
+app.get('/', (req, res) => {
+    res.sendFile(path.join(__dirname, 'index.html'));
+  });
+
 module.exports = app;

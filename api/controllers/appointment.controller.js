@@ -10,6 +10,8 @@ function saveAppointment(req, res) {
         Symptoms: req.body.Symptoms,
         AppointmentTime: req.body.AppointmentTime,
         Remarks: req.body.Remarks,
+        Experience: req.body.Experience,
+        ConsultationFee:req.body.ConsultationFee
     };
 
         const schema = {
@@ -19,6 +21,8 @@ function saveAppointment(req, res) {
             Symptoms: { type: 'string', min: 3, max: 255 },
             AppointmentTime: { type: 'string' },
             Remarks: { type: 'string', min: 3, max: 255 },
+            Experience: {type: 'string', min: 3, max: 255 },
+            ConsultationFee: {type: 'number'}
         };
         
     const v = new Validator();

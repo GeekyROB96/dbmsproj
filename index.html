@@ -12,29 +12,55 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css" />
     <link rel="stylesheet" href="style.css">
     <style>
-
         .popup-container {
-            background-color: #fff;
-            padding: 20px;
-            border-radius: 8px;
-            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            position: relative;
+            z-index: 9999;
+            background-color: #ddf9e3;
+            /* Default color */
+            color: #fff;
+            border-radius: 5px;
+            padding: 10px;
             text-align: center;
-            max-width: 300px;
+            margin-top: 10px;
+            margin-bottom: 10px;
         }
 
         .close-btn {
+            position: absolute;
+            top: 5px;
+            right: 5px;
             cursor: pointer;
-            font-weight: bold;
-            color: #555;
         }
+
+        .form-group {
+            position: relative;
+        }
+
+        .password-suffix {
+            position: absolute;
+            right: 10px;
+            top: 50%;
+            transform: translateY(-50%);
+            cursor: pointer;
+        }
+
+        .error-message {
+            position: absolute;
+            bottom: -20px;
+            left: 0;
+            color: red;
+            font-size: 12px;
+        }
+
         #loginModal {
             border-radius: 15px;
             box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
             padding: 20px;
             margin-top: 20px;
-            background-color: rgba(255, 255, 255, 0.8); /* Adjust the transparency of the modal background */
+            background-color: rgba(255, 255, 255, 0.8);
+            /* Adjust the transparency of the modal background */
         }
-    
+
         #PatientloginForm,
         #doctorLoginForm {
             border-radius: 15px;
@@ -43,14 +69,15 @@
             margin-top: 20px;
             background-color: #fff;
         }
-    
+
 
         #signupModal {
             border-radius: 15px;
             box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
             padding: 20px;
             margin-top: 20px;
-            background-color: rgba(255, 255, 255, 0.8); /* Adjust the transparency of the modal background */
+            background-color: rgba(255, 255, 255, 0.8);
+            /* Adjust the transparency of the modal background */
         }
 
         #patientForm,
@@ -61,7 +88,7 @@
             margin-top: 20px;
             background-color: #fff;
         }
-     
+
 
         #patientSignupBtn,
         #doctorSignupBtn {
@@ -74,6 +101,7 @@
             font-size: 16px;
             margin-right: 10px;
         }
+
         #patientLoginBtn,
         #doctorLoginBtn {
             background-color: #007bff;
@@ -95,17 +123,19 @@
 
         /* Modal Styles */
         .modal {
-        display: none;
-        position: fixed;
-        z-index: 1000;
-        left: 0;
-        top: 0;
-        width: 100%;
-        height: 100%;
-        overflow: auto;
-        background-color: rgba(255, 255, 255, 0.5); /* Semi-transparent white background */
-        backdrop-filter: blur(10px); /* Adjust the blur effect as needed */
-    }
+            display: none;
+            position: fixed;
+            z-index: 1000;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            overflow: auto;
+            background-color: rgba(255, 255, 255, 0.5);
+            /* Semi-transparent white background */
+            backdrop-filter: blur(10px);
+            /* Adjust the blur effect as needed */
+        }
 
         .modal-content {
             background-color: #fefefe;
@@ -216,7 +246,7 @@
         <div class="modal-content">
             <span class="close">&times;</span>
             <h2>Sign Up</h2>
-            <button id="patientSignupBtn" >Patient</button>
+            <button id="patientSignupBtn">Patient</button>
             <button id="doctorSignupBtn">Doctor</button>
 
             <div id="patientForm" style="display: none;">
@@ -238,17 +268,29 @@
                     </div>
                     <div class="form-group">
                         <label for="ContactNo"><i class="far fa-calendar-check icon"></i></label>
-                        <input type="text" placeholder="Contact No" id="ContactNo" name="ContactNo" required>
+                        <input type="text" placeholder="Contact No" id="ContactNo" name="ContactNo" pattern="[0-9]{10}"
+                            title="Contact number must be 10 digits" required>
+                        <span id="contactNoMessage" class="error-message"></span>
                     </div>
                     <div class="form-group">
                         <label for="PatientEmail"><i class="fas fa-envelope icon"></i></label>
-                        <input type="email" placeholder="Email" id="PatientEmail" name="PatientEmail" required>
+                        <input type="email" placeholder="Email" id="PatientEmail" name="PatientEmail"
+                            pattern="[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}" required>
+                        <span id="emailMessage" class="error-message"></span>
+
                     </div>
                     <div class="form-group">
                         <label for="PatientPassword"><i class="fas fa-lock icon"></i></label>
-                        <input type="password" placeholder="Password" id="PatientPassword" name="PatientPassword">
+                        <input type="password" placeholder="Password" id="PatientPassword" name="PatientPassword"
+                            pattern=".{6,}" title="Password must be at least 6 characters long" required>
+                        <span class="password-suffix" onclick="togglePasswordVisibility('PatientPassword')"><i
+                                class="fas fa-eye"></i></span>
+                        <span id="passwordMessage" class="error-message"></span>
                     </div>
-                    <button type="submit" onclick="submitForm(event)" style="background-color:#28a745; color: #fff; padding: 10px 20px; border: none; border-radius: 5px; cursor: pointer; font-size: 16px;">Sign up</button>
+
+                    <button type="submit" onclick="submitForm(event)"
+                        style="background-color:#28a745; color: #fff; padding: 10px 20px; border: none; border-radius: 5px; cursor: pointer; font-size: 16px;">Sign
+                        up</button>
                 </form>
 
             </div>
@@ -261,12 +303,17 @@
                     </div>
                     <div class="form-group">
                         <label for="DoctorEmail"><i class="fas fa-envelope icon"></i></label>
-                        <input type="email" placeholder="Email" id="DoctorEmail" name="DoctorEmail" required>
+                        <input type="email" placeholder="Email" id="DoctorEmail" name="DoctorEmail"
+                            pattern="[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}" required>
+                        <span id="emailMessage" class="error-message"></span>
                     </div>
                     <div class="form-group">
                         <label for="DoctorPassword"><i class="fas fa-lock icon"></i></label>
                         <input type="password" placeholder="Password" id="DoctorPassword" name="DoctorPassword"
-                            required>
+                            pattern=".{6,}" title="Password must be at least 6 characters long" required>
+                        <span class="password-suffix" onclick="togglePasswordVisibility('DoctorPassword')"><i
+                                class="fas fa-eye"></i></span>
+                        <span id="passwordMessage" class="error-message"></span>
                     </div>
                     <div class="form-group">
                         <label for="Specialization"><i class="fas fa-user-tag icon"></i></label>
@@ -279,9 +326,12 @@
                     </div>
                     <div class="form-group">
                         <label for="ContactNo"><i class="far fa-calendar-check icon"></i></label>
-                        <input type="text" placeholder="ContactNo" id="ContactNo" name="ContactNo" required>
+                        <input type="text" placeholder="Contact No" id="ContactNo" name="ContactNo" pattern="[0-9]{10}"
+                            title="Contact number must be 10 digits" required>
+                        <span id="contactNoMessage" class="error-message"></span>
                     </div>
-                    <button type="submit" onclick="submitDForm(event)" style="background-color: #28a745; color: #fff; padding: 10px 20px; border: none; border-radius: 5px; cursor: pointer; font-size: 16px;">Signup</button>
+                    <button type="submit" onclick="submitDForm(event)"
+                        style="background-color: #28a745; color: #fff; padding: 10px 20px; border: none; border-radius: 5px; cursor: pointer; font-size: 16px;">Signup</button>
                 </form>
             </div>
         </div>
@@ -296,13 +346,21 @@
             <div id="PatientloginForm" style="display: none;">
                 <h3>Login</h3>
                 <form id="loginFormContent">
-                    <label for="PatientEmail">Email:</label>
-                    <input type="email" id="PatientEmail" name="PatientEmail" required>
-                    <br><br>
+                    <div class="form-group">
+                        <label for="PatientEmail"><i class="fas fa-envelope icon"></i></label>
+                        <input type="email" placeholder="Email" id="PatientEmail" name="PatientEmail"
+                            pattern="[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}" required>
+                        <span id="emailMessage" class="error-message"></span>
 
-                    <label for="PatientPassword">Password:</label>
-                    <input type="password" id="PatientPassword" name="PatientPassword" required>
-                    <br><br>
+                    </div>
+                    <div class="form-group">
+                        <label for="PatientPassword"><i class="fas fa-lock icon"></i></label>
+                        <input type="password" placeholder="Password" id="PatientPassword" name="PatientPassword"
+                            pattern=".{6,}" title="Password must be at least 6 characters long" required>
+                        <span class="password-suffix" onclick="togglePasswordVisibility('PatientPassword')"><i
+                                class="fas fa-eye"></i></span>
+                        <span id="passwordMessage" class="error-message"></span>
+                    </div>
 
                     <button type="submit" class="btn btn-primary" onclick="submitLoginForm(event)">Login</button>
                 </form>
@@ -312,13 +370,20 @@
             <div id="doctorLoginForm" style="display: none;">
                 <h3>Doctor Login</h3>
                 <form id="doctorLoginFormContent">
-                    <label for="DoctorEmail">Email:</label>
-                    <input type="email" id="DoctorEmail" name="DoctorEmail" required>
-                    <br><br>
-
-                    <label for="DoctorPassword">Password:</label>
-                    <input type="password" id="DoctorPassword" name="DoctorPassword" required>
-                    <br><br>
+                    <div class="form-group">
+                        <label for="DoctorEmail"><i class="fas fa-envelope icon"></i></label>
+                        <input type="email" placeholder="Email" id="DoctorEmail" name="DoctorEmail"
+                            pattern="[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}" required>
+                        <span id="emailMessage" class="error-message"></span>
+                    </div>
+                    <div class="form-group">
+                        <label for="DoctorPassword"><i class="fas fa-lock icon"></i></label>
+                        <input type="password" placeholder="Password" id="DoctorPassword" name="DoctorPassword"
+                            pattern=".{6,}" title="Password must be at least 6 characters long" required>
+                        <span class="password-suffix" onclick="togglePasswordVisibility('DoctorPassword')"><i
+                                class="fas fa-eye"></i></span>
+                        <span id="passwordMessage" class="error-message"></span>
+                    </div>
 
                     <button type="submit" class="btn btn-primary" onclick="submitDoctorLoginForm()">Login</button>
                 </form>
@@ -488,15 +553,10 @@
                     </div>
 
                 </div>
-
             </div>
-
         </div>
-
     </section>
-
     <!-- footer  -->
-
     <footer>
         <div class="container">
             <div class="footer-section">
@@ -559,6 +619,35 @@
     </footer>
 
     <script>
+        function togglePasswordVisibility(inputId) {
+            var passwordInput = document.getElementById(inputId);
+            if (passwordInput.type === "password") {
+                passwordInput.type = "text";
+            } else {
+                passwordInput.type = "password";
+            }
+        }
+        document.getElementById("PatientPassword").addEventListener("input", function () {
+            var password = this.value;
+            if (password.length < 6) {
+                this.setCustomValidity("Password must be at least 6 characters long");
+                document.getElementById("passwordMessage").textContent = "Password must be at least 6 characters long";
+            } else {
+                this.setCustomValidity("");
+                document.getElementById("passwordMessage").textContent = "";
+            }
+        });
+        document.getElementById("DoctorPassword").addEventListener("input", function () {
+            var password = this.value;
+            if (password.length < 6) {
+                this.setCustomValidity("Password must be at least 6 characters long");
+                document.getElementById("passwordMessage").textContent = "Password must be at least 6 characters long";
+            } else {
+                this.setCustomValidity("");
+                document.getElementById("passwordMessage").textContent = "";
+            }
+        });
+
 
         var signupModal = document.getElementById("signupModal");
 
@@ -595,7 +684,6 @@
             document.getElementById("patientForm").style.display = "none";
         };
 
-        // Function to handle patient signup form submission
         function submitForm(event) {
             event.preventDefault();
             console.log('Submit button clicked');
@@ -609,79 +697,96 @@
                 formDataObject[key] = value;
             });
 
-            // Make a POST request to the server with JSON data
-            fetch('http://localhost:3000/patient/sign-up', {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json',
-                },
-                body: JSON.stringify(formDataObject),
-                withCredentials: true
-            })
-                .then(response => {
-                    console.log('Server response status:', response.status); // Log response status
-                    showSuccessPopup();
-
-                    return response.json();
-                })
-                .then(data => {
-                    showSuccessPopup();
-
-                    // Log the response in the console
-                    console.log('Server Response:', data);
-                   
-                })
-                .catch(error => {
-                    console.error('Error:', error);
-                });
+            // Validate contact number
+            var contactNo = formDataObject["ContactNo"];
+            if (contactNo.length === 10 && /^\d+$/.test(contactNo)) {
+                // Validate password
+                var password = formDataObject["PatientPassword"];
+                if (password.length >= 6) {
+                    // Password is valid, proceed with form submission
+                    fetch('http://localhost:3000/patient/sign-up', {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json',
+                        },
+                        body: JSON.stringify(formDataObject),
+                        withCredentials: true
+                    })
+                        .then(response => {
+                            console.log('Server response status:', response.status); // Log response status
+                            if (response.ok) {
+                                showPatientPopup("Patient account created successfully!", true);
+                            } else {
+                                throw new Error('Failed to create patient account');
+                            }
+                            return response.json();
+                        })
+                        .then(data => {
+                            // Log the response in the console
+                            console.log('Server Response:', data);
+                        })
+                        .catch(error => {
+                            console.error('Error:', error);
+                            showPatientPopup("Failed to create patient account", false);
+                        });
+                } else {
+                    // Password is invalid, show error message
+                    var passwordMessage = document.getElementById("passwordMessage");
+                    passwordMessage.textContent = "Password must be at least 6 characters long";
+                }
+            } else {
+                // Contact number is invalid, show error message
+                var contactNoMessage = document.getElementById("contactNoMessage");
+                contactNoMessage.textContent = "Contact number must be 10 digits";
+            }
         }
 
-        // Function to handle doctor signup form submission
         function submitDForm(event) {
             event.preventDefault();
-            console.log('Submit button clicked'); // Log message to check if the function is being called
-
-            // Get form data
             var formData = new FormData(document.getElementById('doctorSignupForm'));
-
-            // Convert FormData to a plain JavaScript object
             var formDataObject = {};
             formData.forEach((value, key) => {
                 formDataObject[key] = value;
             });
-
-            // Make a POST request to the server with JSON data
-            fetch('http://localhost:3000/doctor/sign-up', {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json',
-                },
-                body: JSON.stringify(formDataObject),
-                withCredentials: true
-            })
-                .then(response => {
-                    console.log('Server response status:', response.status); // Log response status
-                    return response.json();
-                })
-                .then(data => {
-                    // Log the response in the console
-                    console.log('Server Response:', data);
-                    showSuccessPopup();
-                })
-                .catch(error => {
-                    console.error('Error:', error);
-                });
+            var contactNo = formDataObject["ContactNo"];
+            if (contactNo.length === 10 && /^\d+$/.test(contactNo)) {
+                // Validate password
+                var password = formDataObject["DoctorPassword"];
+                if (password.length >= 6) {
+                    fetch('http://localhost:3000/doctor/sign-up', {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json',
+                        },
+                        body: JSON.stringify(formDataObject),
+                        withCredentials: true
+                    })
+                        .then(response => {
+                            if (response.ok) {
+                                showDoctorPopup("Doctor account created successfully!", true);
+                            } else {
+                                showDoctorPopup("Failed to create doctor account", false);
+                                throw new Error('Failed to create doctor account');
+                            }
+                            return response.json();
+                        })
+                        .then(data => {
+                            console.log('Server Response:', data);
+                        })
+                        .catch(error => {
+                            console.error('Error:', error);
+                        });
+                } else {
+                    // Password is invalid, show error message
+                    var passwordMessage = document.getElementById("passwordMessage");
+                    passwordMessage.textContent = "Password must be at least 6 characters long";
+                }
+            } else {
+                // Contact number is invalid, show error message
+                var contactNoMessage = document.getElementById("contactNoMessage");
+                contactNoMessage.textContent = "Contact number must be 10 digits";
+            }
         }
-        // document.getElementById('loginFormContent').addEventListener('submit', submitLoginForm);
-
-
-        function saveDoctorFormData(event) {
-            event.preventDefault();
-            // Your code to handle doctor signup form submission
-        }
-        var loginModal = document.getElementById("loginModal");
-
-        // Get the button that opens the login modal
         var loginBtn = document.getElementById("loginBtn");
 
         // Get the <span> element that closes the modal
@@ -759,6 +864,7 @@
         document.getElementById('loginFormContent').addEventListener('submit', submitLoginForm);
         doctorLoginFormContent
         document.getElementById('doctorLoginFormContent').addEventListener('submit', submitDoctorLoginForm);
+
         function submitDoctorLoginForm(event) {
             event.preventDefault(); // Prevent the default form submission behavior
 
@@ -826,34 +932,93 @@
             window.location.href = "index.html";
             return false; // Prevent default form submission
         }
+        function showPatientPopup(message, isSuccess) {
+            // Get the signup form element
+            var signUpForm = document.getElementById("signUpForm");
 
-
-        function showSuccessPopup() {
             // Create a container for the popup
             var popupContainer = document.createElement("div");
             popupContainer.className = "popup-container";
-    
-            // Create success message
-            var successMessage = document.createElement("p");
-            successMessage.textContent = "Account created successfully. You can login now.";
-    
+
+            // Create message paragraph
+            var messageParagraph = document.createElement("p");
+            messageParagraph.textContent = message;
+
             // Create close button
             var closeButton = document.createElement("span");
             closeButton.className = "close-btn";
             closeButton.textContent = "Close";
             closeButton.onclick = function () {
                 // Remove the popup when the close button is clicked
-                document.body.removeChild(popupContainer);
+                signUpForm.removeChild(popupContainer);
             };
-    
+
             // Append elements to the popup container
-            popupContainer.appendChild(successMessage);
+            popupContainer.appendChild(messageParagraph);
             popupContainer.appendChild(closeButton);
-    
-            // Append the popup container to the body
-            document.body.appendChild(popupContainer);
+
+            // Append the popup container to the signup form
+            signUpForm.appendChild(popupContainer);
+
+            // Add spacing between signup button and popup window
+            signUpForm.style.marginBottom = "20px"; // Adjust as needed
+
+            // Style popup based on success or failure
+            if (isSuccess) {
+                popupContainer.style.backgroundColor = "#E6FB96"; // Green for success
+            } else {
+                popupContainer.style.backgroundColor = "#FC9D81"; // Red for failure
+            }
+
+            // Remove the popup after a few seconds
+            setTimeout(function () {
+                signUpForm.removeChild(popupContainer);
+            }, 3000); // Adjust the duration (in milliseconds) as needed
         }
-    
+        function showDoctorPopup(message, isSuccess) {
+            // Get the signup form element
+            var signUpForm = document.getElementById("doctorSignupForm");
+
+            // Create a container for the popup
+            var popupContainer = document.createElement("div");
+            popupContainer.className = "popup-container";
+
+            // Create message paragraph
+            var messageParagraph = document.createElement("p");
+            messageParagraph.textContent = message;
+
+            // Create close button
+            var closeButton = document.createElement("span");
+            closeButton.className = "close-btn";
+            closeButton.textContent = "Close";
+            closeButton.onclick = function () {
+                // Remove the popup when the close button is clicked
+                signUpForm.removeChild(popupContainer);
+            };
+
+            // Append elements to the popup container
+            popupContainer.appendChild(messageParagraph);
+            popupContainer.appendChild(closeButton);
+
+            // Append the popup container to the signup form
+            signUpForm.appendChild(popupContainer);
+
+            // Add spacing between signup button and popup window
+            signUpForm.style.marginBottom = "20px"; // Adjust as needed
+
+            // Style popup based on success or failure
+            if (isSuccess) {
+                popupContainer.style.backgroundColor = "#E6FB96"; // Green for success
+            } else {
+                popupContainer.style.backgroundColor = "#FC9D81"; // Red for failure
+            }
+
+            // Remove the popup after a few seconds
+            setTimeout(function () {
+                signUpForm.removeChild(popupContainer);
+            }, 3000); // Adjust the duration (in milliseconds) as needed
+        }
+
     </script>
 
 </body>
