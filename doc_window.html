@@ -487,6 +487,8 @@
                     <button class="postpone-btn" onclick="postponeAppointment(${appointment.id})"><i class="fas fa-calendar-alt"></i> Postpone</button>
                     <button class="delete-btn" onclick="deleteAppointmentConfirmation(${appointment.id})">Delete</button>
                     <button class="diagnosis-btn" onclick="navigateToDiagnosisWindow(${appointment.id})">Diagnosis Report</button>
+                    <button class="medicine-btn" onclick="navigateToMedicineWindow(${appointment.id})">Medicine Report</button>
+
                 </div>
             `;
 
@@ -642,6 +644,13 @@
         // Store the appointmentId in sessionStorage
         sessionStorage.setItem("selectedAppointmentId", id);
         window.location.href = 'diagnosis.html';
+    }
+
+    function navigateToMedicineWindow(id) {
+        console.log('Navigating to Medicine window for appointment id:', id);
+        // Store the appointmentId in sessionStorage
+        sessionStorage.setItem("selectedAppointmentId", id);
+        window.location.href = 'createmedicine.html';
     }
     closeDeleteModal
     function logout() {

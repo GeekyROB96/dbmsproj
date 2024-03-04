@@ -227,7 +227,7 @@
       <h2>Patient Details</h2>
       <div class="avatar-container">
         <img id="patientImage" src="${getimageurl}" alt="Patient Image"><br>
-        <button class="upload-image-btn" onclick="openFilePicker()">Upload Image</button>
+        <button class="upload-image-btn" onclick="openFilePicker(event)">Upload Image</button>
       </div>
       <div id="myModal" class="modal">
         <div class="modal-content">
@@ -274,9 +274,13 @@
     };
 
     // Retrieve the patient details from session storage
-    var patientDetails = JSON.parse(sessionStorage.getItem('patientDetailss'));
-    var patientemail = patientDetails.PatientEmail;
-    const  PatientId = patientDetails.id;
+   // Retrieve the patient details from session storage
+var patientDetails = JSON.parse(sessionStorage.getItem('patientDetailss'));
+var authToken = JSON.parse(sessionStorage.getItem('authToken')); // Use the same key "authToken" here
+console.log("authToken: " + authToken);
+var patientemail = patientDetails.PatientEmail;
+const PatientId = patientDetails.id;
+
 
     var patientImageElement = document.getElementById('patientImage');
 var getImageUrl = `api/uploads/${patientemail}patient.jpeg`;
@@ -300,7 +304,14 @@ patientImageElement.src = getImageUrl;
       document.getElementById('patientContainer').classList.add('animated');
 
       // Fetch and display appointments
-      fetch(`http://localhost:3000/appointment/appointment/patient/${PatientId}`)
+      fetch(`http://localhost:3000/appointment/appointment/patient/${PatientId}`,
+      {
+        method: 'GET',
+        headers: {
+            'Authorization': `Bearer ${authToken}`, // Include the token in the headers
+            'Content-Type': 'application/json',
+        },
+      })
         .then(response => response.json())
         .then(appointments => {
           renderAppointments(appointments.appointments);
@@ -327,7 +338,7 @@ patientImageElement.src = getImageUrl;
           appointmentCard.innerHTML = `
                         <p>ID:${appointment.id}</p>
                         <p>Appointment id: ${appointment.AppointmentId}</p>
-                        <p>Patient Name: ${appointment.PatientId}</p>
+                        <p>Patient Id: ${appointment.PatientId}</p>
                         <p>Appointment Date: ${appointment.AppointmentDate}</p>
                         <p>Appointment Time: ${appointment.AppointmentTime}</p>
                         <p>Symptoms: ${appointment.Symptoms}</p>
@@ -374,10 +385,29 @@ patientImageElement.src = getImageUrl;
     function logout() {
       // Clear session storage
       sessionStorage.removeItem("patientDetailss");
+      sessionStorage.removeItem("authToken"); // Remove the authentication token
+      
+      // Make a request to the logout endpoint on the server (optional)
+      fetch('http://localhost:3000/patient/logout', {
+          method: 'POST',
+          headers: {
+              'Authorization': `Bearer ${authToken}`, // Include the token if required for server-side validation
+          },
+      })
+      .then(response => response.json())
+      .then(data => {
+          console.log('Logout Response:', data);
+      })
+      .catch(error => {
+          console.error('Error during logout:', error);
+      });
+  
       // Redirect to index.html
       window.location.href = 'index.html';
-    }
-    function openFilePicker() {
+  }
+  
+    function openFilePicker(event) {
+      event.preventDefault();
       var modal = document.getElementById("myModal");
       var uploadForm = document.getElementById("uploadForm");
     

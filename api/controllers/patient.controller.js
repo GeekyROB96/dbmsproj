@@ -276,6 +276,13 @@ function destroy(req, res) {
     });
 }
 
+function logout(req, res) {
+    // Simply respond with a success message for now
+    res.status(200).json({
+        message: "Logout successful",
+    });
+}
+
 
 module.exports = {
     signUp:signUp,
@@ -284,5 +291,6 @@ module.exports = {
     index:index,
     update:update,
     login:login,
-    destroy:destroy
+    destroy:destroy,
+    logout:logout
 };

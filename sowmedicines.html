@@ -99,6 +99,7 @@
             <p>Reason: ${report.reason}</p>
             <p>Measures: ${report.measures}</p>
             <p>Created At: ${new Date(report.createdAt).toLocaleString()}</p>
+            <p>Updated At: ${new Date(report.updatedAt).toLocaleString()}</p>
             <div id="medicineList_${report.id}"></div>
             <button class="download-pdf-btn" onclick="downloadPDF('Diagnosis_Report_${report.id}')">Download PDF</button>
           `;

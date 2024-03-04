@@ -12,6 +12,18 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css" />
     <link rel="stylesheet" href="style.css">
     <style>
+        #errorMessage {
+            
+            color: red;
+            margin-top: 10px; /* Add margin to separate it from other elements */
+            font-weight: bold;
+        }
+        #errorMessage1 {
+            
+            color: red;
+            margin-top: 10px; /* Add margin to separate it from other elements */
+            font-weight: bold;
+        }
         .popup-container {
             position: relative;
             z-index: 9999;
@@ -376,6 +388,9 @@
                                 class="fas fa-eye"></i></span>
                         <span id="passwordMessage" class="error-message"></span>
                     </div>
+                    <!-- Add this to your HTML file where you want to display the error message -->
+                    <div id="errorMessage" style="color: red;"></div>
+
 
                     <button type="submit" class="btn btn-primary" onclick="submitLoginForm(event)">Login</button>
                 </form>
@@ -399,6 +414,7 @@
                                 class="fas fa-eye"></i></span>
                         <span id="passwordMessage" class="error-message"></span>
                     </div>
+                    <div id="errorMessage1" style="color: red;"></div>
 
                     <button type="submit" class="btn btn-primary" onclick="submitDoctorLoginForm()">Login</button>
                 </form>
@@ -865,14 +881,30 @@
                 .then(data => {
                     // Log the response in the console
                     console.log('Server Response:', data);
-                    var patientDetails = data.patient;
-                    sessionStorage.setItem("patientDetailss", JSON.stringify(patientDetails));
-
-                    console.log(patientDetails);
-
-                    window.location.href = "patient_window.html"; // Move this line here
+                
+                    if (data && data.patient && data.token) {
+                        // If the response contains patient details and token, proceed
+                        var patientDetails = data.patient;
+                        sessionStorage.setItem("patientDetailss", JSON.stringify(patientDetails));
+                        var authToken = data.token;
+                        console.log(authToken);
+                        sessionStorage.setItem("authToken", JSON.stringify(authToken));
+                
+                        setTimeout(()=>{
+                            window.location.href = "patient_window.html";
+                        },10000) // Redirect only on successful authentication
+                    } else {
+                        // Handle authentication failure and display a custom message
+                        var errorMessage = data && data.message ? data.message : 'Invalid credentials. Please try again.';
+                        console.error('Authentication failed:', errorMessage);
+                
+                        var errorMessageElement = document.getElementById('errorMessage');
+                        errorMessageElement.innerText = errorMessage;
+                        errorMessageElement.style.display = 'block'; 
+                    }
                 })
                 .catch(error => {
+                    // Handle other errors (e.g., network issues)
                     console.error('Error:', error);
                 });
         }
@@ -904,15 +936,29 @@
                 .then(response => response.json())
                 .then(data => {
                     // Log the response in the console
-                    console.log('Server Response:', data);
-                    var doctorDetails = data.doctor;
-                    sessionStorage.setItem("doctorDetailss", JSON.stringify(doctorDetails));
-
-                    console.log(doctorDetails);
-
-                    window.location.href = "doc_window.html"; // Move this line here
+                
+                    if (data && data.doctor && data.token) {
+                        // If the response contains doctor details and token, proceed
+                        console.log('Server Response:', data);
+                        var doctorDetails = data.doctor;
+                        sessionStorage.setItem("doctorDetailss", JSON.stringify(doctorDetails));
+                
+                        console.log(doctorDetails);
+                
+                        window.location.href = "doc_window.html"; // Redirect only on successful authentication
+                    } else {
+                        // Handle authentication failure and display a custom message
+                        var errorMessage = data && data.message ? data.message : 'Invalid credentials. Please try again.';
+                        console.error('Authentication failed:', errorMessage);
+                
+                        // Display the error message to the user with styling
+                        var errorMessageElement = document.getElementById('errorMessage1');
+                        errorMessageElement.innerText = errorMessage;
+                        errorMessageElement.style.display = 'block'; // Make sure the element is visible
+                    }
                 })
                 .catch(error => {
+                    // Handle other errors (e.g., network issues)
                     console.error('Error:', error);
                 });
         }

@@ -7,6 +7,7 @@ const router = express.Router();
 
 // router.post('/', patientController.save);
 router.post('/sign-up', patientController.signUp);
+router.post('/patient/logout', patientController.logout);
 
 router.get('/',patientController.index);
 router.get('/:id',patientController.show);
