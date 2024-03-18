@@ -227,7 +227,10 @@
       <h2>Patient Details</h2>
       <div class="avatar-container">
         <img id="patientImage" src="${getimageurl}" alt="Patient Image"><br>
-        <button class="upload-image-btn" onclick="openFilePicker(event)">Upload Image</button>
+          <button class="upload-image-btn" onclick="document.getElementById('image').click()">Upload Image</button> 
+          <input type="file" name="image" id="image" accept="image/*" style="display: none;" onchange="uploadImage()">
+
+
       </div>
       <div id="myModal" class="modal">
         <div class="modal-content">
@@ -343,7 +346,6 @@ patientImageElement.src = getImageUrl;
                         <p>Appointment Time: ${appointment.AppointmentTime}</p>
                         <p>Symptoms: ${appointment.Symptoms}</p>
                         <p>Remarks: ${appointment.Remarks}</p>
-                        <p>Diagnosis: ${appointment.Diagnosis || 'Not available'}</p>
                         <button class="diagnosis-btn" onclick="navigateToReport(${appointment.id})">Diagnosis Report</button>
                         <button class="show-medicines-btn" onclick="navigateToShowMedicines(${appointment.id})">Show Medicines</button>
 
@@ -405,17 +407,6 @@ patientImageElement.src = getImageUrl;
       // Redirect to index.html
       window.location.href = 'index.html';
   }
-  
-    function openFilePicker(event) {
-      event.preventDefault();
-      var modal = document.getElementById("myModal");
-      var uploadForm = document.getElementById("uploadForm");
-    
-      // Set the action attribute with the patient email
-      uploadForm.action = `http://localhost:3000/image/uploads/${patientemail}patient`;
-    
-      modal.style.display = "block";
-    }
     
 
     // Function to close modal
@@ -423,6 +414,80 @@ patientImageElement.src = getImageUrl;
       var modal = document.getElementById("myModal");
       modal.style.display = "none";
     }
+
+
+    function uploadImage() {
+      var doctorFormData = sessionStorage.getItem("patientDetailss");
+      var patientEmail = JSON.parse(doctorFormData).PatientEmail; // Parse the JSON string
+  
+      // Retrieve the file input element
+      var fileInput = document.getElementById('image');
+      // Retrieve the selected file
+      var file = fileInput.files[0];
+  
+      // Create a FormData object
+      var formData = new FormData();
+      formData.append('image', file);
+  
+      // Create an HTMLImageElement to load the selected image
+      var img = new Image();
+      
+      // Load the selected image into the HTMLImageElement
+      img.src = URL.createObjectURL(file);
+  
+      // Define a function to be executed when the image is loaded
+      img.onload = function () {
+          // Create a canvas element
+          var canvas = document.createElement('canvas');
+          var ctx = canvas.getContext('2d');
+  
+          // Set the canvas dimensions to match the image dimensions
+          canvas.width = 100; // Set the desired width (you can adjust this)
+          canvas.height = 100; // Set the desired height (you can adjust this)
+  
+          // Draw the image onto the canvas
+          ctx.drawImage(img, 0, 0, canvas.width, canvas.height);
+  
+          // Convert the canvas content to a base64 encoded data URL with JPEG format
+          var resizedImageDataUrl = canvas.toDataURL('image/jpeg');
+  
+          // Convert the base64 data URL to a Blob
+          var blob = dataURLtoBlob(resizedImageDataUrl);
+  
+          // Create a new FormData object
+          var resizedFormData = new FormData();
+          resizedFormData.append('image', blob, 'avatar.jpeg');
+  
+          // Send the resized image data to the server
+          fetch(`http://localhost:3000/image/uploads/${patientEmail}patient`, {
+              method: 'POST',
+              body: resizedFormData
+          })
+              .then(response => {
+                  if (!response.ok) {
+                      throw new Error('Network response was not ok');
+                  }
+                  return response.json();
+              })
+              .then(data => {
+                  // Handle the response data
+                  console.log('Resized image uploaded successfully:', data);
+              })
+              .catch(error => {
+                  console.error('There was a problem with the resized image upload:', error);
+              });
+      };
+  }
+  
+  // Function to convert a data URL to a Blob
+  function dataURLtoBlob(dataURL) {
+      var arr = dataURL.split(','), mime = arr[0].match(/:(.*?);/)[1],
+          bstr = atob(arr[1]), n = bstr.length, u8arr = new Uint8Array(n);
+      while (n--) {
+          u8arr[n] = bstr.charCodeAt(n);
+      }
+      return new Blob([u8arr], { type: mime });
+  }
 
   </script>
 

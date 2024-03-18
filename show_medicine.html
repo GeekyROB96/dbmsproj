@@ -76,9 +76,9 @@
   <script>
     // Retrieve the selected appointment ID from session storage
     var selectedAppointmentID = sessionStorage.getItem("selectedID");
-
+    console.log('Selected Appointment ID:', selectedAppointmentID);
     // Fetch medicines data for the selected appointment ID
-    fetch(`http://localhost:3000/medicine/${selectedAppointmentID}`)
+    fetch(`http://localhost:3000/medicine/aid/${selectedAppointmentID}`)
       .then(response => response.json())
       .then(data => {
         // Log the medicine details to the console
@@ -87,8 +87,12 @@
         // Display the medicine details or a message on the page
         if (data && data.medicines && data.medicines.length > 0) {
           renderMedicines(data.medicines);
+          console.log('Selected Appointment ID:', selectedAppointmentID);
+
         } else {
           console.log('No medicines found.');
+          console.log('Selected Appointment ID:', selectedAppointmentID);
+
           displayNoMedicinesMessage();
         }
       })

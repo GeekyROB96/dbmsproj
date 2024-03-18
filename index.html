@@ -371,7 +371,7 @@
             <button id="doctorLoginBtn">Doctor</button>
 
             <div id="PatientloginForm" style="display: none;">
-                <h3>Login</h3>
+                <h3>Patient Login</h3>
                 <form id="loginFormContent">
                     <div class="form-group">
                         <label for="PatientEmail"><i class="fas fa-envelope icon"></i></label>
@@ -381,17 +381,16 @@
 
                     </div>
                     <div class="form-group">
-                        <label for="PatientPassword"><i class="fas fa-lock icon"></i></label>
-                        <input type="password" placeholder="Password" id="PatientPassword" name="PatientPassword"
-                            pattern=".{6,}" title="Password must be at least 6 characters long" required>
-                        <span class="password-suffix" onclick="togglePasswordVisibility('PatientPassword')"><i
-                                class="fas fa-eye"></i></span>
+                        <label for="PatientPasswordL"><i class="fas fa-lock icon"></i></label>
+                        <input type="password" placeholder="Password" id="PatientPasswordL" name="PatientPasswordL"
+                               pattern=".{6,}" title="Password must be at least 6 characters long" required>
+                        <span class="password-suffix" onclick="togglePasswordVisibility('PatientPasswordL')">
+                            <i id="toggleIcon" class="fas fa-eye"></i>
+                        </span>
                         <span id="passwordMessage" class="error-message"></span>
                     </div>
-                    <!-- Add this to your HTML file where you want to display the error message -->
-                    <div id="errorMessage" style="color: red;"></div>
-
-
+                    
+                    
                     <button type="submit" class="btn btn-primary" onclick="submitLoginForm(event)">Login</button>
                 </form>
 
@@ -407,10 +406,10 @@
                         <span id="emailMessage" class="error-message"></span>
                     </div>
                     <div class="form-group">
-                        <label for="DoctorPassword"><i class="fas fa-lock icon"></i></label>
-                        <input type="password" placeholder="Password" id="DoctorPassword" name="DoctorPassword"
+                        <label for="DoctorPasswordL"><i class="fas fa-lock icon"></i></label>
+                        <input type="password" placeholder="Password" id="DoctorPasswordL" name="DoctorPasswordL"
                             pattern=".{6,}" title="Password must be at least 6 characters long" required>
-                        <span class="password-suffix" onclick="togglePasswordVisibility('DoctorPassword')"><i
+                        <span class="password-suffix" onclick="togglePasswordVisibility('DoctorPasswordL')"><i
                                 class="fas fa-eye"></i></span>
                         <span id="passwordMessage" class="error-message"></span>
                     </div>
@@ -651,13 +650,20 @@
 
     <script>
         function togglePasswordVisibility(inputId) {
-            var passwordInput = document.getElementById(inputId);
-            if (passwordInput.type === "password") {
-                passwordInput.type = "text";
+            var input = document.getElementById(inputId);
+            var icon = document.getElementById("toggleIcon");
+        
+            if (input.type === "password") {
+                input.type = "text";
+                icon.classList.remove("fa-eye");
+                icon.classList.add("fa-eye-slash");
             } else {
-                passwordInput.type = "password";
+                input.type = "password";
+                icon.classList.remove("fa-eye-slash");
+                icon.classList.add("fa-eye");
             }
         }
+        
         document.getElementById("PatientPassword").addEventListener("input", function () {
             var password = this.value;
             if (password.length < 6) {
@@ -859,6 +865,8 @@
 
         function submitLoginForm(event) {
             event.preventDefault(); // Prevent the default form submission behavior
+            var input = document.getElementById('PatientPasswordL');
+            input.setAttribute('name', 'PatientPassword');
 
             var formData = new FormData(document.getElementById('loginFormContent'));
 
@@ -890,9 +898,9 @@
                         console.log(authToken);
                         sessionStorage.setItem("authToken", JSON.stringify(authToken));
                 
-                        setTimeout(()=>{
+                        
                             window.location.href = "patient_window.html";
-                        },10000) // Redirect only on successful authentication
+                        // Redirect only on successful authentication
                     } else {
                         // Handle authentication failure and display a custom message
                         var errorMessage = data && data.message ? data.message : 'Invalid credentials. Please try again.';
@@ -915,6 +923,9 @@
 
         function submitDoctorLoginForm(event) {
             event.preventDefault(); // Prevent the default form submission behavior
+
+            var input = document.getElementById('DoctorPasswordL');
+            input.setAttribute('name','DoctorPassword');
 
             var formData = new FormData(document.getElementById('doctorLoginFormContent'));
 

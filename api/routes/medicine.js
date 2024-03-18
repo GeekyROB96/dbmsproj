@@ -8,7 +8,7 @@ const router = express.Router();
 // router.post('/', patientController.save);
  
 router.post('/', medicineController.saveMedicine);
-router.get('/:appointmentId', medicineController.getMedicinesByAppointmentId);
+router.get('/aid/:appointmentId', medicineController.getMedicinesByAppointmentId);
 router.patch('/:medId', medicineController.updateMedicine);
 router.delete('/:medId', medicineController.deleteMedicine);
 
